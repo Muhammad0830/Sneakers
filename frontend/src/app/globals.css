@@ -4,13 +4,16 @@
   --background: #EFEFEF;
   --primary: #24F89C;
   --foreground: #000000;
-  --white: #ffffff;
-  --black: #000000;
+  --varWhite: #ffffff;
+  --varBlack: #000000;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-varWhite: var(--varWhite);
+  --color-varBlack: var(--varBlack);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -19,6 +22,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #24F89C;
   }
 }
 
