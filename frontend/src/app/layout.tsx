@@ -18,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={openSans.className}>
+    <html lang="en">
       <head />
-      <body className="antialiased">{children}</body>
+      <body className={`antialiased ${openSans.className}`}>{children}</body>
     </html>
   );
 }
