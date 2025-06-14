@@ -8,6 +8,27 @@ import SimpleButton from "@/components/SimpleButton";
 const logo = "SNEAKER";
 const theme = "light";
 
+const data = {
+  navLinks: [
+    {
+      name: "Home",
+      href: "/home",
+    },
+    {
+      name: "Shop",
+      href: "/shop",
+    },
+    {
+      name: "Contact",
+      href: "/contact",
+    },
+    {
+      name: "Sign Up",
+      href: "/signup",
+    },
+  ],
+};
+
 const NavBar = () => {
   const t = useTranslations("NavBar");
   const [size, setSize] = useState(20);
@@ -88,20 +109,61 @@ const NavBar = () => {
       </div>
 
       {/* Menu */}
-      {open && (
-        <div className="absolute px-10 pt-10 left-0 top-0 right-0 h-screen bg-varWhite justify-between shadow-gray-200 shadow-md">
-          <div className="flex justify-between">
-            <div className="text-2xl font-bold">{logo}</div>
+      <div
+        className={`flex flex-col gap-3 absolute px-10 py-10 left-[0] ${
+          open ? "translate-t-[0%]" : "-translate-y-[100%]"
+        } transition:left duration-150 top-0 right-0 h-screen bg-varWhite md:hidden`}
+      >
+        <div className="flex justify-between">
+          <div className="text-2xl font-bold">{logo}</div>
 
+          <div className="absolute top-10 right-10 flex flex-col gap-3 items-center">
             <SimpleButton
               onClick={() => setOpen(false)}
               className="flex justify-center items-center"
             >
               <X size={30} color="var(--color-varBlack)" />
             </SimpleButton>
+
+            <div className="flex flex-col gap-2 bg-background rounded-full px-1.5 py-2">
+              <div className="p-1 cursor-pointer rounded-full">
+                <Search size={size + 8} color="var(--color-varBlack)" />
+              </div>
+              <div className="p-1 cursor-pointer rounded-full">
+                <ShoppingCart size={size + 8} color="var(--color-varBlack)" />
+              </div>
+              <div className="p-1 cursor-pointer rounded-full">
+                <Globe size={size + 8} color="var(--color-varBlack)" />
+              </div>
+              <div className="p-1 cursor-pointer rounded-full">
+                {theme === "light" ? (
+                  <Moon size={size + 8} color="var(--color-varBlack)" />
+                ) : (
+                  <Sun size={size + 8} color="var(--color-varBlack)" />
+                )}
+              </div>
+            </div>
           </div>
         </div>
-      )}
+
+        <div className="flex-1 flex items-center justify-center w-full">
+          <div className="flex flex-col gap-3 justify-between items-center">
+            {data?.navLinks?.map(
+              (item: { name: string; href: string }, index: number) => {
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setOpen(false)}
+                    className="text-xl"
+                  >
+                    <Link href={item.href}>{item.name}</Link>
+                  </button>
+                );
+              }
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
