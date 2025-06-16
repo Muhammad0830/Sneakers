@@ -49,31 +49,31 @@ const NavBar = () => {
   }, []);
 
   return (
-    <div className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/40 py-4 lg:px-6 px-4 backdrop:blur-2xl flex items-center justify-between shadow-gray-200 shadow-md">
+    <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/40 py-4 lg:px-6 px-4 backdrop:blur-2xl flex items-center justify-between shadow-gray-200 shadow-md">
       <div className="flex-1 flex sm:justify-center justify-between lg:gap-10 md:gap-4 sm:gap-8 gap-6 items-center">
         {/* left side Links | Desktop */}
-        <div className="flex-1 sm:flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end hidden">
+        <nav className="flex-1 sm:flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end hidden">
           <div className="lg:text-xl text-[16px]">
             <Link href="/home">{t("home")}</Link>
           </div>
           <div className="lg:text-xl text-[16px]">
             <Link href="/shop">{t("shop")}</Link>
           </div>
-        </div>
+        </nav>
 
         {/* Logo | Desktop */}
         <div className="lg:text-3xl md:text-2xl text-2xl font-bold">{logo}</div>
 
         <div className="flex-1 flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end sm:justify-between items-center">
           {/* right side Links | Desktop*/}
-          <div className="sm:flex hidden lg:gap-10 md:gap-4 sm:gap-8 gap-6">
+          <nav className="sm:flex hidden lg:gap-10 md:gap-4 sm:gap-8 gap-6">
             <div className="lg:text-xl text-[16px]">
               <Link href="/contact">{t("contact")}</Link>
             </div>
             <div className="lg:text-xl text-[16px]">
               <Link href="/signup">{t("signup")}</Link>
             </div>
-          </div>
+          </nav>
 
           {/* icons | Desktop */}
           <div className="md:flex gap-1.5 bg-varWhite rounded-full px-1 py-1 hidden">
@@ -164,7 +164,7 @@ const NavBar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 };
 

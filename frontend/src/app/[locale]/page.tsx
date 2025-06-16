@@ -1,10 +1,10 @@
-// src/app/[locale]/page.tsx
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
 
 type Props = {
-  params: { locale: string }
-}
+  params: Promise<{ locale: string }>;
+};
 
-export default function LocaleRootRedirect({ params: { locale } }: Props) {
-  redirect(`/${locale}/home`)
+export default async function LocaleRootRedirect({ params }: Props) {
+  const { locale } = await params;
+  redirect(`/${locale}/home`);
 }
