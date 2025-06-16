@@ -2,8 +2,9 @@
 import React, { useEffect, useState } from "react";
 import { Search, ShoppingCart, Globe, Moon, Sun, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Link from "next/link";
+import LinkComponent from "./Link";
 import SimpleButton from "@/components/SimpleButton";
+import { usePathname } from "next/navigation";
 
 const logo = "SNEAKER";
 const theme = "light";
@@ -33,6 +34,13 @@ const NavBar = () => {
   const t = useTranslations("NavBar");
   const [size, setSize] = useState(20);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [pathName, setPathName] = useState<string | null>(null)
+
+  useEffect(() => {
+    const newPathName = pathname.split('/')[2]
+    setPathName(newPathName)
+  }, [pathname])
 
   useEffect(() => {
     const handleResize = () => {
@@ -54,10 +62,10 @@ const NavBar = () => {
         {/* left side Links | Desktop */}
         <nav className="flex-1 sm:flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end hidden">
           <div className="lg:text-xl text-[16px]">
-            <Link href="/home">{t("home")}</Link>
+            <LinkComponent animated={'home' === pathName} href="/home">{t("home")}</LinkComponent>
           </div>
           <div className="lg:text-xl text-[16px]">
-            <Link href="/shop">{t("shop")}</Link>
+            <LinkComponent animated={'shop' === pathName} href="/shop">{t("shop")}</LinkComponent>
           </div>
         </nav>
 
@@ -68,10 +76,10 @@ const NavBar = () => {
           {/* right side Links | Desktop*/}
           <nav className="sm:flex hidden lg:gap-10 md:gap-4 sm:gap-8 gap-6">
             <div className="lg:text-xl text-[16px]">
-              <Link href="/contact">{t("contact")}</Link>
+              <LinkComponent animated={'contact' === pathName} href="/contact">{t("contact")}</LinkComponent>
             </div>
             <div className="lg:text-xl text-[16px]">
-              <Link href="/signup">{t("signup")}</Link>
+              <LinkComponent animated={'signup' === pathName} href="/signup">{t("signup")}</LinkComponent>
             </div>
           </nav>
 
@@ -97,7 +105,7 @@ const NavBar = () => {
 
           {/* just for mobile and Tablet */}
           <div className="text-md sm:hidden">
-            <Link href={"/signup"}>{t("signup")}</Link>
+            <LinkComponent href={"/signup"}>{t("signup")}</LinkComponent>
           </div>
           <SimpleButton
             onClick={() => setOpen((prev) => !prev)}
@@ -151,13 +159,14 @@ const NavBar = () => {
             {data?.navLinks?.map(
               (item: { name: string; href: string }, index: number) => {
                 return (
-                  <button
+                  <LinkComponent
                     key={index}
                     onClick={() => setOpen(false)}
                     className="text-xl"
+                    href={item.href}
                   >
-                    <Link href={item.href}>{item.name}</Link>
-                  </button>
+                    {item.name}
+                  </LinkComponent>
                 );
               }
             )}
