@@ -1,27 +1,13 @@
 import express from "express";
+import { createPool } from "../db/mysql";
+const pool = createPool();
+
 const sneakersRouter = express.Router();
 
-let data = [
-  {
-    id: 1,
-    name: "sneakers1",
-    description: "sneakers",
-    price: 100,
-    image: "https://i.ibb.co/4b2r0sX/sneakers.png",
-    category: "sneakers",
-  },
-  {
-    id: 2,
-    name: "sneakers2",
-    description: "sneakers2",
-    price: 200,
-    image: "https://i.ibb.co/4b2r0sX/sneakers.png",
-    category: "sneakers2",
-  },
-];
-
-sneakersRouter.get("/", (req: any, res: any) => {
+sneakersRouter.get("/", async (req: any, res: any) => {
   try {
+    const [data] = await pool.query("SELECT * FROM products");
+
     res.status(200).json(data);
   } catch (err: any) {
     if (res.status) {
