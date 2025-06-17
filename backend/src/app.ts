@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import unknownEndpoint from "./middlewares/middleware";
 import sneakersRouter from "./routes/sneakers";
+
 const app = express();
 
 app.use(cors());
