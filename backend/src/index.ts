@@ -6,5 +6,5 @@ import { config } from "./config";
 
 const PORT = config.port;
 app.listen(PORT, () => {
-  console.log(`server is running on port ${config.port}`);
+  console.log(`server is running on port ${PORT}`);
 });
