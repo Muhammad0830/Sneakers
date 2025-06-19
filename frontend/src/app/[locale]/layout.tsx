@@ -22,7 +22,7 @@ export default async function LocaleLayout({
       <NextIntlClientProvider>
         <div className="min-h-screen flex flex-col">
           <NavBar />
-          <div className="mt-18 flex-1">{children}</div>
+          <div className="pt-18 flex-1 overflow-hidden">{children}</div>
           <Footer />
         </div>
       </NextIntlClientProvider>

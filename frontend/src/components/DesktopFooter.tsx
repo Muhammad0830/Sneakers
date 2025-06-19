@@ -7,7 +7,7 @@ import {
   faInstagram,
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
-import LinkComponent from "@/components/Link";
+import LinkComponent from "@/components/ui/Link";
 
 const DesktopFooter = ({ className }: { className?: string }) => {
   return (

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import LinkComponent from "./Link";
+import LinkComponent from "./ui/Link";
 import dynamic from "next/dynamic";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
