@@ -2,8 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { Search, ShoppingCart, Globe, Moon, Sun, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import LinkComponent from "./Link";
-import SimpleButton from "@/components/SimpleButton";
+import LinkComponent from "./ui/Link";
+import SimpleButton from "@/components/ui/SimpleButton";
 import { usePathname } from "next/navigation";
 
 const logo = "SNEAKER";
@@ -35,12 +35,12 @@ const NavBar = () => {
   const [size, setSize] = useState(20);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const [pathName, setPathName] = useState<string | null>(null)
+  const [pathName, setPathName] = useState<string | null>(null);
 
   useEffect(() => {
-    const newPathName = pathname.split('/')[2]
-    setPathName(newPathName)
-  }, [pathname])
+    const newPathName = pathname.split("/")[2];
+    setPathName(newPathName);
+  }, [pathname]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,24 +62,32 @@ const NavBar = () => {
         {/* left side Links | Desktop */}
         <nav className="flex-1 sm:flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end hidden">
           <div className="lg:text-xl text-[16px]">
-            <LinkComponent animated={'home' === pathName} href="/home">{t("home")}</LinkComponent>
+            <LinkComponent animated={"home" === pathName} href="/home">
+              {t("home")}
+            </LinkComponent>
           </div>
           <div className="lg:text-xl text-[16px]">
-            <LinkComponent animated={'shop' === pathName} href="/shop">{t("shop")}</LinkComponent>
+            <LinkComponent animated={"shop" === pathName} href="/shop">
+              {t("shop")}
+            </LinkComponent>
           </div>
         </nav>
 
         {/* Logo | Desktop */}
-        <div className="lg:text-3xl md:text-2xl text-2xl font-bold">{logo}</div>
+        <div className="lg:text-3xl md:text-2xl text-2xl font-bold cursor-default">{logo}</div>
 
         <div className="flex-1 flex lg:gap-10 md:gap-4 sm:gap-8 gap-6 justify-end sm:justify-between items-center">
           {/* right side Links | Desktop*/}
           <nav className="sm:flex hidden lg:gap-10 md:gap-4 sm:gap-8 gap-6">
             <div className="lg:text-xl text-[16px]">
-              <LinkComponent animated={'contact' === pathName} href="/contact">{t("contact")}</LinkComponent>
+              <LinkComponent animated={"contact" === pathName} href="/contact">
+                {t("contact")}
+              </LinkComponent>
             </div>
             <div className="lg:text-xl text-[16px]">
-              <LinkComponent animated={'signup' === pathName} href="/signup">{t("signup")}</LinkComponent>
+              <LinkComponent animated={"signup" === pathName} href="/signup">
+                {t("signup")}
+              </LinkComponent>
             </div>
           </nav>
 
