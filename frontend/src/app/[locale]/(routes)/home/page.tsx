@@ -7,6 +7,8 @@ import Link from "next/link";
 import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";
 import SimpleButton from "@/components/ui/SimpleButton";
+import { useQuery } from "@tanstack/react-query";
+import { GetTrending } from "@/api/sneakers";
 
 interface Product {
   id: number;
@@ -14,57 +16,47 @@ interface Product {
   size: string;
 }
 
-const products: Product[] = [
-  { id: 0, name: "sneakersRed", size: "32" },
-  { id: 1, name: "sneakersBlue", size: "33" },
-  { id: 2, name: "sneakersYellow", size: "34" },
-  { id: 3, name: "sneakersGreen", size: "35" },
-  { id: 4, name: "sneakersPink", size: "36" },
-];
-
 const Home = () => {
   const t = useTranslations("Home");
   const SVGpathComponentRef = useRef<{
     moveToIndex: (index: number) => void;
     hello: () => void;
   }>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [centerIndex, setCenterIndex] = useState(0);
 
+  const {
+    data: products = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["sneakers"],
+    queryFn: () => GetTrending(),
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+
   const handleClick = (newIndex: number) => {
-    console.log("currentIndex", currentIndex);
     if (isAnimating) return;
+
+    let updatedIndex = newIndex;
+
     if (newIndex < 0) {
-      console.log("newIndex < 0");
-      setIsAnimating(true);
-      setCenterIndex(products.length - 1);
-      SVGpathComponentRef.current?.moveToIndex(products.length - 1);
-
-      setTimeout(() => {
-        setCurrentIndex(products.length - 1);
-        setIsAnimating(false);
-      }, 700);
-    } else if (newIndex >= products.length) {
-      console.log("newIndex > products.length");
-      setIsAnimating(true);
-      setCenterIndex(0);
-      SVGpathComponentRef.current?.moveToIndex(0);
-
-      setTimeout(() => {
-        setCurrentIndex(0);
-        setIsAnimating(false);
-      }, 700);
-    } else {
-      setIsAnimating(true);
-      setCenterIndex(newIndex);
-      SVGpathComponentRef.current?.moveToIndex(newIndex);
-
-      setTimeout(() => {
-        setCurrentIndex(newIndex);
-        setIsAnimating(false);
-      }, 700);
+      updatedIndex = products.length - 1;
+    } else if (newIndex >= products?.length) {
+      updatedIndex = 0;
     }
+
+    setIsAnimating(true);
+    setCenterIndex(updatedIndex);
+    SVGpathComponentRef.current?.moveToIndex(updatedIndex);
+
+    setTimeout(() => {
+      // setCurrentIndex(updatedIndex);
+      setIsAnimating(false);
+    }, 700);
   };
 
   return (
@@ -77,17 +69,19 @@ const Home = () => {
               {t("MainThesis")}
             </h3>
           </div>
-          <Link href={"/shop"}>
-            <Button
-              isLinkButton
-              className="flex gap-2 transition-gap duration-200 cursor-pointer group-hover:gap-4 items-center"
-            >
-              <span>{t("ShopNow")}</span>
-              <div>
-                <ChevronRight size={20} color="white" />
-              </div>
-            </Button>
-          </Link>
+          <div>
+            <Link href={"/shop"}>
+              <Button
+                isLinkButton
+                className="flex gap-2 transition-gap duration-200 cursor-pointer group-hover:gap-4 items-center"
+              >
+                <span>{t("ShopNow")}</span>
+                <div>
+                  <ChevronRight size={20} color="white" />
+                </div>
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="relative -z-10 flex-1">
@@ -99,7 +93,7 @@ const Home = () => {
         </div>
 
         <div className="w-3/8 relative">
-          {products.map((item: Product, index) => {
+          {products?.map((item: Product, index: number) => {
             const relativeIndex = index - centerIndex;
 
             const distance = Math.abs(relativeIndex);

@@ -1,7 +1,8 @@
-import '../lib/fontawesome'; // 👈 Import before any UI that uses icons
+import "../lib/fontawesome"; // 👈 Import before any UI that uses icons
 import "./globals.css";
 import { Metadata } from "next";
-import { Open_Sans } from 'next/font/google'
+import { Open_Sans } from "next/font/google";
+import Providers from "../context/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -9,10 +10,10 @@ export const metadata: Metadata = {
 };
 
 const openSans = Open_Sans({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  display: 'swap',
-})
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
 
 export default function RootLayout({
   children,
@@ -22,7 +23,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={`antialiased ${openSans.className}`}>{children}</body>
+      <body className={`antialiased ${openSans.className}`}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
