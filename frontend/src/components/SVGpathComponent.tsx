@@ -34,7 +34,6 @@ type SVGpathComponentProps = {
 const SVGpathComponent = forwardRef<handleFunctions, SVGpathComponentProps>(
   ({ setIsAnimating, initialIndex }, ref) => {
     //   const [isAnimating, setIsAnimating] = useState(false);
-    console.log('initialIndex', initialIndex)
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const pathRef = useRef<SVGPathElement>(null);
