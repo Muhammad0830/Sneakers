@@ -57,7 +57,7 @@ const NavBar = () => {
   }, []);
 
   return (
-    <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/40 py-4 lg:px-6 px-4 backdrop:blur-2xl flex items-center justify-between shadow-gray-200 shadow-md">
+    <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/50 backdrop-blur-xs py-4 lg:px-6 px-4 flex items-center justify-between shadow-gray-500/20 shadow-lg">
       <div className="flex-1 flex sm:justify-center justify-between lg:gap-10 sm:gap-4 gap-6 items-center">
         {/* left side Links | Desktop */}
         <nav className="flex-1 sm:flex lg:gap-10 sm:gap-4 gap-6 justify-end hidden">
