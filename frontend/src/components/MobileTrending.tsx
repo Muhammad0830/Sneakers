@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useRef } from "react";
 import {
   EmblaCarouselType,
@@ -13,6 +14,7 @@ import {
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
 import { Product } from "@/types/types";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const TWEEN_FACTOR_BASE = 0.52;
 
@@ -27,7 +29,9 @@ type PropType = {
 };
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { slides, options } = props;
+  const t = useTranslations("Home");
+
+  const { options, products } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<HTMLElement[]>([]);
@@ -111,12 +115,14 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   return (
     <div className={`embla ${props.className} mb-15`}>
       <div className="w-full flex justify-center mb-12">
-        <h1 className="text-4xl font-bold">Trending Now</h1>
+        <h1 className="md:text-4xl text-2xl font-bold text-center">
+          {t("TrendingNow")}
+        </h1>
       </div>
 
       <div className="embla__viewport w-full" ref={emblaRef}>
         <div className="embla__container">
-          {slides.map((index) => (
+          {products.map((item: Product, index: number) => (
             <div className="embla__slide" key={index}>
               <div
                 className="embla__slide__number"
@@ -130,8 +136,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                     alt="sneakers"
                   />
                 </div>
-                <div className="text-varBlack absolute left-0 right-0 text-center bottom-[-1rem] text-3xl">
-                  Sneaker {index + 1}
+                <div className="text-varBlack absolute left-0 right-0 text-center bottom-[-1rem] text-2xl">
+                  {item.title}
                 </div>
               </div>
             </div>

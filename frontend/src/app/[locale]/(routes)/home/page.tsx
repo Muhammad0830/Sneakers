@@ -8,8 +8,49 @@ import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";
 import SimpleButton from "@/components/ui/SimpleButton";
 import useApiQuery from "@/hooks/useApiQuery";
-import { Product } from "@/types/types";
+import { Product, AboutCardType } from "@/types/types";
 import EmblaCarousel from "@/components/MobileTrending";
+import AboutCard from "@/components/AboutCard";
+import { Truck, Headset, ShieldCheck, CircleDollarSign, Coins, Sparkle } from "lucide-react";
+
+const AboutUsData = [
+  {
+    id: 1,
+    title: "Free and Fast Delivery",
+    thesis: "Free delivery for all orders over $100 - $200",
+    icon: <Truck size={36} color="white" />,
+  },
+  {
+    id: 2,
+    title: "24/7 Customer Service",
+    thesis: "Friendly 24/7 customer support",
+    icon: <Headset size={36} color="white" />,
+  },
+  {
+    id: 3,
+    title: "Money Back Guarantee",
+    thesis: "We return your money within 14-30 days",
+    icon: <ShieldCheck size={36} color="white" />,
+  },
+  {
+    id: 4,
+    title: "Unbeatable Prices",
+    thesis: "Get the best deals on all products every day",
+    icon: <CircleDollarSign size={36} color="white" />,
+  },
+  {
+    id: 5,
+    title: "Buy Now, Pay Later",
+    thesis: "Shop now and split your payments with easy plans",
+    icon: <Coins size={36} color="white" />,
+  },
+  {
+    id: 6,
+    title: "Exclusive Member Discounts",
+    thesis: "Special deals and offers for our members",
+    icon: <Sparkle size={36} color="white" />,
+  },
+];
 
 const Home = () => {
   const t = useTranslations("Home");
@@ -66,12 +107,17 @@ const Home = () => {
     }, 700);
   };
 
-  const slides = Array.from(Array(products.length).keys())
+  const slides = Array.from(Array(products.length).keys());
 
   return (
     <div className="h-full">
-      <div className="relative z-10 lg:min-h-[80vh] min-h-[60vh] w-full flex sm:flex-row flex-col overflow-hidden sm:px-16 px-4">
-        <EmblaCarousel products={products} slides={slides} options={{ loop: true}} className="sm:hidden block w-[80%]" />
+      <div className="relative z-10 lg:min-h-[80vh] min-h-[60vh] w-full flex sm:flex-row flex-col overflow-hidden sm:px-16 px-4 mb-16">
+        <EmblaCarousel
+          products={products}
+          slides={slides}
+          options={{ loop: true }}
+          className="sm:hidden block w-[80%]"
+        />
 
         <div className="lg:w-3/8 md:w-1/2 sm:w-6/11 w-full lg:min-h-[80vh] md:min-h-[60vh] flex flex-col justify-center gap-6 px-6 mb-10">
           <div className="flex flex-col gap-2">
@@ -159,6 +205,19 @@ const Home = () => {
               Down
             </SimpleButton>
           </div>
+        </div>
+      </div>
+
+      <div className="w-full sm:px-16 px-6 flex items-center flex-col gap-5 my-10">
+        <div className="text-4xl font-bold text-center">{t("AboutUs")}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 w-full [grid-auto-rows:1fr]">
+          {AboutUsData.map((item: AboutCardType, index: number) => {
+            return (
+              <div key={index}>
+                <AboutCard item={item} />
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
