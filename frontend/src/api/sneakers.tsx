@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Product } from "@/types/types";
 
 const api = axios.create({
-  baseURL: "http://10.20.2.171:3001",
+  baseURL: "http://localhost:3001",
 });
 
 export const GetTrending = async (): Promise<Product[]> => {
