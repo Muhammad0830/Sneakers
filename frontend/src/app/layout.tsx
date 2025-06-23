@@ -1,5 +1,7 @@
 import "../lib/fontawesome"; // 👈 Import before any UI that uses icons
 import "./globals.css";
+import './embla.css'
+import './base.css'
 import { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "../context/ReactQueryProvider";
