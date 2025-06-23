@@ -6,7 +6,7 @@ import MobileFooter from "./MobileFooter";
 const Footer = () => {
   return (
     <div className="w-full">
-      <DesktopFooter className={"sm:flex hidden"} />
+      <DesktopFooter className={"sm:flex hidden w-full"}/>
       <MobileFooter className="sm:hidden" />
     </div>
   );
