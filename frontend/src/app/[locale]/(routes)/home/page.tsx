@@ -42,7 +42,6 @@ const Home = () => {
     error,
   } = useApiQuery<Product[]>("/trending", "Trending");
 
-  console.log('products', products)
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
