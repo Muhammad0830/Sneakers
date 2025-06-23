@@ -136,7 +136,7 @@ const Home = () => {
               >
                 <span className="text-sm sm:text-md">{t("ShopNow")}</span>
                 <div>
-                  <ChevronRight size={36} color="white" />
+                  <ChevronRight size={20} color="white" />
                 </div>
               </Button>
             </Link>
