@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Check } from "lucide-react";
 import Link from "next/link";
 import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";
@@ -11,7 +11,14 @@ import useApiQuery from "@/hooks/useApiQuery";
 import { Product, AboutCardType } from "@/types/types";
 import EmblaCarousel from "@/components/MobileTrending";
 import AboutCard from "@/components/AboutCard";
-import { Truck, Headset, ShieldCheck, CircleDollarSign, Coins, Sparkle } from "lucide-react";
+import {
+  Truck,
+  Headset,
+  ShieldCheck,
+  CircleDollarSign,
+  Coins,
+  Sparkle,
+} from "lucide-react";
 
 const AboutUsData = [
   {
@@ -111,6 +118,7 @@ const Home = () => {
 
   return (
     <div className="h-full">
+      {/* main */}
       <div className="relative z-10 lg:min-h-[80vh] min-h-[60vh] w-full flex sm:flex-row flex-col overflow-hidden sm:px-16 px-4 mb-16">
         <EmblaCarousel
           products={products}
@@ -208,7 +216,8 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="w-full sm:px-16 px-6 flex items-center flex-col gap-5 my-10">
+      {/* About Us */}
+      <div className="sm:px-16 px-6 flex items-center flex-col gap-5 my-10">
         <div className="text-4xl font-bold text-center">{t("AboutUs")}</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 w-full [grid-auto-rows:1fr]">
           {AboutUsData.map((item: AboutCardType, index: number) => {
@@ -218,6 +227,168 @@ const Home = () => {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      {/* Pricing */}
+      <div className="px-4 sm:px-16 my-16">
+        <div className="text-4xl font-bold text-center">{t("Pricing")}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+            <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
+              <Check size={50} color="white" />
+            </div>
+            <div className="text-center text-2xl font-bold">
+              {t("Sneakers Free")}
+            </div>
+            <div className="text-center mb-2">
+              <span className="text-3xl font-bold">$0.00</span>
+              <span className="text-xl font-normal">/{t("Month")}</span>
+            </div>
+            <div className="flex flex-col gap-1 border-t-1 border-gray-500/70 pt-2">
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("we return money within")}
+                  {t("14 days")}
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>{t("24/7 customer service")}</p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>{t("special discounts up to")} 10%</p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>{t("free delivery for all orders over")} $200</p>
+              </div>
+            </div>
+          </div>
+          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+            <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
+              <Check size={50} color="white" />
+            </div>
+            <div className="text-center text-2xl font-bold">
+              {t("Sneakers Pro")}
+            </div>
+            <div className="text-center mb-2">
+              <span className="text-3xl font-bold">$2.99</span>
+              <span className="text-xl font-normal">/{t("Sneakers Pro")}</span>
+            </div>
+            <div className="flex flex-col gap-1 border-t-1 border-gray-500/70 pt-2">
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("we return money within")}{" "}
+                  <span className="text-primary font-bold">{t("21 days")}</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>{t("24/7 customer service")}</p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("special discounts up to")}{" "}
+                  <span className="text-primary font-bold">20%</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("free delivery for all orders over")}{" "}
+                  <span className="text-primary font-bold">$150</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("split your payments for")}
+                  {t("2 Months")}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+            <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
+              <Check size={50} color="white" />
+            </div>
+            <div className="text-center text-2xl font-bold">
+              {t("Sneakers Premium")}
+            </div>
+            <div className="text-center mb-2">
+              <span className="text-3xl font-bold">$3.99</span>
+              <span className="text-xl font-normal">/{t("Month")}</span>
+            </div>
+            <div className="flex flex-col gap-1 border-t-1 border-gray-500/70 pt-2">
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("we return money within")}{" "}
+                  <span className="text-primary font-bold">30 days</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>{t("24/7 customer service")}</p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("special discounts up to")}{" "}
+                  <span className="text-primary font-bold">30%</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("free delivery for all orders over")}{" "}
+                  <span className="text-primary font-bold">$100</span>
+                </p>
+              </div>
+              <div className="flex gap-1 items-start">
+                <div className="pt-1">
+                  <Check size={20} color="var(--primary)" />
+                </div>
+                <p>
+                  {t("split your payments for")}{" "}
+                  <span className="text-primary font-bold">
+                    {t("4 Months")}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
