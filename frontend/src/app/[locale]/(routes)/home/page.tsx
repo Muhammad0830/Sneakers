@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import Button from "@/components/ui/Button";
-import { ChevronRight, Check } from "lucide-react";
 import Link from "next/link";
 import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";
@@ -18,6 +17,9 @@ import {
   CircleDollarSign,
   Coins,
   Sparkle,
+  Star,
+  ChevronRight,
+  Check,
 } from "lucide-react";
 
 const AboutUsData = [
@@ -277,7 +279,7 @@ const Home = () => {
           </div>
           <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
             <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
-              <Check size={50} color="white" />
+              <Sparkle size={50} color="white" />
             </div>
             <div className="text-center text-2xl font-bold">
               {t("Sneakers Pro")}
@@ -333,7 +335,7 @@ const Home = () => {
           </div>
           <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
             <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
-              <Check size={50} color="white" />
+              <Star size={50} color="white" />
             </div>
             <div className="text-center text-2xl font-bold">
               {t("Sneakers Premium")}
