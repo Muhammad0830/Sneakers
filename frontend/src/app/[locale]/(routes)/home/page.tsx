@@ -7,7 +7,6 @@ import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";
 import SimpleButton from "@/components/ui/SimpleButton";
 import useApiQuery from "@/hooks/useApiQuery";
-import { Product, AboutCardType } from "@/types/types";
 import EmblaCarousel from "@/components/MobileTrending";
 import AboutCard from "@/components/AboutCard";
 import {
@@ -21,6 +20,8 @@ import {
   ChevronRight,
   Check,
 } from "lucide-react";
+import TestimonialCard from "@/components/TestimonialCard";
+import { AboutCardType, TestimonialType, Product } from "@/types/types";
 
 const AboutUsData = [
   {
@@ -61,6 +62,39 @@ const AboutUsData = [
   },
 ];
 
+const Testimonials = [
+  {
+    id: 1,
+    name: "Emma Jersey",
+    image: "/testimonialsFace1.png",
+    text: "Fantastic experience! The products are top-notch, and the customer service is beyond excellent. Highly recommended!",
+  },
+  {
+    id: 2,
+    name: "James Lenn",
+    image: "/testimonialsFace1.png",
+    text: "Fast shipping, great deals, and amazing quality. I always find exactly what I need. Love this store!",
+  },
+  {
+    id: 3,
+    name: "Sofiya Monde",
+    image: "/testimonialsFace1.png",
+    text: "Shopping here is a breeze. The website is easy to use, and the checkout process is smooth. Five stars!",
+  },
+  {
+    id: 4,
+    name: "Emma Jersey",
+    image: "/testimonialsFace1.png",
+    text: "Fantastic experience! The products are top-notch, and the customer service is beyond excellent. Highly recommended!",
+  },
+  {
+    id: 5,
+    name: "James Lenn",
+    image: "/testimonialsFace1.png",
+    text: "Fast shipping, great deals, and amazing quality. I always find exactly what I need. Love this store!",
+  },
+];
+
 const Home = () => {
   const t = useTranslations("Home");
   const SVGpathComponentRef = useRef<{
@@ -71,10 +105,29 @@ const Home = () => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [centerIndex, setCenterIndex] = useState(0);
   const [responsiveX, setYResponsive] = useState(0.8);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const TestimonialRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(0);
+
+  const handleLeftRight = (number: number) => {
+    setIsAnimating(true);
+    if (number < Testimonials.length && number >= 0) {
+      setCurrentIndex(number);
+      if (TestimonialRef.current && width) {
+        TestimonialRef.current.style.transform = `translateX(-${
+          width * number
+        }px)`;
+      }
+    }
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 510);
+  };
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+      setWidth(width / 3);
       if (width < 640) setYResponsive(1); // mobile
       else if (width < 768) setYResponsive(0.5); // sm
       else if (width < 1024) setYResponsive(0.7); // md
@@ -389,6 +442,88 @@ const Home = () => {
                   </span>
                 </p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Testimonials */}
+      <div className="px-4 md:px-16 sm:px-8 mb-30">
+        <div className="text-4xl font-bold text-center ">
+          {t("Testimonials")}
+        </div>
+        <div className="w-full flex sm:flex-row sm:px-0 px-5 flex-col sm:items-start items-center gap-15 relative mt-10">
+          <div className="relative z-20 sm:w-1/2 min-w-[280px] max-w-[75%] flex flex-col gap-3 py-8 rounded-2xl bg-varWhite/70 backdrop-blur-xs px-4">
+            <h1 className="lg:text-2xl md:text-xl text-lg font-bold sm:text-start text-center">
+              {t("Our customers love shopping with us!")}
+            </h1>
+            <h3 className="lg:text-lg md:text-md text-sm font-normal sm:text-start text-center">
+              {t(
+                "Their kind words reflect our commitment to quality, service, and a seamless experience"
+              )}
+            </h3>
+            <div className="flex sm:justify-start justify-center">
+              <Button isLinkButton className="md:text-md text-sm">
+                {t("View More")}
+              </Button>
+            </div>
+          </div>
+
+          <div className="sm:flex-1 sm:mx-0 mx-20 w-full sm:overflow-visible overflow-scroll items-center sm:justify-center justify-start flex sm:self-end self-center ">
+            <div
+              ref={TestimonialRef}
+              className="flex sm:absolute relative sm:left-[60%] left-0 top-0 bottom-0 sm:items-center transition-transform duration-500"
+              style={{ gap: width < 640 / 3 ? "2rem" : "0" }}
+            >
+              {Testimonials.map((item: TestimonialType, index: number) => {
+                return (
+                  <div
+                    key={index}
+                    className="sm:self-auto self-stretch sm:w-[33vw] w-[60vw] transition-all duration-500 ease-in-out"
+                    style={{
+                      scale:
+                        width < 640 / 3
+                          ? "1"
+                          : index === currentIndex
+                          ? "1"
+                          : "0.7",
+                      opacity:
+                        width < 640 / 3
+                          ? 1
+                          : `${Math.abs(currentIndex - index) >= 2 ? 0 : 1}`,
+                    }}
+                  >
+                    <TestimonialCard
+                      className="h-full"
+                      item={item}
+                      index={index}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            <div className="sm:relative z-50 left-0 bottom-0 right-0 justify-center absolute flex gap-3 lg:translate-y-[250%] translate-y-[300%]">
+              <div className="hidden sm:flex gap-3 items-center px-3 py-2 absolute -top-[50%] -translate-y-[100%]">
+                {Testimonials.map((item: TestimonialType, index: number) => {
+                  return <button style={{
+                    backgroundColor: currentIndex === index ? "var(--varBlack)" : "var(--varBlack)/0"
+                  }} key={index} onClick={() => handleLeftRight(index)} className="w-3 h-3 rounded-full border cursor-pointer transition-backgroundColor duration-500"></button>;
+                })}
+              </div>
+              <SimpleButton
+                disabled={isAnimating}
+                onClick={() => handleLeftRight(currentIndex - 1)}
+                className="px-2 cursor-pointer hidden sm:block"
+              >
+                {t("Left")}
+              </SimpleButton>
+              <SimpleButton
+                disabled={isAnimating}
+                onClick={() => handleLeftRight(currentIndex + 1)}
+                className="px-2 cursor-pointer hidden sm:block"
+              >
+                {t("Right")}
+              </SimpleButton>
             </div>
           </div>
         </div>
