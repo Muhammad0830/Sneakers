@@ -11,3 +11,10 @@ export interface AboutCardType {
   icon: React.ReactNode;
 }
 
+export interface TestimonialType {
+  id: number;
+  name: string;
+  image: string;
+  text: string;
+}
+
