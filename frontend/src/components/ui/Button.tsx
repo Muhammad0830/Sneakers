@@ -28,7 +28,7 @@ const Button = ({
       disabled={disabled}
     >
       <div
-        className={`px-3 py-2 relative z-10 bg-primary rounded-md text-white font-bold ${className}`}
+        className={`px-3 py-2 relative z-10 bg-primary rounded-md text-white font-bold cursor-pointer ${className}`}
       >
         {children}
       </div>

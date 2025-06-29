@@ -506,21 +506,21 @@ const Home = () => {
               <div className="hidden sm:flex gap-3 items-center px-3 py-2 absolute -top-[50%] -translate-y-[100%]">
                 {Testimonials.map((item: TestimonialType, index: number) => {
                   return <button style={{
-                    backgroundColor: currentIndex === index ? "var(--varBlack)" : "var(--varBlack)/0"
-                  }} key={index} onClick={() => handleLeftRight(index)} className="w-3 h-3 rounded-full border cursor-pointer transition-backgroundColor duration-500"></button>;
+                    backgroundColor: currentIndex === index ? "var(--primary)" : "var(--primary)/0"
+                  }} key={index} onClick={() => handleLeftRight(index)} className="w-3 h-3 rounded-full border border-primary cursor-pointer transition-backgroundColor duration-500"></button>;
                 })}
               </div>
               <SimpleButton
                 disabled={isAnimating}
                 onClick={() => handleLeftRight(currentIndex - 1)}
-                className="px-2 cursor-pointer hidden sm:block"
+                className="px-2 cursor-pointer hidden sm:block border-primary text-primary font-bold"
               >
                 {t("Left")}
               </SimpleButton>
               <SimpleButton
                 disabled={isAnimating}
                 onClick={() => handleLeftRight(currentIndex + 1)}
-                className="px-2 cursor-pointer hidden sm:block"
+                className="px-2 cursor-pointer hidden sm:block border-primary text-primary font-bold"
               >
                 {t("Right")}
               </SimpleButton>

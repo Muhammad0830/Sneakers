@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { Star } from "lucide-react";
+import { Star, Quote } from "lucide-react";
 import { TestimonialType } from "@/types/types";
 
 const TestimonialCard = ({
@@ -14,7 +14,7 @@ const TestimonialCard = ({
 }) => {
   return (
     <div
-      className={`bg-varWhite sm:block flex flex-col items-center px-3 py-4 rounded-lg relative w-full ${className}`}
+      className={`bg-varWhite sm:block flex flex-col items-center px-4 py-4 rounded-lg relative w-full ${className}`}
     >
       <div className="sm:absolute relative left-0 top-0 sm:-translate-x-[30%] sm:-translate-y-[30%] w-15 aspect-square rounded-full overflow-hidden">
         <Image
@@ -24,7 +24,9 @@ const TestimonialCard = ({
           className="object-contain"
         />
       </div>
-      <div className="text-center md:text-xl text-md font-bold">{item.name}</div>
+      <div className="text-center md:text-xl text-md font-bold text-primary">
+        {item.name}
+      </div>
       <div className="flex gap-1 items-center justify-center mt-1 mb-3">
         <Star size={15} color="yellow" />
         <Star size={15} color="yellow" />
@@ -32,7 +34,17 @@ const TestimonialCard = ({
         <Star size={15} color="yellow" />
         <Star size={15} color="yellow" />
       </div>
-      <div className="px-2 md:text-md text-sm text-varBlack font-normal">{item.text}</div>
+      <div className="px-2 relative border border-primary/30 rounded-lg p-2">
+        <p className="md:text-md text-sm text-varBlack font-normal">
+          {item.text}
+        </p>
+        <div className="absolute left-0 top-0 -translate-x-[60%] -translate-y-[30%] scale-x-[-1]">
+          <Quote size={20} color={"var(--primary)"} strokeWidth={3} />
+        </div>
+        <div className="absolute bottom-0 right-0 translate-x-[60%] translate-y-[30%] scale-y-[-1]">
+          <Quote size={20} color={"var(--primary)"} strokeWidth={3} />
+        </div>
+      </div>
     </div>
   );
 };
