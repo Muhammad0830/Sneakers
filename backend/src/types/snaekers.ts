@@ -13,3 +13,12 @@ export interface Trending extends RowDataPacket{
   description: string;
   image: string;
 }
+
+export interface Testimonial extends RowDataPacket{
+  id: number;
+  name: string;
+  image: string;
+  text: string;
+  postedAt: string;
+  likes: number;
+}

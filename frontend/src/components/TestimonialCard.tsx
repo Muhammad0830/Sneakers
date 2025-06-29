@@ -18,7 +18,7 @@ const TestimonialCard = ({
     >
       <div className="sm:absolute relative left-0 top-0 sm:-translate-x-[30%] sm:-translate-y-[30%] w-15 aspect-square rounded-full overflow-hidden">
         <Image
-          src={item.image}
+          src={item.image ? item.image : "/testimonialsFace1.png"}
           alt={`testimonials ${index}`}
           fill
           className="object-contain"
