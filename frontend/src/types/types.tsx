@@ -16,5 +16,6 @@ export interface TestimonialType {
   name: string;
   image: string;
   text: string;
+  likes: number;
 }
 

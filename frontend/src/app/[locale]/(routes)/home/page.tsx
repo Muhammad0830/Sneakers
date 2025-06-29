@@ -62,39 +62,6 @@ const AboutUsData = [
   },
 ];
 
-const Testimonials = [
-  {
-    id: 1,
-    name: "Emma Jersey",
-    image: "/testimonialsFace1.png",
-    text: "Fantastic experience! The products are top-notch, and the customer service is beyond excellent. Highly recommended!",
-  },
-  {
-    id: 2,
-    name: "James Lenn",
-    image: "/testimonialsFace1.png",
-    text: "Fast shipping, great deals, and amazing quality. I always find exactly what I need. Love this store!",
-  },
-  {
-    id: 3,
-    name: "Sofiya Monde",
-    image: "/testimonialsFace1.png",
-    text: "Shopping here is a breeze. The website is easy to use, and the checkout process is smooth. Five stars!",
-  },
-  {
-    id: 4,
-    name: "Emma Jersey",
-    image: "/testimonialsFace1.png",
-    text: "Fantastic experience! The products are top-notch, and the customer service is beyond excellent. Highly recommended!",
-  },
-  {
-    id: 5,
-    name: "James Lenn",
-    image: "/testimonialsFace1.png",
-    text: "Fast shipping, great deals, and amazing quality. I always find exactly what I need. Love this store!",
-  },
-];
-
 const Home = () => {
   const t = useTranslations("Home");
   const SVGpathComponentRef = useRef<{
@@ -109,9 +76,12 @@ const Home = () => {
   const TestimonialRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
+  const { data: testimonials = [] } = useApiQuery<TestimonialType[]>("/testimonials", "Testimonials");
+  console.log('testimonials', testimonials);
+  
   const handleLeftRight = (number: number) => {
     setIsAnimating(true);
-    if (number < Testimonials.length && number >= 0) {
+    if (number < testimonials.length && number >= 0) {
       setCurrentIndex(number);
       if (TestimonialRef.current && width) {
         TestimonialRef.current.style.transform = `translateX(-${
@@ -475,7 +445,7 @@ const Home = () => {
               className="flex sm:absolute relative sm:left-[60%] left-0 top-0 bottom-0 sm:items-center transition-transform duration-500"
               style={{ gap: width < 640 / 3 ? "2rem" : "0" }}
             >
-              {Testimonials.map((item: TestimonialType, index: number) => {
+              {testimonials.map((item: TestimonialType, index: number) => {
                 return (
                   <div
                     key={index}
@@ -504,7 +474,7 @@ const Home = () => {
             </div>
             <div className="sm:relative z-50 left-0 bottom-0 right-0 justify-center absolute flex gap-3 lg:translate-y-[250%] translate-y-[300%]">
               <div className="hidden sm:flex gap-3 items-center px-3 py-2 absolute -top-[50%] -translate-y-[100%]">
-                {Testimonials.map((item: TestimonialType, index: number) => {
+                {testimonials.map((item: TestimonialType, index: number) => {
                   return <button style={{
                     backgroundColor: currentIndex === index ? "var(--primary)" : "var(--primary)/0"
                   }} key={index} onClick={() => handleLeftRight(index)} className="w-3 h-3 rounded-full border border-primary cursor-pointer transition-backgroundColor duration-500"></button>;
