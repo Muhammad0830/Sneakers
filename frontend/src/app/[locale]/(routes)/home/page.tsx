@@ -19,6 +19,9 @@ import {
   Star,
   ChevronRight,
   Check,
+  PhoneCall,
+  MailCheck,
+  Pencil,
 } from "lucide-react";
 import TestimonialCard from "@/components/TestimonialCard";
 import { AboutCardType, TestimonialType, Product } from "@/types/types";
@@ -76,9 +79,11 @@ const Home = () => {
   const TestimonialRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
-  const { data: testimonials = [] } = useApiQuery<TestimonialType[]>("/testimonials", "Testimonials");
-  console.log('testimonials', testimonials);
-  
+  const { data: testimonials = [] } = useApiQuery<TestimonialType[]>(
+    "/testimonials",
+    "Testimonials"
+  );
+
   const handleLeftRight = (number: number) => {
     setIsAnimating(true);
     if (number < testimonials.length && number >= 0) {
@@ -226,13 +231,13 @@ const Home = () => {
             <SimpleButton
               onClick={() => handleClick(centerIndex - 1)}
               disabled={isAnimating}
-              className="cursor-pointer"
+              className="cursor-pointer px-3"
             >
               Up
             </SimpleButton>
             <SimpleButton
               onClick={() => handleClick(centerIndex + 1)}
-              className="cursor-pointer"
+              className="cursor-pointer px-3"
               disabled={isAnimating}
             >
               Down
@@ -472,12 +477,22 @@ const Home = () => {
                 );
               })}
             </div>
-            <div className="sm:relative z-50 left-0 bottom-0 right-0 justify-center absolute flex gap-3 lg:translate-y-[250%] translate-y-[300%]">
+            <div className="sm:relative left-0 bottom-0 right-0 justify-center absolute flex gap-3 lg:translate-y-[250%] translate-y-[300%]">
               <div className="hidden sm:flex gap-3 items-center px-3 py-2 absolute -top-[50%] -translate-y-[100%]">
                 {testimonials.map((item: TestimonialType, index: number) => {
-                  return <button style={{
-                    backgroundColor: currentIndex === index ? "var(--primary)" : "var(--primary)/0"
-                  }} key={index} onClick={() => handleLeftRight(index)} className="w-3 h-3 rounded-full border border-primary cursor-pointer transition-backgroundColor duration-500"></button>;
+                  return (
+                    <button
+                      style={{
+                        backgroundColor:
+                          currentIndex === index
+                            ? "var(--primary)"
+                            : "var(--primary)/0",
+                      }}
+                      key={index}
+                      onClick={() => handleLeftRight(index)}
+                      className="w-3 h-3 rounded-full border border-primary cursor-pointer transition-backgroundColor duration-500"
+                    ></button>
+                  );
                 })}
               </div>
               <SimpleButton
@@ -494,6 +509,129 @@ const Home = () => {
               >
                 {t("Right")}
               </SimpleButton>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Contact */}
+      <div className="px-4 md:px-16 sm:px-8 mb-30">
+        <div className="text-4xl font-bold text-center mb-10">
+          {t("Contact")}
+        </div>
+        <div className="flex sm:flex-row flex-col gap-3 items-center">
+          <div className="lg:w-2/5 sm:w-1/2 w-full sm:px-0 px-4 flex flex-col gap-4">
+            <h1 className="font-bold lg:text-3xl text-2xl flex flex-col gap-1 sm:items-start items-center">
+              <span>Any ideas or issues...</span>
+              <span>Contact with Us!</span>
+            </h1>
+
+            <h3 className="font-normal lg:text-lg text-md flex flex-col gap-3 items-start">
+              <span className="sm:text-start text-center">
+                You can contact with us using our email and phone number or
+                writing here.
+              </span>
+              <span className="text-start sm:block hidden">
+                {" "}
+                **If you are not signed up or signed in, please sign in/up first
+                before writing here.
+              </span>
+            </h3>
+            <div className="sm:flex flex-row sm:justify-start items-center gap-4 justify-center hidden">
+              <Button className="hover-trigger" isLinkButton>
+                Sign Up
+              </Button>
+              <Button
+                className="hover-target duration-300 transition-translate"
+                isLinkButton
+              >
+                Sign In
+              </Button>
+            </div>
+          </div>
+          <div className="flex-1 flex flex-col gap-4">
+            <div className="flex lg:flex-row flex-col gap-4 w-full">
+              <div className="flex flex-1 sm:flex-col flex-row sm:items-start sm:justify-start justify-between items-center gap-2 p-4 rounded-lg bg-varWhite">
+                <div className="flex flex-row gap-2 justify-start items-center">
+                  <div className="bg-primary aspect-square sm:w-10 w-7 rounded-lg sm:flex hidden justify-center items-center">
+                    <PhoneCall
+                      size={width * 3 < 640 ? 18 : 25}
+                      color={"white"}
+                    />
+                  </div>
+                  <h2 className="lg:text-2xl sm:text-xl text-md font-bold">
+                    Call to us
+                  </h2>
+                </div>
+                <div>
+                  <h3 className="lg:text-md text-sm text font-normal sm:block hidden">
+                    Call to us using this number
+                  </h3>
+                  <h3 className="lg:text-md sm:text-sm text-xs font-normal">
+                    +999894-410-15-51
+                  </h3>
+                </div>
+              </div>
+              <div className="flex flex-1 sm:flex-col flex-row sm:items-start sm:justify-start justify-between items-center gap-2 p-4 rounded-lg bg-varWhite">
+                <div className="flex flex-row gap-2 justify-start items-center">
+                  <div className="bg-primary aspect-square sm:w-10 w-7 rounded-lg sm:flex hidden justify-center items-center">
+                    <MailCheck
+                      size={width * 3 < 640 ? 18 : 25}
+                      color={"white"}
+                    />
+                  </div>
+                  <div className="lg:text-2xl sm:text-xl text-sm font-bold">
+                    Write to us
+                  </div>
+                </div>
+                <div>
+                  <h3 className="lg:text-md text-sm font-normal sm:block hidden">
+                    Call to us using this email
+                  </h3>
+                  <h3 className="lg:text-md sm:text-sm text-xs font-normal">
+                    abduqayumovm1@gmail.com
+                  </h3>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 p-4 rounded-lg bg-varWhite">
+              <div className="flex flex-row gap-2 items-center">
+                <div className="bg-primary aspect-square sm:w-10 w-7 rounded-lg sm:flex hidden justify-center items-center">
+                  <Pencil size={width * 3 < 640 ? 18 : 25} color={"white"} />
+                </div>
+                <div className="lg:text-2xl sm:text-xl text-sm font-bold flex-1">
+                  Write your words here
+                </div>
+                <div>
+                  <Button className="sm:text-md text-sm">Submit</Button>
+                </div>
+              </div>
+              <div className="rounded-md border border-primary lg:h-25 h-30">
+                <textarea
+                  name="message"
+                  id="message"
+                  placeholder="Type here"
+                  className="w-full h-full p-2 resize-none"
+                ></textarea>
+              </div>
+            </div>
+            <h3 className="font-normal text-md flex flex-col gap-3 items-start sm:hidden">
+              <span className="text-center">
+                {" "}
+                **If you are not signed up or signed in, please sign in/up first
+                before writing here.
+              </span>
+            </h3>
+            <div className="flex flex-row sm:justify-start items-center gap-4 justify-center sm:hidden">
+              <Button className="hover-trigger" isLinkButton>
+                Sign Up
+              </Button>
+              <Button
+                className="hover-target duration-300 transition-translate"
+                isLinkButton
+              >
+                Sign In
+              </Button>
             </div>
           </div>
         </div>

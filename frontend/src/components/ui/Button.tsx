@@ -9,6 +9,7 @@ type ButtonProps = {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   isLinkButton?: boolean;
+  wrapperClassName?: string;
 };
 
 const Button = ({
@@ -18,11 +19,12 @@ const Button = ({
   type,
   disabled,
   isLinkButton,
+  wrapperClassName
 }: ButtonProps) => {
   const t = useTranslations("Home");
   return (
     <button
-      className="relative group"
+      className={`relative group ${wrapperClassName}`}
       onClick={onClick}
       type={type}
       disabled={disabled}
