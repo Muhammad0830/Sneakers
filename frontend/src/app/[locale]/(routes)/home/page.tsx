@@ -540,11 +540,11 @@ const Home = () => {
               </span>
             </h3>
             <div className="sm:flex flex-row sm:justify-start items-center gap-4 justify-center hidden">
-              <Button className="hover-trigger" isLinkButton>
+              <Button wrapperClassName="hover-trigger" isLinkButton>
                 {t("Sign Up")}
               </Button>
               <Button
-                className="hover-target duration-300 transition-translate"
+                wrapperClassName="hover-target duration-300 transition-translate"
                 isLinkButton
               >
                 {t("Sign In")}
@@ -626,11 +626,11 @@ const Home = () => {
               </span>
             </h3>
             <div className="flex flex-row sm:justify-start items-center gap-4 justify-center sm:hidden">
-              <Button className="hover-trigger" isLinkButton>
+              <Button wrapperClassName="hover-trigger" isLinkButton>
                 {t("Sign Up")}
               </Button>
               <Button
-                className="hover-target duration-300 transition-translate"
+                wrapperClassName="hover-target duration-300 transition-translate"
                 isLinkButton
               >
                 {t("Sign In")}
