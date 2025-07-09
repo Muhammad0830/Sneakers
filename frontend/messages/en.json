@@ -58,6 +58,9 @@
       "Write to us": "Write to us",
       "Call to us using this email": "Call to us using this email",
       "Write your words here": "Write your words here",
-      "Submit": "Submit"
-    }
+      "Submit": "Submit",
+      "goHome": "Go Home",
+      "notFoundTitle": "Page Not Found",
+      "notFoundDescription": "Sorry, the page you're looking for doesn't exist."
+    } 
 }
