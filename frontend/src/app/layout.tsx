@@ -1,7 +1,7 @@
 import "../lib/fontawesome"; // 👈 Import before any UI that uses icons
 import "./globals.css";
-import './embla.css'
-import './base.css'
+import "./embla.css";
+import "./base.css";
 import { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "../context/ReactQueryProvider";
@@ -26,7 +26,9 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body className={`antialiased ${openSans.className}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

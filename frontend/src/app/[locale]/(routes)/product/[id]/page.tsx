@@ -1,16 +1,7 @@
-"use client";
-import { notFound, useParams } from "next/navigation";
-import React from "react";
+import ProductIdClient from "./ProductIdClient";
 
-const Page = () => {
-  const params = useParams();
-  const id = params?.id;
+export default async function Page() {
+  await new Promise((res) => setTimeout(res, 1000));
 
-  console.log("id", id);
-
-  if (id) return notFound();
-
-  return <div>page</div>;
-};
-
-export default Page;
+  return <ProductIdClient />;
+}

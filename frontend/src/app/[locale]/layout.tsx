@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { LoadingProvider } from "@/context/LoadingContext";
+import FullScreenLoader from "@/components/FullScreenLoader";
+import GlobalLoader from "@/components/GlobalLoader";
+// import { LoadingProvider } from "@/context/LoadingContext";
 
 export default async function LocaleLayout({
   children,
@@ -20,11 +24,15 @@ export default async function LocaleLayout({
   return (
     <div lang={locale}>
       <NextIntlClientProvider>
-        <div className="min-h-screen flex flex-col">
-          <NavBar />
-          <div className="pt-18 flex-1 overflow-hidden">{children}</div>
-          <Footer />
-        </div>
+        <LoadingProvider>
+          <GlobalLoader />
+          <FullScreenLoader />
+          <div className="min-h-screen flex flex-col">
+            <NavBar />
+            <div className="pt-18 flex-1 overflow-hidden">{children}</div>
+            <Footer />
+          </div>
+        </LoadingProvider>
       </NextIntlClientProvider>
     </div>
   );
