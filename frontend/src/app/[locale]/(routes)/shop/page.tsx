@@ -1,9 +1,9 @@
-import React from 'react'
+// Server component
+import ShopPage from "./ShopClient";
 
-const Shop = () => {
-  return (
-    <div>Shop</div>
-  )
+export default async function Page() {
+  // This will trigger the loading.tsx during route change
+  await new Promise((res) => setTimeout(res, 1000));
+
+  return <ShopPage />;
 }
-
-export default Shop

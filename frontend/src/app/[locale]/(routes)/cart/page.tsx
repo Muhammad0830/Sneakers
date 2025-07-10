@@ -1,9 +1,7 @@
-import React from 'react'
+import CartClient from "./CartClient";
 
-const Cart = () => {
-  return (
-    <div>Cart</div>
-  )
+export default async function Page() {
+  await new Promise((res) => setTimeout(res, 1000));
+  
+  return <CartClient />;
 }
-
-export default Cart

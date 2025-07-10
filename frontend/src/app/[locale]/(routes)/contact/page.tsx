@@ -1,9 +1,7 @@
-import React from 'react'
+import ContactClient from "./ContactClient";
 
-const Contact = () => {
-  return (
-    <div>Contact</div>
-  )
+export default async function Page() {
+  await new Promise((res) => setTimeout(res, 1000));
+  
+  return <ContactClient />;
 }
-
-export default Contact
