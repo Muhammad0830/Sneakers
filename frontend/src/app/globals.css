@@ -1,9 +1,9 @@
 @import "tailwindcss";
-@import "tailwindcss/utilities"; 
+@import "tailwindcss/utilities";
 
 :root {
-  --background: #EFEFEF;
-  --primary: #24F89C;
+  --background: #efefef;
+  --primary: #24f89c;
   --foreground: #000000;
   --varWhite: #ffffff;
   --varBlack: #000000;
@@ -23,7 +23,7 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --primary: #24F89C;
+    --primary: #24f89c;
   }
 }
 
@@ -36,4 +36,85 @@ body {
 
 .hover-trigger:hover + .hover-target {
   translate: 4rem 0rem;
+}
+
+.borderWithShadow {
+  box-shadow: 0px 0px 0px var(--primary);
+  background-color: white;
+  color: var(--primary);
+  border-style: solid;
+  border-color: var(--primary);
+  transition: 0.2s ease-in-out box-shadow, 0.2s ease-in-out background-color,
+    0.2s ease-in-out color, 0.2s ease-in-out border-color;
+}
+
+.borderWithShadow.open:hover {
+  box-shadow: 0px 0px 10px var(--primary);
+}
+
+.borderWithShadow.active {
+  background-color: var(--primary);
+  color: var(--varWhite);
+  border-color: var(--varWhite);
+}
+
+.radiusAnimation {
+  position: relative;
+  padding-inline: 0.5rem;
+  border-radius: 50%;
+  animation: 2.4s infinite;
+  transition: 0.2s ease-in-out box-shadow, 0.2s ease-in-out background-color,
+    0.2s ease-in-out color, 0.2s ease-in-out border-color,
+    padding 0.5s ease-in-out, border-radius 0.5s ease-in-out;
+}
+
+.radiusAnimation.open {
+  padding-inline: 0.75rem;
+  border-radius: 6px;
+}
+
+.wrapperFilter.open {
+  cursor: pointer;
+}
+
+.wrapperFilter.notOpen {
+  cursor: default;
+  pointer-events: none;
+}
+
+@keyframes bounceAnim {
+  0%,
+  30%,
+  100% {
+    translate: 0rem 0rem;
+  }
+  15% {
+    translate: 0rem -0.5rem;
+  }
+}
+
+@keyframes bounceAnim2 {
+  0%,
+  55%,
+  100% {
+    rotate: 0deg;
+    scale: 1;
+  }
+  10%,
+  12% {
+    scale: 1.6;
+    rotate: 45deg;
+  }
+  30%,
+  40% {
+    rotate: -45deg;
+    scale: 1.6;
+  }
+}
+
+@keyframes borderAnim1 {
+  0%,
+  100% {
+    scale: 1;
+  }
 }
