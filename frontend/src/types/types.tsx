@@ -19,3 +19,7 @@ export interface TestimonialType {
   likes: number;
 }
 
+export interface FilterType {
+  name: string;
+}
+

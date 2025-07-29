@@ -10,6 +10,9 @@ type ButtonProps = {
   disabled?: boolean;
   isLinkButton?: boolean;
   wrapperClassName?: string;
+  variants?: "borderedWithShadow" | "border" | "outlined";
+  style?: React.CSSProperties;
+  custom?: boolean;
 };
 
 const Button = ({
@@ -19,7 +22,10 @@ const Button = ({
   type,
   disabled,
   isLinkButton,
-  wrapperClassName
+  wrapperClassName,
+  variants,
+  style,
+  custom,
 }: ButtonProps) => {
   const t = useTranslations("Home");
   return (
@@ -30,7 +36,14 @@ const Button = ({
       disabled={disabled}
     >
       <div
-        className={`px-3 py-2 relative z-10 bg-primary rounded-md text-white font-bold cursor-pointer ${className}`}
+        className={`${
+          custom ? "" : "px-3 py-2 rounded-md"
+        } relative z-10 font-bold cursor-pointer ${
+          variants === "borderedWithShadow"
+            ? "borderWithShadow"
+            : "bg-primary text-white"
+        } ${className}`}
+        style={style}
       >
         {children}
       </div>
@@ -38,7 +51,9 @@ const Button = ({
         className="absolute z-0 top-0 bottom-0 left-[100%] -translate-x-[120%] transition-translate duration-200 group-hover:-translate-x-[0%] flex items-center cursor-pointer"
         style={{ display: isLinkButton ? "flex" : "none" }}
       >
-        <div className="h-[70%] bg-white py-1 px-2 text-xs flex justify-center items-center rounded-br-md rounded-tr-md border-t-1 border-b-1 border-r-1 border-primary">{t("Move")}</div>
+        <div className="h-[70%] bg-white py-1 px-2 text-xs flex justify-center items-center rounded-br-md rounded-tr-md border-t-1 border-b-1 border-r-1 border-primary">
+          {t("Move")}
+        </div>
       </div>
     </button>
   );
