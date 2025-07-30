@@ -98,13 +98,15 @@ export default function ShopClient() {
                     onClick={() => setSelectedMoreFilter(moreFilter)}
                   >
                     <span
-                      className={`overflow-hidden text-center inline-block transition-all duration-500 delay-${
-                        (array.length - 1) * 75 - index * 75
-                      } font-bold ${
+                      className={`overflow-hidden text-center inline-block duration-500 font-bold ${
                         moreFilterOpen
                           ? "w-16 h-6 opacity-100"
                           : "w-0 h-0 opacity-0"
                       }`}
+                      style={{
+                        transitionProperty: "width, height, opacity",
+                        transitionDelay: `${(array.length - 1) * 75 - index * 75}ms`,
+                      }}
                     >
                       {moreFilter.name}
                     </span>
