@@ -19,10 +19,6 @@ export interface TestimonialType {
   likes: number;
 }
 
-export interface FilterType {
-  name: string;
-}
-
 export interface MoreFiltersType {
   name: string;
   isActive: boolean;

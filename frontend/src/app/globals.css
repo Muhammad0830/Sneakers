@@ -82,17 +82,6 @@ body {
   pointer-events: none;
 }
 
-.something {
-  transition: border-radius 0.5s ease-in-out, width 0.5s ease-in-out,
-    height 0.5s ease-in-out, translate 0.5s ease-in-out, top 0.5s ease-in-out;
-    z-index: 10;
-}
-
-div:has(.borderWithShadow:hover) + .something {
-  transition: border-radius 0.5s ease-in-out, width 0.5s 0s ease-in-out,
-    height 0.5s 0s ease-in-out, translate 0.5s ease-in-out, top 0.5s ease-in-out;
-}
-
 @keyframes bounceAnim {
   0%,
   30%,
