@@ -23,3 +23,7 @@ export interface FilterType {
   name: string;
 }
 
+export interface MoreFiltersType {
+  name: string;
+  isActive: boolean;
+}
