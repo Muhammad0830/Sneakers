@@ -22,4 +22,5 @@ export interface TestimonialType {
 export interface MoreFiltersType {
   name: string;
   isActive: boolean;
+  elements?: React.ReactNode;
 }
