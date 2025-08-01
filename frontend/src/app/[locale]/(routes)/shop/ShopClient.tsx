@@ -37,6 +37,18 @@ const filters: MoreFiltersType[] = [
   },
 ];
 
+const defaultValues: {
+  Gender: string[];
+  Size: string[];
+  Price: string[];
+  Color: string[];
+} = {
+  Gender: ["Men", "Women", "Kids"],
+  Size: ["XS", "S", "M", "L", "XL"],
+  Price: ["", ""],
+  Color: ["White", "Black", "Red", "Blue", "Green", "Pink"],
+};
+
 export default function ShopClient() {
   const [selectedFilter, setSelectedFilter] = useState<MoreFiltersType | null>(
     null
@@ -48,12 +60,7 @@ export default function ShopClient() {
   );
   const [selectedValuesMap, setSelectedValuesMap] = useState<{
     [key: string]: string[];
-  }>({
-    Gender: ["Men", "Women", "Kids"],
-    Size: [],
-    Price: [],
-    Color: [],
-  });
+  }>(defaultValues);
   const [appliedFilters, setAppliedFilters] = useState<appliedFiltersType[]>(
     []
   );
@@ -78,10 +85,17 @@ export default function ShopClient() {
       setAppliedFilters((prev) => [...prev, { name, selectedValues: values }]);
     } else if (type === "remove") {
       setAppliedFilters((prev) => prev.filter((f) => f.name !== name));
-      setSelectedValuesMap((prev) => ({
-        ...prev,
-        [name]: ["Men", "Women", "Kids"],
-      }));
+      if (
+        name === "Size" ||
+        name === "Color" ||
+        name === "Price" ||
+        name === "Gender"
+      ) {
+        setSelectedValuesMap((prev) => ({
+          ...prev,
+          [name]: defaultValues[name],
+        }));
+      }
     } else if (type === "update") {
       setAppliedFilters((prev) =>
         prev.map((f) =>
@@ -144,7 +158,7 @@ export default function ShopClient() {
                         setSelectedPopUp(filter);
                       }
                     }}
-                    className={`text-xl border-[2px] ${
+                    className={`text-xl border-[2px] z-20 ${
                       filter.isActive ? "active" : ""
                     }`}
                     variants="borderedWithShadow"
@@ -176,7 +190,7 @@ export default function ShopClient() {
                           onClick={() => {
                             setSelectedPopUp(null);
                           }}
-                          className="z-10 bg-primary rounded-sm border-blue-700 px-1.5 py-0.5 cursor-pointer text-white"
+                          className="z-10 bg-primary rounded-sm border-blue-700 px-3 py-0.5 cursor-pointer text-white"
                         >
                           Close
                         </button>

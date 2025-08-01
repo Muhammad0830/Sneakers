@@ -14,22 +14,42 @@ export const PriceFilter = ({
     setSelected([from, to]);
   }, [from, to]);
 
+  useEffect(() => {
+    setFrom(selected[0] || "");
+    setTo(selected[1] || "");
+  }, [selected]);
+
+  console.log("selected", selected);
+
   return (
-    <div className="flex gap-2 items-center">
+    <div className="gap-2 relative items-center">
       <input
         value={from}
-        onChange={(e) => setFrom(e.target.value)}
-        placeholder="From"
-        className="border rounded px-2 py-1 w-20"
-        type="number"
+        onChange={(e) => {
+          const value = e.target.value;
+          if (/^\d*$/.test(value)) {
+            setFrom(value);
+          }
+        }}
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        placeholder="From $"
+        className="no-spinner border mx-1 w-[8rem] rounded px-2 py-1 m-1"
       />
-      <span>-</span>
       <input
         value={to}
-        onChange={(e) => setTo(e.target.value)}
-        placeholder="To"
-        className="border rounded px-2 py-1 w-20"
-        type="number"
+        onChange={(e) => {
+          const value = e.target.value;
+          if (/^\d*$/.test(value)) {
+            setTo(value);
+          }
+        }}
+        placeholder="To $"
+        className="no-spinner border mx-1 w-[8rem]  rounded px-2 py-1 m-1"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        type="text"
       />
     </div>
   );

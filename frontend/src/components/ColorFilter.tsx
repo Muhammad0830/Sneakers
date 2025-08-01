@@ -47,7 +47,7 @@ export const ColorFilter = ({
           <div
             className={`absolute top-0 bottom-0 left-0 right-0 -z-10 translate-x-[100%] peer-checked:translate-x-[0%] transition-transform duration-300`}
             style={{
-              background: `linear-gradient(to right, transparent 50%, #${color.hex})`,
+              background: `linear-gradient(to right, transparent 50%, ${color.hex})`,
             }}
           ></div>
         </label>
