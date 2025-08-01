@@ -1,16 +1,15 @@
 "use client";
 
+import FilterPopOver from "@/components/filterPopOver";
 import Button from "@/components/ui/Button";
 import { MoreFiltersType } from "@/types/types";
 import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
 
-const filters: MoreFiltersType[] = [
-  { name: "Size", isActive: false },
-  { name: "Price", isActive: false },
-  { name: "Color", isActive: false },
-  { name: "Gender", isActive: false },
-];
+interface appliedFiltersType {
+  name: string;
+  selectedValues: string[];
+}
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -19,19 +18,90 @@ const moreFilters: MoreFiltersType[] = [
   { name: "New", isActive: false },
 ];
 
+const filters: MoreFiltersType[] = [
+  {
+    name: "Size",
+    isActive: false,
+  },
+  {
+    name: "Price",
+    isActive: false,
+  },
+  {
+    name: "Color",
+    isActive: false,
+  },
+  {
+    name: "Gender",
+    isActive: false,
+  },
+];
+
+const defaultValues: {
+  Gender: string[];
+  Size: string[];
+  Price: string[];
+  Color: string[];
+} = {
+  Gender: ["Men", "Women", "Kids"],
+  Size: ["XS", "S", "M", "L", "XL"],
+  Price: ["", ""],
+  Color: ["White", "Black", "Red", "Blue", "Green", "Pink"],
+};
+
 export default function ShopClient() {
   const [selectedFilter, setSelectedFilter] = useState<MoreFiltersType | null>(
     null
   );
   const [moreFilterOpen, setMoreFilterOpen] = useState(false);
+  const [activeOrder, setActiveOrder] = useState<string[]>([]);
+  const [selectedPopUp, setSelectedPopUp] = useState<MoreFiltersType | null>(
+    null
+  );
+  const [selectedValuesMap, setSelectedValuesMap] = useState<{
+    [key: string]: string[];
+  }>(defaultValues);
+  const [appliedFilters, setAppliedFilters] = useState<appliedFiltersType[]>(
+    []
+  );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
-  const [activeOrder, setActiveOrder] = useState<string[]>([]);
 
-  const toggleFilter = (name: string) => {
+  console.log("map", selectedValuesMap);
+
+  const toggleFilter = (
+    name: string,
+    type: "apply" | "remove" | "update" | "none"
+  ) => {
+    const values = selectedValuesMap[name] || [];
+
     if (name === "All") {
       setSpecificFilters(filters);
       setActiveOrder([]);
+      return;
+    }
+
+    if (type === "apply") {
+      setAppliedFilters((prev) => [...prev, { name, selectedValues: values }]);
+    } else if (type === "remove") {
+      setAppliedFilters((prev) => prev.filter((f) => f.name !== name));
+      if (
+        name === "Size" ||
+        name === "Color" ||
+        name === "Price" ||
+        name === "Gender"
+      ) {
+        setSelectedValuesMap((prev) => ({
+          ...prev,
+          [name]: defaultValues[name],
+        }));
+      }
+    } else if (type === "update") {
+      setAppliedFilters((prev) =>
+        prev.map((f) =>
+          f.name === name ? { ...f, selectedValues: values } : f
+        )
+      );
       return;
     }
 
@@ -45,13 +115,9 @@ export default function ShopClient() {
       )
     );
 
-    setActiveOrder((prev) => {
-      if (!isActive) {
-        return [...prev, name]; // add to end if activating
-      } else {
-        return prev.filter((n) => n !== name); // remove if deactivating
-      }
-    });
+    setActiveOrder((prev) =>
+      !isActive ? [...prev, name] : prev.filter((n) => n !== name)
+    );
   };
 
   const activeFiltersInOrder = activeOrder.map((name) =>
@@ -64,7 +130,7 @@ export default function ShopClient() {
       <div className="flex flex-row items-center gap-10 justify-center self-center relative ">
         <Button
           onClick={() => {
-            toggleFilter("All");
+            toggleFilter("All", "none");
           }}
           className={`text-xl border-[2px] ${
             specificFilters.some((f) => f.isActive) ? "" : "active"
@@ -75,19 +141,138 @@ export default function ShopClient() {
         </Button>
         {specificFilters
           ? specificFilters.map((filter: MoreFiltersType, index: number) => {
+              const currentName = selectedPopUp?.name || "";
+              const currentValues = selectedValuesMap[currentName] || [];
+
+              const existing = appliedFilters.find(
+                (f) => f.name === currentName
+              );
+
               return (
-                <Button
-                  onClick={() => {
-                    toggleFilter(filter.name);
-                  }}
-                  className={`text-xl border-[2px] ${
-                    filter.isActive ? "active" : ""
-                  }`}
-                  variants="borderedWithShadow"
-                  key={index}
-                >
-                  {filter.name}
-                </Button>
+                <div className="relative" key={index}>
+                  <Button
+                    onClick={() => {
+                      if (selectedPopUp?.name === filter.name) {
+                        setSelectedPopUp(null);
+                      } else {
+                        setSelectedPopUp(filter);
+                      }
+                    }}
+                    className={`text-xl border-[2px] z-20 ${
+                      filter.isActive ? "active" : ""
+                    }`}
+                    variants="borderedWithShadow"
+                  >
+                    {filter.name}
+                  </Button>
+
+                  <div
+                    className={`popup absolute border border-primary bg-white p-2 rounded-md z-10 left-[50%] translate-x-[-50%] flex justify-center ${
+                      selectedPopUp?.name === filter.name
+                        ? "active"
+                        : "inactive"
+                    }`}
+                  >
+                    <div className="flex flex-col gap-2 relative overflow-hidden">
+                      <FilterPopOver
+                        Filter={filter.name}
+                        index={index}
+                        selectedValues={selectedValuesMap[filter.name] || []}
+                        setSelectedValues={(newValues: string[]) => {
+                          setSelectedValuesMap((prev) => ({
+                            ...prev,
+                            [filter.name]: newValues,
+                          }));
+                        }}
+                      />
+                      <div className="flex items-center gap-2 justify-between">
+                        <button
+                          onClick={() => {
+                            setSelectedPopUp(null);
+                          }}
+                          className="z-10 bg-primary rounded-sm border-blue-700 px-3 py-0.5 cursor-pointer text-white"
+                        >
+                          Close
+                        </button>
+                        <button
+                          className={`overflow-hidden rounded-sm flex justify-center border-blue-700 px-1.5 py-0.5 transition-colors duration-300 cursor-pointer text-white ${
+                            !existing ||
+                            !(
+                              JSON.stringify(currentValues) ===
+                              JSON.stringify(existing.selectedValues)
+                            )
+                              ? "bg-blue-500"
+                              : "bg-red-500"
+                          }`}
+                          onClick={() => {
+                            if (selectedPopUp?.name) {
+                              if (currentValues.length === 0) {
+                                alert("Please select at least one value");
+                                return;
+                              }
+
+                              if (!existing) {
+                                toggleFilter(currentName, "apply");
+                              } else if (
+                                JSON.stringify(currentValues) ===
+                                JSON.stringify(existing.selectedValues)
+                              ) {
+                                toggleFilter(currentName, "remove");
+                              } else {
+                                toggleFilter(currentName, "update");
+                              }
+                            }
+                          }}
+                        >
+                          <span
+                            className={`absolute transition-transform duration-300 ${
+                              filter.isActive &&
+                              appliedFilters.some(
+                                (f) => f.name === selectedPopUp?.name
+                              )
+                                ? "translate-x-[300%]"
+                                : "translate-x-0"
+                            }`}
+                          >
+                            Apply
+                          </span>
+                          <span
+                            className={`absolute transition-transform duration-300 ${
+                              filter.isActive &&
+                              selectedValuesMap[filter.name] ===
+                                appliedFilters.find(
+                                  (f) => f.name === selectedPopUp?.name
+                                )?.selectedValues
+                                ? "translate-x-0"
+                                : filter.isActive &&
+                                  selectedValuesMap[filter.name] !==
+                                    appliedFilters.find(
+                                      (f) => f.name === selectedPopUp?.name
+                                    )?.selectedValues
+                                ? "translate-x-[300%]"
+                                : "-translate-x-[300%]"
+                            }`}
+                          >
+                            Cancel
+                          </span>
+                          <span
+                            className={`relative transition-transform duration-300 ${
+                              filter.isActive &&
+                              selectedValuesMap[filter.name] !==
+                                appliedFilters.find(
+                                  (f) => f.name === selectedPopUp?.name
+                                )?.selectedValues
+                                ? "translate-x-0"
+                                : "-translate-x-[300%]"
+                            }`}
+                          >
+                            Update
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               );
             })
           : null}
@@ -220,7 +405,7 @@ export default function ShopClient() {
                   </span>
                 ))}
                 <button
-                  onClick={() => toggleFilter("All")}
+                  onClick={() => toggleFilter("All", "none")}
                   className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
                 >
                   <X size={16} color="white" />

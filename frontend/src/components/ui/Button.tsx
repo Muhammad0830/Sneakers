@@ -56,7 +56,7 @@ const Button = ({
         </div>
       </div>
     </button>
-  );
+    );
 };
 
 export default Button;
