@@ -2,14 +2,9 @@
 
 import FilterPopOver from "@/components/filterPopOver";
 import Button from "@/components/ui/Button";
-import { MoreFiltersType } from "@/types/types";
+import { MoreFiltersType, Filters, appliedFiltersType } from "@/types/types";
 import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
-
-interface appliedFiltersType {
-  name: string;
-  selectedValues: string[];
-}
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -50,9 +45,7 @@ const defaultValues: {
 };
 
 export default function ShopClient() {
-  const [selectedFilter, setSelectedFilter] = useState<MoreFiltersType | null>(
-    null
-  );
+  const [selectedFilter, setSelectedFilter] = useState<Filters | null>(null);
   const [moreFilterOpen, setMoreFilterOpen] = useState(false);
   const [activeOrder, setActiveOrder] = useState<string[]>([]);
   const [selectedPopUp, setSelectedPopUp] = useState<MoreFiltersType | null>(
@@ -132,7 +125,7 @@ export default function ShopClient() {
           onClick={() => {
             toggleFilter("All", "none");
           }}
-          className={`text-xl border-[2px] ${
+          className={`text-xl min-w-[6rem] border-[2px] ${
             specificFilters.some((f) => f.isActive) ? "" : "active"
           }`}
           variants="borderedWithShadow"
@@ -158,7 +151,7 @@ export default function ShopClient() {
                         setSelectedPopUp(filter);
                       }
                     }}
-                    className={`text-xl border-[2px] z-20 ${
+                    className={`text-xl border-[2px] min-w-[6rem] z-20 ${
                       filter.isActive ? "active" : ""
                     }`}
                     variants="borderedWithShadow"
@@ -299,7 +292,7 @@ export default function ShopClient() {
         <div
           className={`absolute bottom-[0%] transition-all ${
             moreFilterOpen
-              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[3.5rem] duration-700"
+              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[4.5rem] duration-700"
               : "right-[0%] translate-y-[calc(100%)] -translate-x-[50%] duration-1000"
           } top-[0%] flex justify-center items-center gap-2`}
         >
@@ -333,16 +326,21 @@ export default function ShopClient() {
                   }}
                   onClick={() => {
                     if (moreFilter.name !== selectedFilter?.name) {
-                      setSelectedFilter(moreFilter);
+                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                    } else if (
+                      moreFilter.name == selectedFilter?.name &&
+                      selectedFilter.isAsc
+                    ) {
+                      setSelectedFilter({ ...moreFilter, isAsc: false });
                     } else {
                       setSelectedFilter(null);
                     }
                   }}
                 >
                   <span
-                    className={`overflow-hidden text-center inline-block duration-500 font-bold ${
+                    className={`overflow-hidden text-center flex justify-center items-center gap-1 duration-500 font-bold ${
                       moreFilterOpen
-                        ? "w-16 h-6 opacity-100"
+                        ? "w-19 h-6 opacity-100"
                         : "w-0 h-0 opacity-0"
                     }`}
                     style={{
@@ -352,7 +350,38 @@ export default function ShopClient() {
                       }ms`,
                     }}
                   >
-                    {moreFilter.name}
+                    <div className="relative flex">
+                      <span
+                        className={`${
+                          selectedFilter?.name === moreFilter.name
+                            ? "-translate-x-[0.5rem]"
+                            : "translate-x-0"
+                        } transition-transform duration-200`}
+                      >
+                        {moreFilter.name}
+                      </span>
+
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          selectedFilter?.isAsc
+                            ? "translate-y-0"
+                            : "translate-y-[100%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↑
+                      </span>
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          !selectedFilter?.isAsc
+                            ? "-translate-y-0"
+                            : "-translate-y-[100%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↓
+                      </span>
+                    </div>
                   </span>
                 </Button>
               );
@@ -362,7 +391,7 @@ export default function ShopClient() {
 
         <div
           className={`absolute border border-transparent bottom-[0%] ${
-            moreFilterOpen ? "-left-[3.5rem]" : "-left-0"
+            moreFilterOpen ? "-left-[4.5rem]" : "-left-0"
           } translate-y-[calc(100%+1rem+2px)] flex gap-4 items-center`}
           style={{
             transitionProperty: "left",

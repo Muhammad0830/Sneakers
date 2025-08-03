@@ -24,3 +24,14 @@ export interface MoreFiltersType {
   isActive: boolean;
   elements?: React.ReactNode;
 }
+
+export interface appliedFiltersType {
+  name: string;
+  selectedValues: string[];
+}
+
+export interface Filters {
+  name: string;
+  isActive: boolean;
+  isAsc: boolean;
+}
