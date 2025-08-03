@@ -19,8 +19,6 @@ export const PriceFilter = ({
     setTo(selected[1] || "");
   }, [selected]);
 
-  console.log("selected", selected);
-
   return (
     <div className="gap-2 relative items-center">
       <input

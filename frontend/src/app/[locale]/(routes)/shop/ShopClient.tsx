@@ -2,9 +2,15 @@
 
 import FilterPopOver from "@/components/filterPopOver";
 import Button from "@/components/ui/Button";
-import { MoreFiltersType, Filters, appliedFiltersType } from "@/types/types";
+import {
+  MoreFiltersType,
+  Filters,
+  appliedFiltersType,
+  Product,
+} from "@/types/types";
 import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
+import ProductCard from "@/components/ProductCard";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -32,6 +38,153 @@ const filters: MoreFiltersType[] = [
   },
 ];
 
+const products: Product[] = [
+  {
+    id: 1,
+    title: "Product 1",
+    size: "XS, S, M, L, XL",
+    price: "19.99",
+    color: "white, black, red, lightblue, lightgreen",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 2,
+    title: "Product 2",
+    size: "S, M, L",
+    price: "29.99",
+    color: "black, red, lightblue",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 3,
+    title: "Product 3",
+    size: "M, L, XL",
+    price: "39.99",
+    color: "red, pink",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 4,
+    title: "Product 4",
+    size: "L, XL",
+    price: "49.99",
+    color: "lightblue, white, red",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 5,
+    title: "Product 5",
+    size: "L, XL",
+    price: "59.99",
+    color: "lightgreen, black, white",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 6,
+    title: "Product 6",
+    size: "XS, S, M, L",
+    price: "19.99",
+    color: "white, black, yellow",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 7,
+    title: "Product 7",
+    size: "S, M, L",
+    price: "29.99",
+    color: "black, lightgreen",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 8,
+    title: "Product 8",
+    size: "M, L",
+    price: "39.99",
+    color: "red, black",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 9,
+    title: "Product 9",
+    size: "XS, S, M, L",
+    price: "19.99",
+    color: "white, pink",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 10,
+    title: "Product 10",
+    size: "S, M, L, XL",
+    price: "29.99",
+    color: "black, red, pink, white, lightblue",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 11,
+    title: "Product 11",
+    size: "M, L, XL",
+    price: "39.99",
+    color: "Red, lightgreen, pink",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 12,
+    title: "Product 12",
+    size: "S, M, L, XL",
+    price: "49.99",
+    color: "Lightblue, white, black",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 13,
+    title: "Product 13",
+    size: "S, M, L, XL",
+    price: "59.99",
+    color: "LightGreen, black, red",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 14,
+    title: "Product 14",
+    size: "XS, S, M, L",
+    price: "19.99",
+    color: "White, black, pink",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 15,
+    title: "Product 15",
+    size: "S, M, L, XL",
+    price: "29.99",
+    color: "Black, lightblue, white",
+    rate: 4.5,
+    reviews: 10,
+  },
+  {
+    id: 16,
+    title: "Product 16",
+    size: "M, L, XL",
+    price: "39.99",
+    color: "Red, lightblue, white, black",
+    rate: 4.5,
+    reviews: 10,
+  },
+];
+
 const defaultValues: {
   Gender: string[];
   Size: string[];
@@ -41,7 +194,7 @@ const defaultValues: {
   Gender: ["Men", "Women", "Kids"],
   Size: ["XS", "S", "M", "L", "XL"],
   Price: ["", ""],
-  Color: ["White", "Black", "Red", "Blue", "Green", "Pink"],
+  Color: ["White", "Black", "Red", "Lightblue", "Lightgreen", "Pink"],
 };
 
 export default function ShopClient() {
@@ -59,8 +212,6 @@ export default function ShopClient() {
   );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
-
-  console.log("map", selectedValuesMap);
 
   const toggleFilter = (
     name: string,
@@ -117,10 +268,14 @@ export default function ShopClient() {
     specificFilters.find((f) => f.name === name)
   );
 
+  console.log("appliedFilters", appliedFilters);
+  console.log("selectedFilter", selectedFilter);
+  console.log("selectedValuesMap", selectedValuesMap);
+
   return (
     <div className="px-[60px] mt-4 flex flex-col">
       <div className="mb-2">pathname: Home/shop</div>
-      <div className="flex flex-row items-center gap-10 justify-center self-center relative ">
+      <div className="flex flex-row items-center gap-10 justify-center self-center relative mb-16">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
@@ -271,7 +426,10 @@ export default function ShopClient() {
           : null}
         <div className="relative">
           <Button
-            onClick={() => setMoreFilterOpen((prev) => !prev)}
+            onClick={() => {
+              setMoreFilterOpen((prev) => !prev);
+              setSelectedPopUp(null);
+            }}
             className="text-xl border-[2px] flex items-center gap-4 px-8"
           >
             <span>More Filters </span>
@@ -292,7 +450,7 @@ export default function ShopClient() {
         <div
           className={`absolute bottom-[0%] transition-all ${
             moreFilterOpen
-              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[4.5rem] duration-700"
+              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[2.5rem] duration-700"
               : "right-[0%] translate-y-[calc(100%)] -translate-x-[50%] duration-1000"
           } top-[0%] flex justify-center items-center gap-2`}
         >
@@ -391,7 +549,7 @@ export default function ShopClient() {
 
         <div
           className={`absolute border border-transparent bottom-[0%] ${
-            moreFilterOpen ? "-left-[4.5rem]" : "-left-0"
+            moreFilterOpen ? "-left-[2.5rem]" : "-left-0"
           } translate-y-[calc(100%+1rem+2px)] flex gap-4 items-center`}
           style={{
             transitionProperty: "left",
@@ -406,7 +564,9 @@ export default function ShopClient() {
                   {selectedFilter?.name}
                 </span>
                 <button
-                  onClick={() => setSelectedFilter(null)}
+                  onClick={() => {
+                    setSelectedFilter(null);
+                  }}
                   className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
                 >
                   <X size={16} color="white" />
@@ -434,7 +594,11 @@ export default function ShopClient() {
                   </span>
                 ))}
                 <button
-                  onClick={() => toggleFilter("All", "none")}
+                  onClick={() => {
+                    toggleFilter("All", "none");
+                    setSelectedValuesMap(defaultValues);
+                    setAppliedFilters([]);
+                  }}
                   className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
                 >
                   <X size={16} color="white" />
@@ -447,6 +611,13 @@ export default function ShopClient() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* product cards */}
+      <div className="grid grid-cols-4 gap-8 my-16">
+        {products.map((product: Product) => {
+          return <ProductCard product={product} key={product.id} />;
+        })}
       </div>
     </div>
   );
