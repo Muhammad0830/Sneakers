@@ -2,14 +2,9 @@
 
 import FilterPopOver from "@/components/filterPopOver";
 import Button from "@/components/ui/Button";
-import { MoreFiltersType } from "@/types/types";
+import { MoreFiltersType, Filters, appliedFiltersType } from "@/types/types";
 import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
-
-interface appliedFiltersType {
-  name: string;
-  selectedValues: string[];
-}
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -50,11 +45,7 @@ const defaultValues: {
 };
 
 export default function ShopClient() {
-  const [selectedFilter, setSelectedFilter] = useState<{
-    name: string;
-    isActive: boolean;
-    isAsc: boolean;
-  } | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<Filters | null>(null);
   const [moreFilterOpen, setMoreFilterOpen] = useState(false);
   const [activeOrder, setActiveOrder] = useState<string[]>([]);
   const [selectedPopUp, setSelectedPopUp] = useState<MoreFiltersType | null>(
