@@ -10,17 +10,17 @@ export const ColorFilter = ({
     { color: "White", hex: "#ffffff" },
     { color: "Black", hex: "#000000" },
     { color: "Red", hex: "#ff0000" },
-    { color: "Blue", hex: "#0000ff" },
-    { color: "Green", hex: "#00ff00" },
+    { color: "Lightblue", hex: "#0000ff" },
+    { color: "Lightgreen", hex: "#00ff00" },
     { color: "Pink", hex: "#ffc0cb" },
   ];
   return (
-    <div className="grid grid-cols-2 gap-2 min-w-[13rem]">
+    <div className="grid grid-cols-2 gap-2 min-w-[14rem]">
       {colors.map((color) => (
         <label
           key={color.color}
           htmlFor={color.color}
-          className="flex items-center gap-2 cursor-pointer py-0.5 px-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
+          className="flex items-center text-sm gap-2 cursor-pointer py-0.5 px-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
         >
           <input
             type="checkbox"

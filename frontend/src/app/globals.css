@@ -4,6 +4,7 @@
 :root {
   --background: #efefef;
   --primary: #24f89c;
+  --primary-80: #00ff9131;
   --foreground: #000000;
   --varWhite: #ffffff;
   --varBlack: #000000;
@@ -13,6 +14,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
+  --color-primary-80: var(--primary-80);
   --color-varWhite: var(--varWhite);
   --color-varBlack: var(--varBlack);
   --font-sans: var(--font-geist-sans);

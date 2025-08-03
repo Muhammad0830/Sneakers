@@ -35,3 +35,13 @@ export interface Filters {
   isActive: boolean;
   isAsc: boolean;
 }
+
+export interface Product {
+  id: number;
+  title: string;
+  price: string;
+  size: string;
+  color: string;
+  rate: number;
+  reviews: number;
+}
