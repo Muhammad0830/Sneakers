@@ -5,9 +5,9 @@ import { useTranslations } from "next-intl";
 import LinkComponent from "./ui/Link";
 import SimpleButton from "@/components/ui/SimpleButton";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 
 const logo = "SNEAKER";
-const theme = "light";
 
 const data = {
   navLinks: [
@@ -36,6 +36,10 @@ const NavBar = () => {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [pathName, setPathName] = useState<string | null>(null);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     const newPathName = pathname.split("/")[2];
@@ -56,6 +60,8 @@ const NavBar = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (!mounted) return null;
+
   return (
     <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/50 backdrop-blur-xs py-4 lg:px-6 px-4 flex items-center justify-between shadow-gray-500/20 shadow-lg">
       <div className="flex-1 flex sm:justify-center justify-between lg:gap-10 sm:gap-4 gap-6 items-center">
@@ -74,7 +80,9 @@ const NavBar = () => {
         </nav>
 
         {/* Logo | Desktop */}
-        <div className="lg:text-3xl md:text-2xl text-2xl font-bold cursor-default">{logo}</div>
+        <div className="lg:text-3xl md:text-2xl text-2xl font-bold cursor-default">
+          {logo}
+        </div>
 
         <div className="flex-1 flex lg:gap-10 sm:gap-4 gap-6 justify-end sm:justify-between items-center">
           {/* right side Links | Desktop*/}
@@ -102,13 +110,16 @@ const NavBar = () => {
             <div className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5">
               <Globe size={size} color="var(--color-varBlack)" />
             </div>
-            <div className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5">
+            <button
+              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+              className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5"
+            >
               {theme === "light" ? (
                 <Moon size={size} color="var(--color-varBlack)" />
               ) : (
                 <Sun size={size} color="var(--color-varBlack)" />
               )}
-            </div>
+            </button>
           </div>
 
           {/* just for mobile and Tablet */}

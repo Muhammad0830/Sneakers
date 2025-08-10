@@ -6,6 +6,7 @@ import "./animations.css";
 import { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "../context/ReactQueryProvider";
+import { ThemeProvider } from "next-themes";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -27,7 +28,11 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body className={`antialiased ${openSans.className}`}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            {children}
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
