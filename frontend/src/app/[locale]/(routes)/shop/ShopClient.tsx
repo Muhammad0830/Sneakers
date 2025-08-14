@@ -275,10 +275,14 @@ export default function ShopClient() {
   return (
     <div className="px-[60px] mt-4 flex flex-col">
       <div className="mb-2">pathname: Home/shop</div>
-      <div className="flex flex-row items-center gap-10 justify-center self-center relative mb-16">
+
+      {/* filtering */}
+      <div className="flex z-50 flex-row items-center gap-10 justify-center self-center relative mb-16">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
+            setSelectedValuesMap(defaultValues);
+            setAppliedFilters([]);
           }}
           className={`text-xl min-w-[6rem] border-[2px] ${
             specificFilters.some((f) => f.isActive) ? "" : "active"
