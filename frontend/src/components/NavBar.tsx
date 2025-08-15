@@ -100,7 +100,7 @@ const NavBar = () => {
           </nav>
 
           {/* icons | Desktop */}
-          <div className="lg:flex gap-1.5 bg-varWhite rounded-full px-1 py-1 hidden">
+          <div className="lg:flex gap-1.5 bg-varWhite rounded-full px-1 py-1 hidden items-center">
             <div className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5">
               <Search size={size} color="var(--color-varBlack)" />
             </div>
@@ -112,13 +112,22 @@ const NavBar = () => {
             </div>
             <button
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5"
+              className="p-1 overflow-hidden cursor-pointer relative rounded-full hover:bg-varBlack/5"
             >
-              {theme === "light" ? (
+              <div
+                className={`relative ${
+                  theme === "dark" ? "-translate-y-[120%]" : "-translate-y-[0%]"
+                } transition-transform duration-300`}
+              >
                 <Moon size={size} color="var(--color-varBlack)" />
-              ) : (
+              </div>
+              <div
+                className={`absolute top-0 bottom-0 flex items-center justify-center ${
+                  theme === "dark" ? "translate-y-[0%]" : "translate-y-[120%]"
+                } transition-transform duration-300`}
+              >
                 <Sun size={size} color="var(--color-varBlack)" />
-              )}
+              </div>
             </button>
           </div>
 
@@ -162,13 +171,16 @@ const NavBar = () => {
               <div className="p-1 cursor-pointer rounded-full">
                 <Globe size={size + 8} color="var(--color-varBlack)" />
               </div>
-              <div className="p-1 cursor-pointer rounded-full">
+              <button
+                onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                className="p-1 cursor-pointer rounded-full"
+              >
                 {theme === "light" ? (
                   <Moon size={size + 8} color="var(--color-varBlack)" />
                 ) : (
                   <Sun size={size + 8} color="var(--color-varBlack)" />
                 )}
-              </div>
+              </button>
             </div>
           </div>
         </div>
