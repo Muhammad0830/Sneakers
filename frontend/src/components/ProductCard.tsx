@@ -9,6 +9,8 @@ const ProductCard = ({ product }: { product: Product }) => {
   const colors = product.color.split(", ");
   const sizes = product.size.split(", ");
 
+  const rating = Number(product.rating).toFixed(1);
+
   return (
     <div className="relative">
       <div className="productCard group relative flex justify-center gap-2">
@@ -44,11 +46,10 @@ const ProductCard = ({ product }: { product: Product }) => {
           >
             <div className="flex items-center gap-2 justify-center">
               <div className="flex items-center gap-2 justify-center text-sm bg-white px-1 rounded-md">
-                <Star size={12} color="yellow" fill="yellow" /> {product.rate} /
-                5
+                <Star size={12} color="yellow" fill="yellow" /> {rating} / 5
               </div>
               <div className="rounded-md bg-white px-1 text-sm">
-                {product.reviews} reviews
+                {product.reviews.length} reviews
               </div>
             </div>
             <div className="flex items-center gap-2 justify-center">

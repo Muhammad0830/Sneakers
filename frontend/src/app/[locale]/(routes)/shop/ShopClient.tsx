@@ -11,6 +11,7 @@ import {
 import { ChevronDown, X } from "lucide-react";
 import { useState } from "react";
 import ProductCard from "@/components/ProductCard";
+import useApiQuery from "@/hooks/useApiQuery";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -35,153 +36,6 @@ const filters: MoreFiltersType[] = [
   {
     name: "Gender",
     isActive: false,
-  },
-];
-
-const products: Product[] = [
-  {
-    id: 1,
-    title: "Product 1",
-    size: "XS, S, M, L, XL",
-    price: "19.99",
-    color: "white, black, red, lightblue, lightgreen",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 2,
-    title: "Product 2",
-    size: "S, M, L",
-    price: "29.99",
-    color: "black, red, lightblue",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 3,
-    title: "Product 3",
-    size: "M, L, XL",
-    price: "39.99",
-    color: "red, pink",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 4,
-    title: "Product 4",
-    size: "L, XL",
-    price: "49.99",
-    color: "lightblue, white, red",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 5,
-    title: "Product 5",
-    size: "L, XL",
-    price: "59.99",
-    color: "lightgreen, black, white",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 6,
-    title: "Product 6",
-    size: "XS, S, M, L",
-    price: "19.99",
-    color: "white, black, yellow",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 7,
-    title: "Product 7",
-    size: "S, M, L",
-    price: "29.99",
-    color: "black, lightgreen",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 8,
-    title: "Product 8",
-    size: "M, L",
-    price: "39.99",
-    color: "red, black",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 9,
-    title: "Product 9",
-    size: "XS, S, M, L",
-    price: "19.99",
-    color: "white, pink",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 10,
-    title: "Product 10",
-    size: "S, M, L, XL",
-    price: "29.99",
-    color: "black, red, pink, white, lightblue",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 11,
-    title: "Product 11",
-    size: "M, L, XL",
-    price: "39.99",
-    color: "Red, lightgreen, pink",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 12,
-    title: "Product 12",
-    size: "S, M, L, XL",
-    price: "49.99",
-    color: "Lightblue, white, black",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 13,
-    title: "Product 13",
-    size: "S, M, L, XL",
-    price: "59.99",
-    color: "LightGreen, black, red",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 14,
-    title: "Product 14",
-    size: "XS, S, M, L",
-    price: "19.99",
-    color: "White, black, pink",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 15,
-    title: "Product 15",
-    size: "S, M, L, XL",
-    price: "29.99",
-    color: "Black, lightblue, white",
-    rate: 4.5,
-    reviews: 10,
-  },
-  {
-    id: 16,
-    title: "Product 16",
-    size: "M, L, XL",
-    price: "39.99",
-    color: "Red, lightblue, white, black",
-    rate: 4.5,
-    reviews: 10,
   },
 ];
 
@@ -212,6 +66,18 @@ export default function ShopClient() {
   );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
+
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useApiQuery<Product[]>("/", "Sneakers");
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (error) {
+    console.error("error", error);
+  }
 
   const toggleFilter = (
     name: string,
@@ -619,7 +485,7 @@ export default function ShopClient() {
 
       {/* product cards */}
       <div className="grid grid-cols-4 gap-8 my-16">
-        {products.map((product: Product) => {
+        {products?.map((product: Product) => {
           return <ProductCard product={product} key={product.id} />;
         })}
       </div>

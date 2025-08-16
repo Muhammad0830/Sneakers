@@ -1,9 +1,3 @@
-export interface Product {
-  id: number;
-  title: string;
-  size: string;
-}
-
 export interface AboutCardType {
   id: number;
   title: string;
@@ -39,9 +33,12 @@ export interface Filters {
 export interface Product {
   id: number;
   title: string;
+  description?: string;
+  image?: string | null;
   price: string;
   size: string;
   color: string;
-  rate: number;
-  reviews: number;
+  rating: string;
+  reviews: string[];
+  gender?: string;
 }
