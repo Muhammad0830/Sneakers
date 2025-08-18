@@ -67,7 +67,6 @@ export default function ShopClient() {
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
   const [page, setPage] = useState(1);
-  console.log("page", page);
 
   const {
     data: products,
