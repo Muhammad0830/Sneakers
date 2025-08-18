@@ -25,6 +25,8 @@
   --background: #0a0a0a;
   --foreground: #ededed;
   --primary: #24f89c;
+  --varWhite: #222222;
+  --varBlack: #ffffff;
 }
 
 body {
