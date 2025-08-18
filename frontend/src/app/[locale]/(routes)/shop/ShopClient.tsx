@@ -82,7 +82,11 @@ export default function ShopClient() {
     ["Sneakers", page, limit]
   );
 
-  const { data: products, totalPages } = data ?? { data: [], totalPages: 0 };
+  const {
+    data: products,
+    totalPages,
+    total,
+  } = data ?? { data: [], totalPages: 0 };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -491,6 +495,16 @@ export default function ShopClient() {
               </span>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center w-full translate-y-4">
+        <div className="text-md text-varWhite font-bold bg-primary rounded-sm px-1">
+          Visible products: From {(page - 1) * limit + 1} to{" "}
+          {page === totalPages ? total : page * limit}
+        </div>
+        <div className="text-md text-varWhite font-bold bg-primary rounded-sm px-1">
+          {total} products available!
         </div>
       </div>
 
