@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-const BaseURL = 'http://localhost:3001/sneakers';
 
-const useApiQuery = <T,>(url: string, key: string) => {
-  const { data, error, isLoading } = useQuery<T>({
-    queryKey: [key],
+const BaseURL = "http://localhost:3001/sneakers";
+
+const useApiQuery = <T,>(
+  url: string,
+  key: string | (string | number)[]
+) => {
+  const { data, error, isLoading, refetch } = useQuery<T>({
+    queryKey: Array.isArray(key) ? key : [key], // ✅ allow array or string
     queryFn: async () => {
       const response = await fetch(`${BaseURL}${url}`, {
         method: "GET",
@@ -20,7 +24,7 @@ const useApiQuery = <T,>(url: string, key: string) => {
     },
   });
 
-  return { data, error, isLoading };
+  return { data, error, isLoading, refetch };
 };
 
 export default useApiQuery;

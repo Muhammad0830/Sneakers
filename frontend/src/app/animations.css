@@ -16,6 +16,10 @@
   box-shadow: 0px 0px 10px var(--primary);
 }
 
+.buttonWrapper:has(.linkDiv:hover) .borderWithShadow {
+  box-shadow: 0px 0px 10px var(--primary);
+}
+
 .borderWithShadow.active {
   background-color: var(--primary);
   color: white;
@@ -69,7 +73,7 @@
 
 .hoverable {
   box-shadow: 0px 0px 0px var(--primary);
-  transition: box-shadow 0.2s ease-in-out
+  transition: box-shadow 0.2s ease-in-out;
 }
 
 .hoverable:hover {

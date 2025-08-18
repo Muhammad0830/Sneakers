@@ -9,13 +9,39 @@ const sneakersRouter = express.Router();
 
 sneakersRouter.get("/", async (req: any, res: any) => {
   try {
-    const data = await query<Product[]>("SELECT * FROM products");
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 12;
+    const offset = (page - 1) * limit;
+
+    const data = await query<Product[]>(
+      "SELECT * FROM products LIMIT :limit OFFSET :offset",
+      {
+        limit: limit,
+        offset: offset,
+      }
+    );
 
     if (data.length <= 0) {
       return res.status(404).json({ message: "no data found" });
     }
 
-    res.status(200).json(data);
+    const totalResult = await query<any[]>(
+      "SELECT COUNT(*) as count FROM products"
+    );
+    const total = (totalResult[0] as { count: number }).count;
+    const totalPages = Math.ceil(total / limit);
+
+    if (data.length === 0) {
+      return res.status(404).json({ message: "no data found" });
+    }
+
+    res.status(200).json({
+      page,
+      limit,
+      total,
+      totalPages,
+      data,
+    });
   } catch (err: any) {
     if (res.status) {
       res.status(500).json({ message: err.message });
