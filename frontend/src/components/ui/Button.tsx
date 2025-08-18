@@ -13,6 +13,8 @@ type ButtonProps = {
   variants?: "borderedWithShadow" | "border" | "outlined";
   style?: React.CSSProperties;
   custom?: boolean;
+  isCursorPointer?: boolean;
+  isHoverable?: boolean;
 };
 
 const Button = ({
@@ -26,6 +28,8 @@ const Button = ({
   variants,
   style,
   custom,
+  isCursorPointer,
+  isHoverable,
 }: ButtonProps) => {
   const t = useTranslations("Home");
   return (
@@ -38,11 +42,13 @@ const Button = ({
       <div
         className={`${
           custom ? "" : "px-3 py-2 rounded-md"
-        } relative z-10 font-bold cursor-pointer ${
+        } relative z-10 font-bold ${
+          isCursorPointer === false ? "" : "cursor-pointer"
+        } ${
           variants === "borderedWithShadow"
             ? "borderWithShadow"
             : "bg-primary text-white"
-        } ${className}`}
+        } ${isHoverable ? "hoverable" : ""} ${className}`}
         style={style}
       >
         {children}
@@ -56,7 +62,7 @@ const Button = ({
         </div>
       </div>
     </button>
-    );
+  );
 };
 
 export default Button;

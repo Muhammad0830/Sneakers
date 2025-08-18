@@ -8,7 +8,7 @@ import {
   appliedFiltersType,
   Product,
 } from "@/types/types";
-import { ChevronDown, X } from "lucide-react";
+import { ChevronDown, ChevronRight, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
@@ -66,6 +66,8 @@ export default function ShopClient() {
   );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
+  const [page, setPage] = useState(1);
+  console.log("page", page);
 
   const {
     data: products,
@@ -134,16 +136,12 @@ export default function ShopClient() {
     specificFilters.find((f) => f.name === name)
   );
 
-  console.log("appliedFilters", appliedFilters);
-  console.log("selectedFilter", selectedFilter);
-  console.log("selectedValuesMap", selectedValuesMap);
-
   return (
     <div className="px-[60px] mt-4 flex flex-col">
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="flex z-50 flex-row items-center gap-10 justify-center self-center relative mb-16">
+      <div className="flex z-40 flex-row items-center gap-10 justify-center self-center relative mb-16">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
@@ -488,6 +486,64 @@ export default function ShopClient() {
         {products?.map((product: Product) => {
           return <ProductCard product={product} key={product.id} />;
         })}
+      </div>
+
+      {/* previous and next buttons */}
+      <div className="flex justify-between gap-5 items-center">
+        <Button
+          variants="borderedWithShadow"
+          className="flex border border-primary items-center justify-between gap-2"
+        >
+          <ShoppingCart size={20} color="var(--primary)" />
+          <span>Go to the Cart</span>
+          <ChevronRight size={20} color="var(--primary)" />
+        </Button>
+
+        <div className="flex items-center gap-2">
+          <Button
+            isHoverable={page > 1}
+            isCursorPointer={page > 1}
+            onClick={() => setPage(page > 1 ? page - 1 : page)}
+            className={`h-10 ${page > 1 ? "" : "bg-primary/50"}`}
+          >
+            Previous
+          </Button>
+          {page === 1 ? null : (
+            <Button
+              variants="borderedWithShadow"
+              onClick={() => setPage(1)}
+              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+            >
+              1
+            </Button>
+          )}
+          <Button
+            variants="border"
+            disabled
+            isCursorPointer={false}
+            className="border border-primary w-10 h-10 flex justify-center items-center"
+          >
+            {page}
+          </Button>
+          {page === 10 ? null : (
+            <Button
+              onClick={() => setPage(10)}
+              variants="borderedWithShadow"
+              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+            >
+              10
+            </Button>
+          )}
+          <Button
+            isHoverable={page < 10}
+            variants="outlined"
+            isCursorPointer={page < 10}
+            onClick={() => setPage(page < 10 ? page + 1 : page)}
+            className={`h-10 ${page < 10 ? "" : "bg-primary/50"}`}
+          >
+            Next
+          </Button>
+        </div>
       </div>
     </div>
   );
