@@ -9,7 +9,7 @@ import {
   Product,
 } from "@/types/types";
 import { ChevronDown, ChevronRight, ShoppingCart, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
 
@@ -51,6 +51,14 @@ const defaultValues: {
   Color: ["White", "Black", "Red", "Lightblue", "Lightgreen", "Pink"],
 };
 
+interface ProductsDataProps {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  data: Product[];
+}
+
 export default function ShopClient() {
   const [selectedFilter, setSelectedFilter] = useState<Filters | null>(null);
   const [moreFilterOpen, setMoreFilterOpen] = useState(false);
@@ -67,12 +75,18 @@ export default function ShopClient() {
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
   const [page, setPage] = useState(1);
+  const limit = 12;
 
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = useApiQuery<Product[]>("/", "Sneakers");
+  const { data, isLoading, error, refetch } = useApiQuery<ProductsDataProps>(
+    `/?page=${page}&limit=${limit}`,
+    ["Sneakers", page, limit]
+  );
+
+  const { data: products, totalPages } = data ?? { data: [], totalPages: 0 };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -490,6 +504,7 @@ export default function ShopClient() {
       {/* previous and next buttons */}
       <div className="flex justify-between gap-5 items-center">
         <Button
+          isLinkButton
           variants="borderedWithShadow"
           className="flex border border-primary items-center justify-between gap-2 "
         >
@@ -502,7 +517,10 @@ export default function ShopClient() {
           <Button
             isHoverable={page > 1}
             isCursorPointer={page > 1}
-            onClick={() => setPage(page > 1 ? page - 1 : page)}
+            onClick={() => {
+              setPage(page > 1 ? page - 1 : page);
+              refetch();
+            }}
             className={`h-10 ${page > 1 ? "" : "bg-primary/50"}`}
           >
             Previous
@@ -510,7 +528,10 @@ export default function ShopClient() {
           {page === 1 ? null : (
             <Button
               variants="borderedWithShadow"
-              onClick={() => setPage(1)}
+              onClick={() => {
+                setPage(1);
+                refetch();
+              }}
               className={`border border-primary w-10 h-10 flex justify-center items-center`}
             >
               1
@@ -524,21 +545,27 @@ export default function ShopClient() {
           >
             {page}
           </Button>
-          {page === 10 ? null : (
+          {page === totalPages ? null : (
             <Button
-              onClick={() => setPage(10)}
+              onClick={() => {
+                setPage(totalPages || 1);
+                refetch();
+              }}
               variants="borderedWithShadow"
               className={`border border-primary w-10 h-10 flex justify-center items-center`}
             >
-              10
+              {totalPages}
             </Button>
           )}
           <Button
-            isHoverable={page < 10}
+            isHoverable={page < totalPages}
             variants="outlined"
-            isCursorPointer={page < 10}
-            onClick={() => setPage(page < 10 ? page + 1 : page)}
-            className={`h-10 ${page < 10 ? "" : "bg-primary/50"}`}
+            isCursorPointer={page < totalPages}
+            onClick={() => {
+              setPage(page < totalPages ? page + 1 : page);
+              refetch();
+            }}
+            className={`h-10 ${page < totalPages ? "" : "bg-primary/50"}`}
           >
             Next
           </Button>

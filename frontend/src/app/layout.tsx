@@ -25,11 +25,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head />
       <body className={`antialiased ${openSans.className}`}>
         <Providers>
-          <ThemeProvider attribute="class" defaultTheme="light">
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}
           </ThemeProvider>
         </Providers>

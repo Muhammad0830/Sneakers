@@ -34,7 +34,7 @@ const Button = ({
   const t = useTranslations("Home");
   return (
     <button
-      className={`relative group ${wrapperClassName}`}
+      className={`relative overflow-visible group buttonWrapper ${wrapperClassName}`}
       onClick={onClick}
       type={type}
       disabled={disabled}
@@ -54,10 +54,10 @@ const Button = ({
         {children}
       </div>
       <div
-        className="absolute z-0 top-0 bottom-0 left-[100%] -translate-x-[120%] transition-translate duration-200 group-hover:-translate-x-[0%] flex items-center cursor-pointer"
+        className="absolute linkDiv peer z-0 top-0 bottom-0 left-[100%] -translate-x-[120%] transition-translate duration-200 group-hover:-translate-x-[0%] flex items-center cursor-pointer"
         style={{ display: isLinkButton ? "flex" : "none" }}
       >
-        <div className="h-[70%] bg-white py-1 px-2 text-xs flex justify-center items-center rounded-br-md rounded-tr-md border-t-1 border-b-1 border-r-1 border-primary">
+        <div className="h-[70%] bg-varWhite py-1 px-2 text-xs flex justify-center items-center rounded-br-md rounded-tr-md border-t-1 border-b-1 border-r-1 border-primary">
           {t("Move")}
         </div>
       </div>
