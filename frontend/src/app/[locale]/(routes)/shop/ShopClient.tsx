@@ -491,7 +491,7 @@ export default function ShopClient() {
       <div className="flex justify-between gap-5 items-center">
         <Button
           variants="borderedWithShadow"
-          className="flex border border-primary items-center justify-between gap-2"
+          className="flex border border-primary items-center justify-between gap-2 "
         >
           <ShoppingCart size={20} color="var(--primary)" />
           <span>Go to the Cart</span>
