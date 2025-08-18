@@ -86,7 +86,7 @@ export default function ShopClient() {
     data: products,
     totalPages,
     total,
-  } = data ?? { data: [], totalPages: 0 };
+  } = data ?? { data: [], totalPages: 0, total: 0 };
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
