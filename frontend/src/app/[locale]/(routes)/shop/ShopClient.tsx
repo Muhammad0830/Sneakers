@@ -158,7 +158,7 @@ export default function ShopClient() {
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="flex z-40 flex-row items-center gap-10 justify-center self-center relative mb-16">
+      <div className="flex z-40 flex-row items-center gap-12.5 justify-center self-center relative mb-16">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
@@ -317,7 +317,7 @@ export default function ShopClient() {
             }}
             className="text-xl border-[2px] flex items-center gap-4 px-8"
           >
-            <span>More Filters </span>
+            <span>Sorts</span>
             <ChevronDown
               size={28}
               color="white"
@@ -499,24 +499,24 @@ export default function ShopClient() {
       </div>
 
       <div className="flex justify-between items-center w-full translate-y-4">
-        <div className="text-md text-varWhite font-bold bg-primary rounded-sm px-1">
+        <div className="text-md text-white font-semibold bg-primary rounded-sm px-1">
           Visible products: From {(page - 1) * limit + 1} to{" "}
           {page === totalPages ? total : page * limit}
         </div>
-        <div className="text-md text-varWhite font-bold bg-primary rounded-sm px-1">
-          {total} products available!
+        <div className="text-md text-white font-semibold bg-primary rounded-sm px-1">
+          Total: {total} products available!
         </div>
       </div>
 
       {/* product cards */}
-      <div className="grid grid-cols-4 gap-8 my-16">
+      <div className="grid grid-cols-4 gap-8 mt-16 mb-4">
         {products?.map((product: Product) => {
           return <ProductCard product={product} key={product.id} />;
         })}
       </div>
 
-      {/* previous and next buttons */}
-      <div className="flex justify-between gap-5 items-center">
+      {/* pagination buttons */}
+      <div className="flex justify-between gap-5 mb-8 items-center">
         <Button
           isLinkButton
           variants="borderedWithShadow"

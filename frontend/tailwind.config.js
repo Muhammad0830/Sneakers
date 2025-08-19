@@ -7,7 +7,16 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        background: "var(--color-background)",
+        foreground: "var(--color-foreground)",
+        primary: "var(--color-primary)",
+        "primary-80": "var(--color-primary-80)",
+        varWhite: "var(--color-varWhite)",
+        varBlack: "var(--color-varBlack)",
+      },
+    },
   },
   plugins: [],
 };
