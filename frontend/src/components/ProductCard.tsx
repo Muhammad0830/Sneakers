@@ -11,6 +11,10 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   const rating = Number(product.rating).toFixed(1);
 
+  if (!product) {
+    return null;
+  }
+
   return (
     <div className="relative">
       <div className="productCard group relative flex justify-center gap-2">
@@ -24,6 +28,11 @@ const ProductCard = ({ product }: { product: Product }) => {
             fill
             className="object-cover"
           />
+        </div>
+
+        {/* gender badge */}
+        <div className="absolute z-30 capitalize top-3 cursor-default font-semibold text-sm left-3 bg-primary border-primary text-white px-1 rounded-sm">
+          {product.gender}
         </div>
 
         <div
