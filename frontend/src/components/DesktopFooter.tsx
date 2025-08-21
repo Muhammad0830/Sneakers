@@ -12,7 +12,7 @@ import LinkComponent from "@/components/ui/Link";
 const DesktopFooter = ({ className }: { className?: string }) => {
   return (
     <div
-      className={`bg-[#D1D1D1] w-full lg:px-12 px-8 py-6 gap-4 flex-wrap justify-between flex ${className}`}
+      className={`bg-[#D1D1D1] dark:bg-black w-full lg:px-12 px-8 py-6 gap-4 flex-wrap justify-between flex ${className}`}
     >
       {/* Footer Links */}
       <div className="md:flex-3 w-[45%]">

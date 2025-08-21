@@ -445,7 +445,7 @@ export default function ShopClient() {
             <span className="pointer-events-none">Sort By: </span>
             {selectedFilter ? (
               <div className="flex items-center gap-2">
-                <span className="text-primary h-6 text-sm bg-white px-1 py-0.5 rounded-sm pointer-events-none">
+                <span className="text-primary h-6 text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
                   {selectedFilter?.name}
                 </span>
                 <button
@@ -458,7 +458,7 @@ export default function ShopClient() {
                 </button>
               </div>
             ) : (
-              <span className="text-primary h-6 text-sm bg-white px-1 py-0.5 rounded-sm pointer-events-none">
+              <span className="text-primary h-6 text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
                 None
               </span>
             )}
@@ -472,7 +472,7 @@ export default function ShopClient() {
                     key={index}
                     className="text-sm text-gray-800 pointer-events-none"
                   >
-                    <span className="text-primary bg-white px-1 py-0.5 rounded-sm">
+                    <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
                       {filter!.name}
                     </span>
                     {index < activeFiltersInOrder.length - 1 && " / "}
@@ -490,7 +490,7 @@ export default function ShopClient() {
                 </button>
               </span>
             ) : (
-              <span className="text-primary text-sm bg-white px-1 py-0.5 rounded-sm pointer-events-none">
+              <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
                 All
               </span>
             )}
@@ -499,11 +499,11 @@ export default function ShopClient() {
       </div>
 
       <div className="flex justify-between items-center w-full translate-y-4">
-        <div className="text-md text-white font-semibold bg-primary rounded-sm px-1">
+        <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
           Visible products: From {(page - 1) * limit + 1} to{" "}
           {page === totalPages ? total : page * limit}
         </div>
-        <div className="text-md text-white font-semibold bg-primary rounded-sm px-1">
+        <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
           Total: {total} products available!
         </div>
       </div>
