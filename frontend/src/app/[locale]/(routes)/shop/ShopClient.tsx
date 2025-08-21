@@ -336,7 +336,7 @@ export default function ShopClient() {
           className={`absolute bottom-[0%] transition-all ${
             moreFilterOpen
               ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[2.5rem] duration-700"
-              : "right-[0%] translate-y-[calc(100%)] -translate-x-[50%] duration-1000"
+              : "right-[0] translate-y-[calc(100%)] -translate-x-[25%] duration-1000"
           } top-[0%] flex justify-center items-center gap-2`}
         >
           {moreFilters.map(

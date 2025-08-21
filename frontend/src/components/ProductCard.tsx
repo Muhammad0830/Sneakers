@@ -31,7 +31,7 @@ const ProductCard = ({ product }: { product: Product }) => {
         </div>
 
         {/* gender badge */}
-        <div className="absolute z-30 capitalize top-3 cursor-default font-semibold text-sm left-3 bg-primary border-primary text-white px-1 rounded-sm">
+        <div className="absolute z-30 capitalize top-3 cursor-default font-semibold text-sm left-3 bg-primary border-primary text-white dark:text-black px-1 rounded-sm">
           {product.gender}
         </div>
 
