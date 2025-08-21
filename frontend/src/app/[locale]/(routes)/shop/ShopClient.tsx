@@ -12,6 +12,7 @@ import { ChevronDown, ChevronRight, ShoppingCart, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -74,6 +75,7 @@ export default function ShopClient() {
   );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
+  const [sortingDialogOpen, setSortingDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -158,14 +160,14 @@ export default function ShopClient() {
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="flex z-40 flex-row items-center gap-12.5 justify-center self-center relative mb-16">
+      <div className="flex z-40 flex-row items-center lg:gap-12.5 md:gap-6 justify-between self-center relative mb-16 lg:w-auto w-full">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
             setSelectedValuesMap(defaultValues);
             setAppliedFilters([]);
           }}
-          className={`text-xl min-w-[6rem] border-[2px] ${
+          className={`text-xl lg:min-w-[6rem] min-w-[4rem] border-[2px] ${
             specificFilters.some((f) => f.isActive) ? "" : "active"
           }`}
           variants="borderedWithShadow"
@@ -191,7 +193,7 @@ export default function ShopClient() {
                         setSelectedPopUp(filter);
                       }
                     }}
-                    className={`text-xl border-[2px] min-w-[6rem] z-20 ${
+                    className={`text-xl border-[2px] lg:min-w-[6rem] min-w-[4rem] z-20 ${
                       filter.isActive ? "active" : ""
                     }`}
                     variants="borderedWithShadow"
@@ -315,13 +317,13 @@ export default function ShopClient() {
               setMoreFilterOpen((prev) => !prev);
               setSelectedPopUp(null);
             }}
-            className="text-xl border-[2px] flex items-center gap-4 px-8"
+            className="text-xl border-[2px] flex items-center gap-4 lg:px-8"
           >
             <span>Sorts</span>
             <ChevronDown
               size={28}
               color="white"
-              className={`rotate-0 transition-transform duration-500 ease-in-out`}
+              className={`rotate-0 lg:block hidden transition-transform duration-500 ease-in-out`}
               style={{
                 animationDelay: `${moreFilterOpen ? "0" : "2000ms"}`,
                 animationName: `${moreFilterOpen ? "" : "bounceAnim2"}`,
@@ -330,14 +332,18 @@ export default function ShopClient() {
               }}
             />
           </Button>
+          <button
+            onClick={() => setSortingDialogOpen(true)}
+            className="absolute inset-0 transparent z-20 lg:hidden "
+          ></button>
         </div>
 
         <div
-          className={`absolute bottom-[0%] transition-all ${
+          className={`absolute lg:flex hidden bottom-[0%] transition-all ${
             moreFilterOpen
-              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[2.5rem] duration-700"
+              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[1.5rem] duration-700"
               : "right-[0] translate-y-[calc(100%)] -translate-x-[25%] duration-1000"
-          } top-[0%] flex justify-center items-center gap-2`}
+          } top-[0%] justify-center items-center gap-2`}
         >
           {moreFilters.map(
             (
@@ -434,13 +440,47 @@ export default function ShopClient() {
 
         <div
           className={`absolute border border-transparent bottom-[0%] ${
-            moreFilterOpen ? "-left-[2.5rem]" : "-left-0"
-          } translate-y-[calc(100%+1rem+2px)] flex gap-4 items-center`}
+            moreFilterOpen ? "-left-[1.5rem]" : "-left-0"
+          } translate-y-[calc(100%+1rem+2px)] flex gap-2 items-center lg:justify-start justify-between w-full`}
           style={{
             transitionProperty: "left",
             transitionDuration: "0.7s",
           }}
         >
+          <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
+            <span className="pointer-events-none">Filter by: </span>
+            {specificFilters.some((f) => f.isActive) ? (
+              <span className="flex items-center gap-1 flex-row ">
+                {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
+                  <span
+                    key={index}
+                    className="text-sm text-gray-800 pointer-events-none"
+                  >
+                    <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
+                      {filter!.name}
+                    </span>
+                    <span className="text-gray-500">
+                      {index < activeFiltersInOrder.length - 1 && " / "}
+                    </span>
+                  </span>
+                ))}
+                <button
+                  onClick={() => {
+                    toggleFilter("All", "none");
+                    setSelectedValuesMap(defaultValues);
+                    setAppliedFilters([]);
+                  }}
+                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
+                >
+                  <X size={16} color="white" />
+                </button>
+              </span>
+            ) : (
+              <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
+                All
+              </span>
+            )}
+          </div>
           <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
             <span className="pointer-events-none">Sort By: </span>
             {selectedFilter ? (
@@ -460,38 +500,6 @@ export default function ShopClient() {
             ) : (
               <span className="text-primary h-6 text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
                 None
-              </span>
-            )}
-          </div>
-          <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
-            <span className="pointer-events-none">Filter by: </span>
-            {specificFilters.some((f) => f.isActive) ? (
-              <span className="flex items-center gap-2 flex-row ">
-                {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
-                  <span
-                    key={index}
-                    className="text-sm text-gray-800 pointer-events-none"
-                  >
-                    <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
-                      {filter!.name}
-                    </span>
-                    {index < activeFiltersInOrder.length - 1 && " / "}
-                  </span>
-                ))}
-                <button
-                  onClick={() => {
-                    toggleFilter("All", "none");
-                    setSelectedValuesMap(defaultValues);
-                    setAppliedFilters([]);
-                  }}
-                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
-                >
-                  <X size={16} color="white" />
-                </button>
-              </span>
-            ) : (
-              <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
-                All
               </span>
             )}
           </div>
@@ -585,6 +593,78 @@ export default function ShopClient() {
           </Button>
         </div>
       </div>
+
+      {/* Sorting Dialog for mobile and desktop */}
+      <Dialog open={sortingDialogOpen} onOpenChange={setSortingDialogOpen}>
+        <DialogContent className="bg-white dark:bg-black sm:min-w-[350px] min-w-[250px] w-[50vw] px-4 py-3 rounded-md">
+          <DialogTitle className="text-xl">Sorts</DialogTitle>
+          <div className="grid grid-cols-2 gap-2">
+            {moreFilters.map((moreFilter: MoreFiltersType, index: number) => {
+              return (
+                <Button
+                  key={index}
+                  custom
+                  wrapperClassName="open wrapperFilter"
+                  className={`radiusAnimation open py-2 overflow-hidden flex justify-center items-center border-[2px] transition-all duration-500 ${
+                    moreFilter.name === selectedFilter?.name
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                  onClick={() => {
+                    if (moreFilter.name !== selectedFilter?.name) {
+                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                    } else if (
+                      moreFilter.name == selectedFilter?.name &&
+                      selectedFilter.isAsc
+                    ) {
+                      setSelectedFilter({ ...moreFilter, isAsc: false });
+                    } else {
+                      setSelectedFilter(null);
+                    }
+                  }}
+                >
+                  <span
+                    className={`overflow-hidden text-center sm:text-sm text-xs flex justify-center items-center gap-1 duration-500 font-bold w-19 h-6 opacity-100`}
+                  >
+                    <div className="relative flex text-black dark:text-white">
+                      <span
+                        className={`${
+                          selectedFilter?.name === moreFilter.name
+                            ? "-translate-x-[0.5rem]"
+                            : "translate-x-0"
+                        } transition-transform duration-200`}
+                      >
+                        {moreFilter.name}
+                      </span>
+
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          selectedFilter?.isAsc
+                            ? "translate-y-0"
+                            : "translate-y-[140%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↑
+                      </span>
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          !selectedFilter?.isAsc
+                            ? "-translate-y-0"
+                            : "-translate-y-[140%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↓
+                      </span>
+                    </div>
+                  </span>
+                </Button>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

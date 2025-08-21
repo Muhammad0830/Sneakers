@@ -48,13 +48,13 @@ const Button = ({
           variants === "borderedWithShadow"
             ? "borderWithShadow"
             : "bg-primary text-white"
-        } ${isHoverable ? "hoverable" : ""} ${className}`}
+        } ${isHoverable ? "lg:hoverable" : ""} ${className}`}
         style={style}
       >
         {children}
       </div>
       <div
-        className="absolute linkDiv peer z-0 top-0 bottom-0 left-[100%] -translate-x-[120%] transition-translate duration-200 group-hover:-translate-x-[0%] flex items-center cursor-pointer"
+        className="absolute linkDiv peer z-0 top-0 bottom-0 left-[100%] -translate-x-[120%] transition-translate duration-200 lg:group-hover:-translate-x-[0%] flex items-center cursor-pointer"
         style={{ display: isLinkButton ? "flex" : "none" }}
       >
         <div className="h-[70%] bg-varWhite py-1 px-2 text-xs flex justify-center items-center rounded-br-md rounded-tr-md border-t-1 border-b-1 border-r-1 border-primary">

@@ -84,7 +84,7 @@ const NavBar = () => {
           {logo}
         </div>
 
-        <div className="flex-1 flex lg:gap-10 sm:gap-4 gap-6 justify-end sm:justify-between items-center">
+        <div className="flex-1 flex lg:gap-6 sm:gap-4 gap-6 justify-end sm:justify-between items-center">
           {/* right side Links | Desktop*/}
           <nav className="sm:flex hidden lg:gap-10 sm:gap-4 gap-6">
             <div className="lg:text-xl text-xl">

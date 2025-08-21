@@ -116,3 +116,10 @@
     scale: 1;
   }
 }
+
+@media (hover: none) {
+  .btn:hover {
+    all: unset; /* removes all hover styles */
+    /* or reset only what you changed */
+  }
+}
