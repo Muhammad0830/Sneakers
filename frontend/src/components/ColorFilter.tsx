@@ -15,12 +15,12 @@ export const ColorFilter = ({
     { color: "Pink", hex: "#ffc0cb" },
   ];
   return (
-    <div className="grid grid-cols-2 gap-2 min-w-[14rem]">
+    <div className="grid grid-cols-2 gap-2 sm:min-w-[14rem]">
       {colors.map((color) => (
         <label
           key={color.color}
           htmlFor={color.color}
-          className="flex items-center text-sm gap-2 cursor-pointer py-0.5 px-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
+          className="flex items-center text-sm gap-2 cursor-pointer sm:py-0.5 sm:px-1.5 px-2 py-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
         >
           <input
             type="checkbox"
@@ -40,7 +40,7 @@ export const ColorFilter = ({
           ></div>
           <label
             htmlFor={color.color}
-            className="cursor-pointer select-none text-nowrap"
+            className="cursor-pointer select-none text-nowrap md:text-md text-sm"
           >
             {color.color}
           </label>

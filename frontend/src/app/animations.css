@@ -116,3 +116,18 @@
     scale: 1;
   }
 }
+
+@media (hover: none) {
+  .btn:hover {
+    all: unset; /* removes all hover styles */
+    /* or reset only what you changed */
+  }
+}
+
+@media (max-width: 1023px) {
+  .productCard:hover .cardButtonsWrapper,
+  .productCard:hover .cardButtons {
+    translate: none; 
+    transition: none;
+  }
+}

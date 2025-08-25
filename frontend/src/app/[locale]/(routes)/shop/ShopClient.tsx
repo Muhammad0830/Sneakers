@@ -8,10 +8,24 @@ import {
   appliedFiltersType,
   Product,
 } from "@/types/types";
-import { ChevronDown, ChevronRight, ShoppingCart, X } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Filter,
+  Search,
+  ShoppingCart,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MobileFilterSort from "@/components/MobileFilterComponent";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -74,6 +88,7 @@ export default function ShopClient() {
   );
   const [specificFilters, setSpecificFilters] =
     useState<MoreFiltersType[]>(filters);
+  const [sortingDialogOpen, setSortingDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 12;
 
@@ -154,18 +169,18 @@ export default function ShopClient() {
   );
 
   return (
-    <div className="px-[60px] mt-4 flex flex-col">
+    <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="flex z-40 flex-row items-center gap-12.5 justify-center self-center relative mb-16">
+      <div className="z-40 flex-row sm:flex hidden items-center lg:gap-12.5 md:gap-6 justify-between self-center relative mb-16 lg:w-auto w-full">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
             setSelectedValuesMap(defaultValues);
             setAppliedFilters([]);
           }}
-          className={`text-xl min-w-[6rem] border-[2px] ${
+          className={`text-xl lg:min-w-[6rem] min-w-[4rem] border-[2px] ${
             specificFilters.some((f) => f.isActive) ? "" : "active"
           }`}
           variants="borderedWithShadow"
@@ -182,7 +197,7 @@ export default function ShopClient() {
               );
 
               return (
-                <div className="relative" key={index}>
+                <div className="relative z-40" key={index}>
                   <Button
                     onClick={() => {
                       if (selectedPopUp?.name === filter.name) {
@@ -191,7 +206,7 @@ export default function ShopClient() {
                         setSelectedPopUp(filter);
                       }
                     }}
-                    className={`text-xl border-[2px] min-w-[6rem] z-20 ${
+                    className={`text-xl border-[2px] lg:min-w-[6rem] min-w-[4rem] z-20 ${
                       filter.isActive ? "active" : ""
                     }`}
                     variants="borderedWithShadow"
@@ -315,13 +330,13 @@ export default function ShopClient() {
               setMoreFilterOpen((prev) => !prev);
               setSelectedPopUp(null);
             }}
-            className="text-xl border-[2px] flex items-center gap-4 px-8"
+            className="text-xl border-[2px] flex items-center gap-4 lg:px-8"
           >
             <span>Sorts</span>
             <ChevronDown
               size={28}
               color="white"
-              className={`rotate-0 transition-transform duration-500 ease-in-out`}
+              className={`rotate-0 lg:block hidden transition-transform duration-500 ease-in-out`}
               style={{
                 animationDelay: `${moreFilterOpen ? "0" : "2000ms"}`,
                 animationName: `${moreFilterOpen ? "" : "bounceAnim2"}`,
@@ -330,14 +345,18 @@ export default function ShopClient() {
               }}
             />
           </Button>
+          <button
+            onClick={() => setSortingDialogOpen(true)}
+            className="absolute inset-0 transparent z-20 lg:hidden "
+          ></button>
         </div>
 
         <div
-          className={`absolute bottom-[0%] transition-all ${
+          className={`absolute lg:flex hidden bottom-[0%] z-30 transition-all ${
             moreFilterOpen
-              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[2.5rem] duration-700"
+              ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[1.5rem] duration-700"
               : "right-[0] translate-y-[calc(100%)] -translate-x-[25%] duration-1000"
-          } top-[0%] flex justify-center items-center gap-2`}
+          } top-[0%] justify-center items-center gap-2`}
         >
           {moreFilters.map(
             (
@@ -433,14 +452,48 @@ export default function ShopClient() {
         </div>
 
         <div
-          className={`absolute border border-transparent bottom-[0%] ${
-            moreFilterOpen ? "-left-[2.5rem]" : "-left-0"
-          } translate-y-[calc(100%+1rem+2px)] flex gap-4 items-center`}
+          className={`absolute border border-transparent bottom-[0%] z-0 ${
+            moreFilterOpen ? "-left-[1.5rem]" : "-left-0"
+          } translate-y-[calc(100%+1rem+2px)] flex gap-2 items-center lg:justify-start justify-between w-full`}
           style={{
             transitionProperty: "left",
             transitionDuration: "0.7s",
           }}
         >
+          <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
+            <span className="pointer-events-none">Filter by: </span>
+            {specificFilters.some((f) => f.isActive) ? (
+              <span className="flex items-center gap-1 flex-row ">
+                {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
+                  <span
+                    key={index}
+                    className="text-sm text-gray-800 pointer-events-none"
+                  >
+                    <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
+                      {filter!.name}
+                    </span>
+                    <span className="text-gray-500">
+                      {index < activeFiltersInOrder.length - 1 && " / "}
+                    </span>
+                  </span>
+                ))}
+                <button
+                  onClick={() => {
+                    toggleFilter("All", "none");
+                    setSelectedValuesMap(defaultValues);
+                    setAppliedFilters([]);
+                  }}
+                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
+                >
+                  <X size={16} color="white" />
+                </button>
+              </span>
+            ) : (
+              <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
+                All
+              </span>
+            )}
+          </div>
           <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
             <span className="pointer-events-none">Sort By: </span>
             {selectedFilter ? (
@@ -463,19 +516,62 @@ export default function ShopClient() {
               </span>
             )}
           </div>
-          <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
-            <span className="pointer-events-none">Filter by: </span>
+        </div>
+      </div>
+
+      {/* mobile filtering */}
+      <div className="flex sm:hidden flex-row w-full justify-between gap-2 items-center">
+        <div className="flex-1 relative border border-primary rounded-sm h-8 overflow-hidden">
+          <input
+            className="h-full w-full px-2 rounded-sm text-sm"
+            type="text"
+            placeholder="Type here to search"
+          />
+        </div>
+        <div className="flex gap-2 justify-between">
+          <Button className="max-h-8 py-0.5 flex justify-center items-center rounded-sm">
+            <Search size={20} color="white" />
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="max-h-8 py-0.5 flex justify-center items-center rounded-sm">
+                <Filter size={20} color="white" />
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="w-[90vw] max-h-[90vh] overflow-y-scroll p-3 rounded-md bg-[#fff] dark:bg-[#222]">
+              <DialogTitle>Filters and Sortings</DialogTitle>
+              <MobileFilterSort
+                specificFilters={specificFilters}
+                appliedFilters={appliedFilters}
+                toggleFilter={toggleFilter}
+                defaultValues={defaultValues}
+                setSelectedValuesMap={setSelectedValuesMap}
+                setAppliedFilters={setAppliedFilters}
+                moreFilters={moreFilters}
+                selectedFilter={selectedFilter}
+                setSelectedFilter={setSelectedFilter}
+                selectedValuesMap={selectedValuesMap}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
+      <div className="border border-transparent sm:hidden mt-2 w-full flex flex-row flex-wrap justify-between">
+        <div className="flex">
+          <div className="border-[1px] border-primary py-1 px-2 rounded-md mb-1 flex items-center gap-1">
+            <span className="pointer-events-none text-sm">Filter by: </span>
             {specificFilters.some((f) => f.isActive) ? (
-              <span className="flex items-center gap-2 flex-row ">
+              <span className="flex items-center gap-1 flex-row ">
                 {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
                   <span
                     key={index}
                     className="text-sm text-gray-800 pointer-events-none"
                   >
-                    <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
+                    <span className="text-primary bg-varWhite px-0.5 py-0.5 rounded-sm text-sm">
                       {filter!.name}
                     </span>
-                    {index < activeFiltersInOrder.length - 1 && " / "}
                   </span>
                 ))}
                 <button
@@ -496,9 +592,33 @@ export default function ShopClient() {
             )}
           </div>
         </div>
+        <div className="flex">
+          <div className="border-[1px] border-primary py-1 px-2 rounded-md flex items-center gap-1">
+            <span className="pointer-events-none text-sm">Sort By: </span>
+            {selectedFilter ? (
+              <div className="flex items-center gap-2">
+                <span className="text-primary text-sm h-6 bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
+                  {selectedFilter?.name}
+                </span>
+                <button
+                  onClick={() => {
+                    setSelectedFilter(null);
+                  }}
+                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
+                >
+                  <X size={16} color="white" />
+                </button>
+              </div>
+            ) : (
+              <span className="text-primary h-6 text-sm bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
+                None
+              </span>
+            )}
+          </div>
+        </div>
       </div>
 
-      <div className="flex justify-between items-center w-full translate-y-4">
+      <div className="sm:flex hidden justify-between items-center w-full md:translate-y-4 translate-y-2">
         <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
           Visible products: From {(page - 1) * limit + 1} to{" "}
           {page === totalPages ? total : page * limit}
@@ -509,21 +629,21 @@ export default function ShopClient() {
       </div>
 
       {/* product cards */}
-      <div className="grid grid-cols-4 gap-8 mt-16 mb-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3 lg:mt-16 md:mt-10 mt-6 mb-4">
         {products?.map((product: Product) => {
           return <ProductCard product={product} key={product.id} />;
         })}
       </div>
 
       {/* pagination buttons */}
-      <div className="flex justify-between gap-5 mb-8 items-center">
+      <div className="flex sm:flex-row flex-col-reverse justify-between gap-5 mb-8 items-center">
         <Button
           isLinkButton
           variants="borderedWithShadow"
           className="flex border border-primary items-center justify-between gap-2 "
         >
           <ShoppingCart size={20} color="var(--primary)" />
-          <span>Go to the Cart</span>
+          <span className="sm:text-md text-sm">Go to the Cart</span>
           <ChevronRight size={20} color="var(--primary)" />
         </Button>
 
@@ -535,7 +655,9 @@ export default function ShopClient() {
               setPage(page > 1 ? page - 1 : page);
               refetch();
             }}
-            className={`h-10 ${page > 1 ? "" : "bg-primary/50"}`}
+            className={`h-10 flex items-center justify-center ${
+              page > 1 ? "" : "bg-primary/50"
+            } sm:text-md text-sm`}
           >
             Previous
           </Button>
@@ -546,7 +668,7 @@ export default function ShopClient() {
                 setPage(1);
                 refetch();
               }}
-              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
             >
               1
             </Button>
@@ -555,7 +677,7 @@ export default function ShopClient() {
             variants="border"
             disabled
             isCursorPointer={false}
-            className="border border-primary w-10 h-10 flex justify-center items-center"
+            className="border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm"
           >
             {page}
           </Button>
@@ -566,7 +688,7 @@ export default function ShopClient() {
                 refetch();
               }}
               variants="borderedWithShadow"
-              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
             >
               {totalPages}
             </Button>
@@ -579,12 +701,86 @@ export default function ShopClient() {
               setPage(page < totalPages ? page + 1 : page);
               refetch();
             }}
-            className={`h-10 ${page < totalPages ? "" : "bg-primary/50"}`}
+            className={`h-10 flex items-center justify-center ${
+              page < totalPages ? "" : "bg-primary/50"
+            } sm:text-md text-sm`}
           >
             Next
           </Button>
         </div>
       </div>
+
+      {/* Sorting Dialog for mobile and desktop */}
+      <Dialog open={sortingDialogOpen} onOpenChange={setSortingDialogOpen}>
+        <DialogContent className="bg-white dark:bg-black sm:min-w-[350px] min-w-[250px] w-[50vw] px-4 py-3 rounded-md">
+          <DialogTitle className="text-xl">Sorts</DialogTitle>
+          <div className="grid grid-cols-2 gap-2">
+            {moreFilters.map((moreFilter: MoreFiltersType, index: number) => {
+              return (
+                <Button
+                  key={index}
+                  custom
+                  wrapperClassName="open wrapperFilter"
+                  className={`radiusAnimation open py-2 overflow-hidden flex justify-center items-center border-[2px] transition-all duration-500 ${
+                    moreFilter.name === selectedFilter?.name
+                      ? "bg-primary"
+                      : "bg-transparent"
+                  }`}
+                  onClick={() => {
+                    if (moreFilter.name !== selectedFilter?.name) {
+                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                    } else if (
+                      moreFilter.name == selectedFilter?.name &&
+                      selectedFilter.isAsc
+                    ) {
+                      setSelectedFilter({ ...moreFilter, isAsc: false });
+                    } else {
+                      setSelectedFilter(null);
+                    }
+                  }}
+                >
+                  <span
+                    className={`overflow-hidden text-center sm:text-sm text-xs flex justify-center items-center gap-1 duration-500 font-bold w-19 h-6 opacity-100`}
+                  >
+                    <div className="relative flex text-black dark:text-white">
+                      <span
+                        className={`${
+                          selectedFilter?.name === moreFilter.name
+                            ? "-translate-x-[0.5rem]"
+                            : "translate-x-0"
+                        } transition-transform duration-200`}
+                      >
+                        {moreFilter.name}
+                      </span>
+
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          selectedFilter?.isAsc
+                            ? "translate-y-0"
+                            : "translate-y-[140%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↑
+                      </span>
+                      <span
+                        className={`absolute top-0 ${
+                          moreFilter.name === selectedFilter?.name &&
+                          !selectedFilter?.isAsc
+                            ? "-translate-y-0"
+                            : "-translate-y-[140%]"
+                        } bottom-0 -right-2 flex items-center transition-transform duration-300`}
+                      >
+                        ↓
+                      </span>
+                    </div>
+                  </span>
+                </Button>
+              );
+            })}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

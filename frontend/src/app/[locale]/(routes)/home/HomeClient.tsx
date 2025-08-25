@@ -229,13 +229,13 @@ const HomeClient = () => {
             <SimpleButton
               onClick={() => handleClick(centerIndex - 1)}
               disabled={isAnimating}
-              className="cursor-pointer px-3"
+              className="cursor-pointer px-3 border-black dark:border-white"
             >
               Up
             </SimpleButton>
             <SimpleButton
               onClick={() => handleClick(centerIndex + 1)}
-              className="cursor-pointer px-3"
+              className="cursor-pointer px-3 border-black dark:border-white"
               disabled={isAnimating}
             >
               Down

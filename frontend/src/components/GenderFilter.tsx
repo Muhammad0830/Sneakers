@@ -13,7 +13,7 @@ export const GenderFilter = ({
         <label
           key={option}
           htmlFor={option}
-          className="flex items-center gap-2 cursor-pointer py-0.5 px-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
+          className="flex items-center gap-2 cursor-pointer sm:py-0.5 sm:px-1.5 px-2 py-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
         >
           <input
             type="checkbox"
@@ -33,7 +33,7 @@ export const GenderFilter = ({
           ></div>
           <label
             htmlFor={option}
-            className="cursor-pointer select-none text-nowrap"
+            className="cursor-pointer select-none text-nowrap sm:text-md text-sm"
           >
             For {option.charAt(0).toUpperCase() + option.slice(1)}
           </label>
