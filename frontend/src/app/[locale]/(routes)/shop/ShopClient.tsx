@@ -8,11 +8,24 @@ import {
   appliedFiltersType,
   Product,
 } from "@/types/types";
-import { ChevronDown, ChevronRight, ShoppingCart, X } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Filter,
+  Search,
+  ShoppingCart,
+  X,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MobileFilterSort from "@/components/MobileFilterComponent";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -156,11 +169,11 @@ export default function ShopClient() {
   );
 
   return (
-    <div className="px-[60px] mt-4 flex flex-col">
+    <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="flex z-40 flex-row items-center lg:gap-12.5 md:gap-6 justify-between self-center relative mb-16 lg:w-auto w-full">
+      <div className="z-40 flex-row sm:flex hidden items-center lg:gap-12.5 md:gap-6 justify-between self-center relative mb-16 lg:w-auto w-full">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
@@ -506,7 +519,46 @@ export default function ShopClient() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center w-full translate-y-4">
+      {/* mobile filtering */}
+      <div className="flex flex-row w-full justify-between gap-2 items-center">
+        <div className="flex-1 relative border border-primary rounded-sm h-8 overflow-hidden">
+          <input
+            className="h-full w-full px-2 rounded-sm text-sm"
+            type="text"
+            placeholder="Type here to search"
+          />
+        </div>
+        <div className="flex gap-2 justify-between">
+          <Button className="max-h-8 py-0.5 flex justify-center items-center rounded-sm">
+            <Search size={20} color="white" />
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="max-h-8 py-0.5 flex justify-center items-center rounded-sm">
+                <Filter size={20} color="white" />
+              </Button>
+            </DialogTrigger>
+
+            <DialogContent className="w-[90vw] max-h-[90vh] overflow-y-scroll p-3 rounded-md bg-[#fff] dark:bg-[#222]">
+              <DialogTitle>Filters and Sortings</DialogTitle>
+              <MobileFilterSort
+                specificFilters={specificFilters}
+                appliedFilters={appliedFilters}
+                toggleFilter={toggleFilter}
+                defaultValues={defaultValues}
+                setSelectedValuesMap={setSelectedValuesMap}
+                setAppliedFilters={setAppliedFilters}
+                moreFilters={moreFilters}
+                selectedFilter={selectedFilter}
+                setSelectedFilter={setSelectedFilter}
+                selectedValuesMap={selectedValuesMap}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
+      </div>
+
+      <div className="sm:flex hidden justify-between items-center w-full translate-y-4">
         <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
           Visible products: From {(page - 1) * limit + 1} to{" "}
           {page === totalPages ? total : page * limit}

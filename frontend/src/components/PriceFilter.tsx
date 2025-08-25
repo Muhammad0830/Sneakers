@@ -20,35 +20,39 @@ export const PriceFilter = ({
   }, [selected]);
 
   return (
-    <div className="gap-2 relative items-center">
-      <input
-        value={from}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (/^\d*$/.test(value)) {
-            setFrom(value);
-          }
-        }}
-        type="text"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        placeholder="From $"
-        className="no-spinner border mx-1 w-[8rem] rounded px-2 py-1 m-1"
-      />
-      <input
-        value={to}
-        onChange={(e) => {
-          const value = e.target.value;
-          if (/^\d*$/.test(value)) {
-            setTo(value);
-          }
-        }}
-        placeholder="To $"
-        className="no-spinner border mx-1 w-[8rem]  rounded px-2 py-1 m-1"
-        inputMode="numeric"
-        pattern="[0-9]*"
-        type="text"
-      />
+    <div className="gap-2 w-full relative flex sm:flex-col flex-row items-center">
+      <div className="border border-blue-800 overflow-hidden sm:mx-1 sm:w-[8rem] w-1/2 rounded my-1">
+        <input
+          value={from}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^\d*$/.test(value)) {
+              setFrom(value);
+            }
+          }}
+          type="text"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          placeholder="From $"
+          className="no-spinner w-full h-full rounded sm:py-1 px-2 py-1.5 sm:text-md text-sm"
+        />
+      </div>
+      <div className="border border-blue-800 overflow-hidden sm:mx-1 sm:w-[8rem] w-1/2 rounded my-1">
+        <input
+          value={to}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^\d*$/.test(value)) {
+              setTo(value);
+            }
+          }}
+          placeholder="To $"
+          className="no-spinner w-full h-full rounded sm:py-1 px-2 py-1.5 sm:text-md text-sm"
+          inputMode="numeric"
+          pattern="[0-9]*"
+          type="text"
+        />
+      </div>
     </div>
   );
 };

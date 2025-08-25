@@ -25,12 +25,12 @@ export default function FilterPopOver({
     }[Filter] || [];
 
   return (
-    <div className="grid grid-cols-3 min-w-[12rem] gap-2">
+    <div className="grid grid-cols-3 sm:min-w-[12rem] gap-2">
       {options.map((option) => (
         <label
           key={option}
           htmlFor={option}
-          className="flex items-center gap-2 cursor-pointer py-0.5 px-1.5 overflow-hidden rounded-sm border border-blue-800 relative"
+          className="flex items-center gap-2 cursor-pointer sm:py-0.5 sm:px-1.5 px-2 py-1 overflow-hidden rounded-sm border border-blue-800 relative"
         >
           <input
             type="checkbox"
@@ -50,7 +50,7 @@ export default function FilterPopOver({
           ></div>
           <label
             htmlFor={option}
-            className="cursor-pointer select-none text-nowrap"
+            className="cursor-pointer select-none text-nowrap sm:text-md text-sm"
           >
             {option}
           </label>
