@@ -7,6 +7,7 @@ import { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "../context/ReactQueryProvider";
 import { ThemeProvider } from "next-themes";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -33,6 +34,7 @@ export default function RootLayout({
             {children}
           </ThemeProvider>
         </Providers>
+        <Analytics />
       </body>
     </html>
   );
