@@ -352,7 +352,7 @@ export default function ShopClient() {
         </div>
 
         <div
-          className={`absolute lg:flex hidden bottom-[0%] transition-all ${
+          className={`absolute lg:flex hidden bottom-[0%] z-30 transition-all ${
             moreFilterOpen
               ? "right-[0] translate-y-[calc(100%+1rem)] translate-x-[1.5rem] duration-700"
               : "right-[0] translate-y-[calc(100%)] -translate-x-[25%] duration-1000"
@@ -452,7 +452,7 @@ export default function ShopClient() {
         </div>
 
         <div
-          className={`absolute border border-transparent bottom-[0%] ${
+          className={`absolute border border-transparent bottom-[0%] z-20 ${
             moreFilterOpen ? "-left-[1.5rem]" : "-left-0"
           } translate-y-[calc(100%+1rem+2px)] flex gap-2 items-center lg:justify-start justify-between w-full`}
           style={{
@@ -520,7 +520,7 @@ export default function ShopClient() {
       </div>
 
       {/* mobile filtering */}
-      <div className="flex flex-row w-full justify-between gap-2 items-center">
+      <div className="flex sm:hidden flex-row w-full justify-between gap-2 items-center">
         <div className="flex-1 relative border border-primary rounded-sm h-8 overflow-hidden">
           <input
             className="h-full w-full px-2 rounded-sm text-sm"
@@ -558,7 +558,67 @@ export default function ShopClient() {
         </div>
       </div>
 
-      <div className="sm:flex hidden justify-between items-center w-full translate-y-4">
+      <div className="border border-transparent sm:hidden mt-2 w-full flex flex-row flex-wrap justify-between">
+        <div className="flex">
+          <div className="border-[1px] border-primary py-1 px-2 rounded-md mb-1 flex items-center gap-1">
+            <span className="pointer-events-none text-sm">Filter by: </span>
+            {specificFilters.some((f) => f.isActive) ? (
+              <span className="flex items-center gap-1 flex-row ">
+                {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
+                  <span
+                    key={index}
+                    className="text-sm text-gray-800 pointer-events-none"
+                  >
+                    <span className="text-primary bg-varWhite px-0.5 py-0.5 rounded-sm text-sm">
+                      {filter!.name}
+                    </span>
+                  </span>
+                ))}
+                <button
+                  onClick={() => {
+                    toggleFilter("All", "none");
+                    setSelectedValuesMap(defaultValues);
+                    setAppliedFilters([]);
+                  }}
+                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
+                >
+                  <X size={16} color="white" />
+                </button>
+              </span>
+            ) : (
+              <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
+                All
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex">
+          <div className="border-[1px] border-primary py-1 px-2 rounded-md flex items-center gap-1">
+            <span className="pointer-events-none text-sm">Sort By: </span>
+            {selectedFilter ? (
+              <div className="flex items-center gap-2">
+                <span className="text-primary text-sm h-6 bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
+                  {selectedFilter?.name}
+                </span>
+                <button
+                  onClick={() => {
+                    setSelectedFilter(null);
+                  }}
+                  className="bg-red-500 rounded-full w-5 h-5 cursor-pointer flex justify-center items-center rotatet-0 hover:rotate-90 ease-in-out transition-transform duration-200"
+                >
+                  <X size={16} color="white" />
+                </button>
+              </div>
+            ) : (
+              <span className="text-primary h-6 text-sm bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
+                None
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="sm:flex hidden justify-between items-center w-full md:translate-y-4 translate-y-2">
         <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
           Visible products: From {(page - 1) * limit + 1} to{" "}
           {page === totalPages ? total : page * limit}
@@ -569,21 +629,21 @@ export default function ShopClient() {
       </div>
 
       {/* product cards */}
-      <div className="grid grid-cols-4 gap-8 mt-16 mb-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3 lg:mt-16 md:mt-10 mt-6 mb-4">
         {products?.map((product: Product) => {
           return <ProductCard product={product} key={product.id} />;
         })}
       </div>
 
       {/* pagination buttons */}
-      <div className="flex justify-between gap-5 mb-8 items-center">
+      <div className="flex sm:flex-row flex-col-reverse justify-between gap-5 mb-8 items-center">
         <Button
           isLinkButton
           variants="borderedWithShadow"
           className="flex border border-primary items-center justify-between gap-2 "
         >
           <ShoppingCart size={20} color="var(--primary)" />
-          <span>Go to the Cart</span>
+          <span className="sm:text-md text-sm">Go to the Cart</span>
           <ChevronRight size={20} color="var(--primary)" />
         </Button>
 
@@ -595,7 +655,9 @@ export default function ShopClient() {
               setPage(page > 1 ? page - 1 : page);
               refetch();
             }}
-            className={`h-10 ${page > 1 ? "" : "bg-primary/50"}`}
+            className={`h-10 flex items-center justify-center ${
+              page > 1 ? "" : "bg-primary/50"
+            } sm:text-md text-sm`}
           >
             Previous
           </Button>
@@ -606,7 +668,7 @@ export default function ShopClient() {
                 setPage(1);
                 refetch();
               }}
-              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
             >
               1
             </Button>
@@ -615,7 +677,7 @@ export default function ShopClient() {
             variants="border"
             disabled
             isCursorPointer={false}
-            className="border border-primary w-10 h-10 flex justify-center items-center"
+            className="border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm"
           >
             {page}
           </Button>
@@ -626,7 +688,7 @@ export default function ShopClient() {
                 refetch();
               }}
               variants="borderedWithShadow"
-              className={`border border-primary w-10 h-10 flex justify-center items-center`}
+              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
             >
               {totalPages}
             </Button>
@@ -639,7 +701,9 @@ export default function ShopClient() {
               setPage(page < totalPages ? page + 1 : page);
               refetch();
             }}
-            className={`h-10 ${page < totalPages ? "" : "bg-primary/50"}`}
+            className={`h-10 flex items-center justify-center ${
+              page < totalPages ? "" : "bg-primary/50"
+            } sm:text-md text-sm`}
           >
             Next
           </Button>
