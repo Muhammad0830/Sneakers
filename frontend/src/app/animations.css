@@ -123,3 +123,11 @@
     /* or reset only what you changed */
   }
 }
+
+@media (max-width: 1023px) {
+  .productCard:hover .cardButtonsWrapper,
+  .productCard:hover .cardButtons {
+    translate: none; /* resets translate */
+    transition: none; /* disable transition if needed */
+  }
+}

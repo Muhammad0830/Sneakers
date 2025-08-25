@@ -197,7 +197,7 @@ export default function ShopClient() {
               );
 
               return (
-                <div className="relative" key={index}>
+                <div className="relative z-40" key={index}>
                   <Button
                     onClick={() => {
                       if (selectedPopUp?.name === filter.name) {
@@ -452,7 +452,7 @@ export default function ShopClient() {
         </div>
 
         <div
-          className={`absolute border border-transparent bottom-[0%] z-20 ${
+          className={`absolute border border-transparent bottom-[0%] z-0 ${
             moreFilterOpen ? "-left-[1.5rem]" : "-left-0"
           } translate-y-[calc(100%+1rem+2px)] flex gap-2 items-center lg:justify-start justify-between w-full`}
           style={{
