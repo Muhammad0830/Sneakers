@@ -35,12 +35,19 @@ sneakersRouter.get("/", async (req: any, res: any) => {
       return res.status(404).json({ message: "no data found" });
     }
 
+    const colors = data[0].color.split(", ");
+    const sizes = data[0].size.split(", ");
+
     res.status(200).json({
       page,
       limit,
       total,
       totalPages,
-      data,
+      data: data.map((item: any) => ({
+        ...item,
+        color: colors,
+        size: sizes,
+      })),
     });
   } catch (err: any) {
     if (res.status) {

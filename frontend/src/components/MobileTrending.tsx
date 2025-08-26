@@ -12,7 +12,7 @@ import {
   usePrevNextButtons,
 } from "./EmblaCarouselArrowButtons";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
-import { Product } from "@/types/types";
+import { Trending } from "@/types/types";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
@@ -22,7 +22,7 @@ const numberWithinRange = (number: number, min: number, max: number): number =>
   Math.min(Math.max(number, min), max);
 
 type PropType = {
-  products: Product[];
+  products: Trending[];
   slides: number[];
   options?: EmblaOptionsType;
   className?: string;
@@ -122,7 +122,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
       <div className="embla__viewport w-full" ref={emblaRef}>
         <div className="embla__container">
-          {products.map((item: Product, index: number) => (
+          {products.map((item: Trending, index: number) => (
             <div className="embla__slide" key={index}>
               <div
                 className="embla__slide__number"

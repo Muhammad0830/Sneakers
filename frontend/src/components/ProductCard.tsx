@@ -7,8 +7,8 @@ import { MessageCircle, Star, StarIcon, ThumbsUp } from "lucide-react";
 import { useTheme } from "next-themes";
 
 const ProductCard = ({ product }: { product: Product }) => {
-  const colors = product.color.split(", ");
-  const sizes = product.size.split(", ");
+  const colors = product.color;
+  const sizes = product.size;
   const { theme } = useTheme();
 
   const rating = Number(product.rating).toFixed(1);
