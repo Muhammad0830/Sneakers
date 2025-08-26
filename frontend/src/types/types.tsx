@@ -8,9 +8,10 @@ export interface AboutCardType {
 export interface TestimonialType {
   id: number;
   name: string;
-  image: string;
+  image?: string;
   text: string;
   likes: number;
+  postedAt?: string;
 }
 
 export interface MoreFiltersType {
@@ -30,15 +31,25 @@ export interface Filters {
   isAsc: boolean;
 }
 
+export interface Trending {
+  id: number;
+  title: string;
+  description?: string;
+  image?: string | null;
+  created_at?: string;
+}
+
 export interface Product {
   id: number;
   title: string;
   description?: string;
   image?: string | null;
   price: string;
-  size: string;
-  color: string;
+  size: string[];
+  color: string[];
   rating: string;
   reviews: string[];
   gender?: string;
+  created_at?: string;
+  updated_at?: string;
 }

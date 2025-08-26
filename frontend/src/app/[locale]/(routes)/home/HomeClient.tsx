@@ -24,7 +24,8 @@ import {
   Pencil,
 } from "lucide-react";
 import TestimonialCard from "@/components/TestimonialCard";
-import { AboutCardType, TestimonialType, Product } from "@/types/types";
+import { AboutCardType, TestimonialType, Trending } from "@/types/types";
+import localData from "@/data_frontend/data.json";
 
 const AboutUsData = [
   {
@@ -79,15 +80,22 @@ const HomeClient = () => {
   const TestimonialRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
 
-  const { data: testimonials = [] } = useApiQuery<TestimonialType[]>(
+  const { data: testimonialsApi = [] } = useApiQuery<TestimonialType[]>(
     "/testimonials",
     "Testimonials"
   );
 
-  const { data: products = [], error } = useApiQuery<Product[]>(
+  const { data: productsApi = [], error } = useApiQuery<Trending[]>(
     "/trending",
     "Trending"
   );
+
+  // checking the backend working or not
+  const testimonials: TestimonialType[] =
+    testimonialsApi?.length > 0 ? testimonialsApi : localData.testimonials;
+
+  const products: Trending[] =
+    productsApi?.length > 0 ? productsApi : localData.trending;
 
   useEffect(() => {
     const handleResize = () => {
@@ -119,7 +127,9 @@ const HomeClient = () => {
     }, 510);
   };
 
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) {
+    console.error("Error fetching products:", error.message);
+  }
 
   const handleClick = (newIndex: number) => {
     if (isAnimating) return;
@@ -188,7 +198,7 @@ const HomeClient = () => {
         </div>
 
         <div className="lg:w-3/8 md:w-1/6 sm:w-1/5 relative sm:block hidden">
-          {products?.map((item: Product, index: number) => {
+          {products?.map((item: Trending, index: number) => {
             const relativeIndex = index - centerIndex;
 
             const distance = Math.abs(relativeIndex);

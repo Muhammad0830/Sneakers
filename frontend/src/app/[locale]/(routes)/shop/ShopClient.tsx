@@ -26,6 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import MobileFilterSort from "@/components/MobileFilterComponent";
+import localData from "@/data_frontend/data.json";
 
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
@@ -97,20 +98,28 @@ export default function ShopClient() {
     ["Sneakers", page, limit]
   );
 
+  const localDataProducts: Product[] = localData.products;
+  const localtotal = localDataProducts.length;
+  const localTotalPages = localtotal / limit;
+
   const {
     data: products,
     totalPages,
     total,
-  } = data ?? { data: [], totalPages: 0, total: 0 };
+  } = data || {
+    data: localDataProducts,
+    totalPages: localTotalPages,
+    total: localtotal,
+  };
+
+  console.log("products", products);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
 
-  if (isLoading) return <div>Loading...</div>;
-
   if (error) {
-    console.error("error", error);
+    console.log("error", error);
   }
 
   const toggleFilter = (
@@ -168,8 +177,23 @@ export default function ShopClient() {
     specificFilters.find((f) => f.name === name)
   );
 
+  console.log("isLoading", isLoading);
+
   return (
     <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">
+      {/* loading fetch */}
+      <div
+        className={`fixed flex items-center gap-2 bottom-6 right-6 translate-x-[0%] transition-transform duration-700  bg-white dark:bg-[#222222] shadow-[0_0_10px_2px_#22222250] dark:shadow-[0_0_10px_2px_#ffffff40] px-3 py-3 rounded-md z-50 ${
+          isLoading ? "translate-x-[0%]" : "translate-x-[200%]"
+        }`}
+        style={{
+          transitionDelay: isLoading ? "500ms" : "0ms",
+        }}
+      >
+        <span>Loading the data...</span>
+        <div className="h-6 w-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
