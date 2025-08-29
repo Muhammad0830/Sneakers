@@ -13,7 +13,7 @@ const AboutCard = ({
   const t = useTranslations("Home");
   return (
     <div
-      className={`${className} flex flex-col gap-4 h-full bg-white rounded-xl shadow-md px-4 py-6 justify-between items-center border border-varBlack/20`}
+      className={`${className} flex flex-col gap-4 h-full bg-white dark:bg-black rounded-md shadow-md px-4 py-6 justify-between items-center border border-varBlack/20`}
     >
       <div className="rounded-lg bg-primary w-16 aspect-square flex items-center justify-center">
         {item.icon}

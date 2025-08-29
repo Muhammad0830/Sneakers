@@ -272,7 +272,7 @@ const HomeClient = () => {
       <div className="px-4 sm:px-16 my-16">
         <div className="text-4xl font-bold text-center">{t("Pricing")}</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
-          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+          <div className="border border-varBlack/20 px-3 py-6 rounded-md dark:bg-black flex flex-col items-center cursor-pointer">
             <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
               <Check size={50} color="white" />
             </div>
@@ -313,7 +313,7 @@ const HomeClient = () => {
               </div>
             </div>
           </div>
-          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+          <div className="border border-varBlack/20 px-3 py-6 rounded-md dark:bg-black flex flex-col items-center cursor-pointer">
             <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
               <Sparkle size={50} color="white" />
             </div>
@@ -369,7 +369,7 @@ const HomeClient = () => {
               </div>
             </div>
           </div>
-          <div className="border px-3 py-6 rounded-md flex flex-col items-center cursor-pointer">
+          <div className="border border-varBlack/20 px-3 py-6 rounded-md dark:bg-black flex flex-col items-center cursor-pointer">
             <div className="w-20 aspect-square bg-primary flex justify-center items-center rounded-2xl mb-4">
               <Star size={50} color="white" />
             </div>
