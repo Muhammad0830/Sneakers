@@ -7,14 +7,16 @@ import React, {
   useState,
 } from "react";
 import gsap from "gsap";
+import { useTheme } from "next-themes";
+import Dots from "@/components/Dots";
 
-interface Product {
+interface TrendingProduct {
   id: number;
   name: string;
   size: string;
 }
 
-const products: Product[] = [
+const products: TrendingProduct[] = [
   { id: 0, name: "sneakersRed", size: "32" },
   { id: 1, name: "sneakersBlue", size: "33" },
   { id: 2, name: "sneakersYellow", size: "34" },
@@ -34,6 +36,10 @@ type SVGpathComponentProps = {
 const SVGpathComponent = forwardRef<handleFunctions, SVGpathComponentProps>(
   ({ setIsAnimating, initialIndex }, ref) => {
     //   const [isAnimating, setIsAnimating] = useState(false);
+    const { theme } = useTheme();
+    const [dotPositions, setDotPositions] = useState<
+      { x: number; y: number }[]
+    >([]);
 
     const [currentIndex, setCurrentIndex] = useState(0);
     const pathRef = useRef<SVGPathElement>(null);
@@ -81,22 +87,10 @@ const SVGpathComponent = forwardRef<handleFunctions, SVGpathComponentProps>(
         })
         .reverse();
 
+      setDotPositions(positions);
+
       if (dotsGroupRef.current) {
         dotsGroupRef.current.innerHTML = ""; // clear existing dots
-
-        products.forEach((product, index) => {
-          const dot = document.createElementNS(
-            "http://www.w3.org/2000/svg",
-            "circle"
-          );
-          dot.setAttribute("r", "6");
-          dot.setAttribute("fill", "white");
-          dot.setAttribute("stroke", "black");
-          dot.setAttribute("stroke-width", "1");
-          dot.setAttribute("cx", positions[index].x.toString());
-          dot.setAttribute("cy", positions[index].y.toString());
-          dotsGroupRef.current?.appendChild(dot);
-        });
 
         if (selectedCircleRef.current) {
           gsap.set(selectedCircleRef.current, {
@@ -162,13 +156,20 @@ const SVGpathComponent = forwardRef<handleFunctions, SVGpathComponentProps>(
             </defs>
 
             <g transform="rotate(270, 250, 250)" filter="url(#glow)">
-              <path ref={pathRef} stroke="black" strokeWidth="3" fill="none" />
-              <g ref={dotsGroupRef}></g>
+              <path
+                ref={pathRef}
+                stroke={`${theme === "light" ? "black" : "white"}`}
+                strokeWidth="3"
+                fill="none"
+              />
+              <g ref={dotsGroupRef}>
+                <Dots products={products} positions={dotPositions} />
+              </g>
               <circle
                 filter="url(#glow)"
                 ref={selectedCircleRef}
                 r="8"
-                fill="black"
+                fill={`${theme === "light" ? "black" : "white"}`}
               />
             </g>
           </svg>

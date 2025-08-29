@@ -28,11 +28,11 @@ const TestimonialCard = ({
         {item.name}
       </div>
       <div className="flex gap-1 items-center justify-center mt-1 mb-3">
-        <Star size={15} color="yellow" />
-        <Star size={15} color="yellow" />
-        <Star size={15} color="yellow" />
-        <Star size={15} color="yellow" />
-        <Star size={15} color="yellow" />
+        <Star size={15} color="yellow" fill="yellow" />
+        <Star size={15} color="yellow" fill="yellow" />
+        <Star size={15} color="yellow" fill="yellow" />
+        <Star size={15} color="yellow" fill="yellow" />
+        <Star size={15} color="yellow" fill="yellow" />
       </div>
       <div className="px-2 relative border border-primary/30 rounded-lg p-2">
         <p className="md:text-md text-sm text-varBlack font-normal">
