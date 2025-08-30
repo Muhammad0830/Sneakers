@@ -28,6 +28,36 @@ import {
 import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
 
+function buildQueryString(
+  filters: appliedFiltersType[], //Record<string, string[]>,
+  page: number,
+  limit: number,
+  sort?: { name: string; isActive: boolean; isAsc: boolean }
+) {
+  const newParams = new URLSearchParams();
+
+  newParams.set("page", String(page));
+  newParams.set("limit", String(limit));
+
+  filters.forEach((filter: appliedFiltersType) => {
+    if (filter.name === "Price") {
+      newParams.set("minPrice", String(filter.selectedValues[0]));
+      newParams.set("maxPrice", String(filter.selectedValues[1]));
+    } else {
+      filter.selectedValues.forEach((v) => {
+        newParams.append(filter.name.toLowerCase(), String(v));
+      });
+    }
+  });
+
+  if (sort?.isActive) {
+    newParams.set("sortBy", sort.name.toLowerCase());
+    newParams.set("order", sort.isAsc ? "asc" : "desc");
+  }
+
+  return newParams.toString();
+}
+
 const moreFilters: MoreFiltersType[] = [
   { name: "Popular", isActive: false },
   { name: "Sale", isActive: false },
@@ -93,9 +123,19 @@ export default function ShopClient() {
   const [page, setPage] = useState(1);
   const limit = 12;
 
+  console.log("appliedFilters", appliedFilters);
+  console.log("selectedValuesMap", selectedValuesMap);
+
+  const queryString = buildQueryString(
+    appliedFilters,
+    page,
+    limit,
+    selectedFilter || undefined
+  );
+
   const { data, isLoading, error, refetch } = useApiQuery<ProductsDataProps>(
-    `/?page=${page}&limit=${limit}`,
-    ["Sneakers", page, limit]
+    `/?${queryString}`,
+    ["Sneakers", page, limit, queryString]
   );
 
   const localDataProducts: Product[] = localData.products;
@@ -176,8 +216,6 @@ export default function ShopClient() {
   const activeFiltersInOrder = activeOrder.map((name) =>
     specificFilters.find((f) => f.name === name)
   );
-
-  console.log("isLoading", isLoading);
 
   return (
     <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">
@@ -412,12 +450,20 @@ export default function ShopClient() {
                   }}
                   onClick={() => {
                     if (moreFilter.name !== selectedFilter?.name) {
-                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                      setSelectedFilter({
+                        ...moreFilter,
+                        isAsc: true,
+                        isActive: true,
+                      });
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
                       selectedFilter.isAsc
                     ) {
-                      setSelectedFilter({ ...moreFilter, isAsc: false });
+                      setSelectedFilter({
+                        ...moreFilter,
+                        isAsc: false,
+                        isActive: true,
+                      });
                     } else {
                       setSelectedFilter(null);
                     }
