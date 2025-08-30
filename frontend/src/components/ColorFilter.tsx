@@ -1,4 +1,3 @@
-// ColorFilter.tsx
 export const ColorFilter = ({
   selected,
   setSelected,
