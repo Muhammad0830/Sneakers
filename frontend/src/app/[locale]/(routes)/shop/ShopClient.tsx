@@ -123,9 +123,6 @@ export default function ShopClient() {
   const [page, setPage] = useState(1);
   const limit = 12;
 
-  console.log("appliedFilters", appliedFilters);
-  console.log("selectedValuesMap", selectedValuesMap);
-
   const queryString = buildQueryString(
     appliedFilters,
     page,
@@ -151,8 +148,6 @@ export default function ShopClient() {
     totalPages: localTotalPages,
     total: localtotal,
   };
-
-  console.log("products", products);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
