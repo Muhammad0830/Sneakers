@@ -13,30 +13,92 @@ sneakersRouter.get("/", async (req: any, res: any) => {
     const limit = parseInt(req.query.limit as string) || 12;
     const offset = (page - 1) * limit;
 
-    const data = await query<Product[]>(
-      "SELECT * FROM products LIMIT :limit OFFSET :offset",
-      {
-        limit: limit,
-        offset: offset,
-      }
-    );
+    const genders = req.query.gender; // can be string or array
+    const colors = req.query.color;
+    const sizes = req.query.size;
+    const minPrice = req.query.minPrice ? Number(req.query.minPrice) : null;
+    const maxPrice = req.query.maxPrice ? Number(req.query.maxPrice) : null;
 
-    if (data.length <= 0) {
-      return res.status(404).json({ message: "no data found" });
+    const allowedSortFields = ["popular", "sale", "top", "new"];
+    const sortBy = allowedSortFields.includes(req.query.sortBy as string)
+      ? (req.query.sortBy as string)
+      : "id";
+    const order = req.query.order === "desc" ? "DESC" : "ASC";
+
+    const whereClauses: string[] = [];
+    const params: any = { limit, offset };
+
+    if (genders) {
+      if (Array.isArray(genders)) {
+        whereClauses.push(`gender IN (:genders)`);
+        params.genders = genders;
+      } else {
+        whereClauses.push(`gender = :gender`);
+        params.gender = genders;
+      }
+    }
+    if (colors) {
+      if (Array.isArray(colors)) {
+        const colorConditions = colors.map(
+          (c, i) => `FIND_IN_SET(:color${i}, REPLACE(color, ' ', ''))`
+        );
+        whereClauses.push(`(${colorConditions.join(" OR ")})`);
+
+        // Add parameters
+        colors.forEach((c, i) => {
+          params[`color${i}`] = c;
+        });
+      } else {
+        whereClauses.push(`FIND_IN_SET(:color, REPLACE(color, ' ', ''))`);
+        params.color = colors;
+      }
     }
 
-    const totalResult = await query<any[]>(
-      "SELECT COUNT(*) as count FROM products"
+    if (sizes) {
+      if (Array.isArray(sizes)) {
+        const sizeConditions = sizes.map(
+          (s, i) => `FIND_IN_SET(:size${i}, REPLACE(size, ' ', ''))`
+        );
+        whereClauses.push(`(${sizeConditions.join(" OR ")})`);
+        sizes.forEach((s, i) => {
+          params[`size${i}`] = s;
+        });
+      } else {
+        whereClauses.push(`FIND_IN_SET(:size, REPLACE(size, ' ', ''))`);
+        params.size = sizes;
+      }
+    }
+
+    if (minPrice !== null) {
+      whereClauses.push(`price >= :minPrice`);
+      params.minPrice = minPrice;
+    }
+    if (maxPrice !== null) {
+      whereClauses.push(`price <= :maxPrice`);
+      params.maxPrice = maxPrice;
+    }
+
+    const whereSQL =
+      whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
+
+    const data = await query<Product[]>(
+      `SELECT * FROM products ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
+      params
     );
-    const total = (totalResult[0] as { count: number }).count;
-    const totalPages = Math.ceil(total / limit);
 
     if (data.length === 0) {
       return res.status(404).json({ message: "no data found" });
     }
 
-    const colors = data[0].color.split(", ");
-    const sizes = data[0].size.split(", ");
+    const totalResult = await query<any[]>(
+      `SELECT COUNT(*) as count FROM products ${whereSQL}`,
+      params
+    );
+    const total = (totalResult[0] as { count: number }).count;
+    const totalPages = Math.ceil(total / limit);
+
+    const finalColors = data[0].color.split(", ");
+    const finalSizes = data[0].size.split(", ");
 
     res.status(200).json({
       page,
@@ -45,8 +107,8 @@ sneakersRouter.get("/", async (req: any, res: any) => {
       totalPages,
       data: data.map((item: any) => ({
         ...item,
-        color: colors,
-        size: sizes,
+        color: finalColors,
+        size: finalSizes,
       })),
     });
   } catch (err: any) {
