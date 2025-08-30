@@ -218,11 +218,6 @@ export default function ShopClient() {
     );
   };
 
-  console.log(
-    appliedFilters.find((f) => f.name === "Size")?.selectedValues,
-    selectedValuesMap["Size"]
-  );
-
   const activeFiltersInOrder = activeOrder.map((name) =>
     specificFilters.find((f) => f.name === name)
   );
