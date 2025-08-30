@@ -1,4 +1,5 @@
 import FILTER_COMPONENTS from "@/utils/Filter_components";
+import { useTheme } from "next-themes";
 
 export default function FilterPopOver({
   Filter,
@@ -10,6 +11,7 @@ export default function FilterPopOver({
   setSelectedValues: (values: string[]) => void;
   index: number;
 }) {
+  const { theme } = useTheme();
   const CustomFilter = FILTER_COMPONENTS[Filter];
 
   if (CustomFilter) {
@@ -57,7 +59,9 @@ export default function FilterPopOver({
           <div
             className={`absolute top-0 bottom-0 left-0 right-0 -z-10 translate-x-[100%] peer-checked:translate-x-[0%] transition-transform duration-300`}
             style={{
-              background: "linear-gradient(to right, transparent 30%, #c7ebf0)",
+              background: `linear-gradient(to right, transparent 30%, ${
+                theme === "light" ? "#c7ebf0" : "#4596ed"
+              })`,
             }}
           ></div>
         </label>

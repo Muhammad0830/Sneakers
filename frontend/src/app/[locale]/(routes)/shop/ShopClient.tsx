@@ -28,6 +28,16 @@ import {
 import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
 
+function arraysHaveSameValues(
+  a: string[] | appliedFiltersType[] | undefined,
+  b: string[] | appliedFiltersType[] | undefined
+) {
+  if (a?.length !== b?.length) return false;
+  if (a && b) {
+    return [...a].sort().every((val, i) => val === [...b].sort()[i]);
+  }
+}
+
 function buildQueryString(
   filters: appliedFiltersType[], //Record<string, string[]>,
   page: number,
@@ -208,6 +218,11 @@ export default function ShopClient() {
     );
   };
 
+  console.log(
+    appliedFilters.find((f) => f.name === "Size")?.selectedValues,
+    selectedValuesMap["Size"]
+  );
+
   const activeFiltersInOrder = activeOrder.map((name) =>
     specificFilters.find((f) => f.name === name)
   );
@@ -272,7 +287,7 @@ export default function ShopClient() {
                   </Button>
 
                   <div
-                    className={`popup absolute border border-primary bg-white p-2 rounded-md z-10 left-[50%] translate-x-[-50%] flex justify-center ${
+                    className={`popup absolute border border-primary bg-white dark:bg-black p-2 rounded-md z-10 left-[50%] translate-x-[-50%] flex justify-center ${
                       selectedPopUp?.name === filter.name
                         ? "active"
                         : "inactive"
@@ -344,10 +359,12 @@ export default function ShopClient() {
                           <span
                             className={`absolute transition-transform duration-300 ${
                               filter.isActive &&
-                              selectedValuesMap[filter.name] ===
+                              arraysHaveSameValues(
+                                selectedValuesMap[filter.name],
                                 appliedFilters.find(
                                   (f) => f.name === selectedPopUp?.name
                                 )?.selectedValues
+                              )
                                 ? "translate-x-0"
                                 : filter.isActive &&
                                   selectedValuesMap[filter.name] !==
@@ -363,10 +380,12 @@ export default function ShopClient() {
                           <span
                             className={`relative transition-transform duration-300 ${
                               filter.isActive &&
-                              selectedValuesMap[filter.name] !==
+                              !arraysHaveSameValues(
+                                selectedValuesMap[filter.name],
                                 appliedFilters.find(
                                   (f) => f.name === selectedPopUp?.name
                                 )?.selectedValues
+                              )
                                 ? "translate-x-0"
                                 : "-translate-x-[300%]"
                             }`}

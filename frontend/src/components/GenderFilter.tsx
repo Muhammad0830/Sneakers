@@ -1,4 +1,5 @@
-// GenderFilter.tsx
+import { useTheme } from "next-themes";
+
 export const GenderFilter = ({
   selected,
   setSelected,
@@ -6,6 +7,7 @@ export const GenderFilter = ({
   selected: string[];
   setSelected: (values: string[]) => void;
 }) => {
+  const { theme } = useTheme();
   const options = ["Men", "Women", "Kids"];
   return (
     <div className="flex flex-col gap-2">
@@ -40,7 +42,9 @@ export const GenderFilter = ({
           <div
             className={`absolute top-0 bottom-0 left-0 right-0 -z-10 translate-x-[100%] peer-checked:translate-x-[0%] transition-transform duration-300`}
             style={{
-              background: "linear-gradient(to right, transparent 30%, #c7ebf0)",
+              background: `linear-gradient(to right, transparent 30%, ${
+                theme === "light" ? "#c7ebf0" : "#4596ed"
+              })`,
             }}
           ></div>
         </label>
