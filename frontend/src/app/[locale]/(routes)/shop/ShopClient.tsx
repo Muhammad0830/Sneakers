@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
+import { useCustomToast } from "@/context/CustomToastContext";
 
 function hasChanges(
   defaultValues: {
@@ -155,10 +156,7 @@ export default function ShopClient() {
   const [sortingDialogOpen, setSortingDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 12;
-
-  const customToast = (message: string) => {
-    alert(message);
-  };
+  const { showToast } = useCustomToast();
 
   const queryString = buildQueryString(
     appliedFilters,
@@ -371,10 +369,18 @@ export default function ShopClient() {
                                 currentName
                               ) === false
                             ) {
-                              customToast("Please select at least one value");
+                              showToast(
+                                "warning",
+                                "Warning",
+                                "Please make at least one change"
+                              );
                             } else if (selectedPopUp?.name) {
                               if (currentValues.length === 0) {
-                                alert("Please select at least one value");
+                                showToast(
+                                  "warning",
+                                  "Warning",
+                                  "Please select at least one value"
+                                );
                                 return;
                               }
 

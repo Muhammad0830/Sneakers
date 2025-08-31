@@ -105,7 +105,6 @@ export default function MobileFilterSort({
                       <button
                         onClick={() => {
                           toggleFilter(filter.name, "remove");
-                          console.log("working");
                         }}
                         className="text-red-500 text-xs"
                       >

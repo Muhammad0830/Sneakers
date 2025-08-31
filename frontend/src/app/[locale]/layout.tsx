@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import { LoadingProvider } from "@/context/LoadingContext";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import GlobalLoader from "@/components/GlobalLoader";
+import CustomToast from "@/components/CustomToast";
 // import { LoadingProvider } from "@/context/LoadingContext";
 
 export default async function LocaleLayout({
@@ -27,10 +28,13 @@ export default async function LocaleLayout({
         <LoadingProvider>
           <GlobalLoader />
           <FullScreenLoader />
-          <div className="min-h-screen flex flex-col">
+          <div className="min-h-screen flex flex-col relative">
             <NavBar />
             <div className="pt-18 flex-1 overflow-hidden">{children}</div>
             <Footer />
+
+            {/* toast */}
+            <CustomToast />
           </div>
         </LoadingProvider>
       </NextIntlClientProvider>

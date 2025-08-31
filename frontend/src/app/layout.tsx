@@ -8,6 +8,7 @@ import { Open_Sans } from "next/font/google";
 import Providers from "../context/ReactQueryProvider";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
+import { CustomToastProvider } from "@/context/CustomToastContext";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body className={`antialiased ${openSans.className}`}>
         <Providers>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            {children}
+            <CustomToastProvider>{children}</CustomToastProvider>
           </ThemeProvider>
         </Providers>
         <Analytics />
