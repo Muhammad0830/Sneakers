@@ -28,6 +28,29 @@ import {
 import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
 
+function hasChanges(
+  defaultValues: {
+    Gender: string[];
+    Size: string[];
+    Price: string[];
+    Color: string[];
+  },
+  selectedValuesMap: {
+    [key: string]: string[];
+  },
+  currentName: "Gender" | "Size" | "Price" | "Color"
+) {
+  if (
+    arraysHaveSameValues(
+      defaultValues[currentName],
+      selectedValuesMap[currentName]
+    )
+  )
+    return false;
+
+  return true;
+}
+
 function arraysHaveSameValues(
   a: string[] | appliedFiltersType[] | undefined,
   b: string[] | appliedFiltersType[] | undefined
@@ -132,6 +155,10 @@ export default function ShopClient() {
   const [sortingDialogOpen, setSortingDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 12;
+
+  const customToast = (message: string) => {
+    alert(message);
+  };
 
   const queryString = buildQueryString(
     appliedFilters,
@@ -310,7 +337,7 @@ export default function ShopClient() {
                           Close
                         </button>
                         <button
-                          className={`overflow-hidden rounded-sm flex justify-center border-blue-700 px-1.5 py-0.5 transition-colors duration-300 cursor-pointer text-white ${
+                          className={`overflow-hidden relative rounded-sm flex justify-center border-blue-700 px-1.5 py-0.5 transition-colors duration-300 cursor-pointer text-white ${
                             !existing ||
                             !(
                               JSON.stringify(currentValues) ===
@@ -320,7 +347,32 @@ export default function ShopClient() {
                               : "bg-red-500"
                           }`}
                           onClick={() => {
-                            if (selectedPopUp?.name) {
+                            if (
+                              (currentName === "Size" ||
+                                currentName === "Color" ||
+                                currentName === "Price" ||
+                                currentName === "Gender") &&
+                              hasChanges(
+                                defaultValues,
+                                selectedValuesMap,
+                                currentName
+                              ) === false &&
+                              filter.isActive
+                            ) {
+                              toggleFilter(currentName, "remove");
+                            } else if (
+                              (currentName === "Size" ||
+                                currentName === "Color" ||
+                                currentName === "Price" ||
+                                currentName === "Gender") &&
+                              hasChanges(
+                                defaultValues,
+                                selectedValuesMap,
+                                currentName
+                              ) === false
+                            ) {
+                              customToast("Please select at least one value");
+                            } else if (selectedPopUp?.name) {
                               if (currentValues.length === 0) {
                                 alert("Please select at least one value");
                                 return;
@@ -708,10 +760,19 @@ export default function ShopClient() {
       </div>
 
       {/* product cards */}
-      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3 lg:mt-16 md:mt-10 mt-6 mb-4">
-        {products?.map((product: Product) => {
-          return <ProductCard product={product} key={product.id} />;
-        })}
+      <div className="w-full lg:mt-16 md:mt-10 mt-6 mb-4">
+        {products.length <= 0 ? (
+          <div className="w-full">
+            No products found, please try changing the filter or the search
+            query.
+          </div>
+        ) : (
+          <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3">
+            {products?.map((product: Product) => {
+              return <ProductCard product={product} key={product.id} />;
+            })}
+          </div>
+        )}
       </div>
 
       {/* pagination buttons */}
