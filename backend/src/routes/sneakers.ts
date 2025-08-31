@@ -87,7 +87,9 @@ sneakersRouter.get("/", async (req: any, res: any) => {
     );
 
     if (data.length === 0) {
-      return res.status(404).json({ message: "no data found" });
+      return res
+        .status(200)
+        .json({ page, limit, total: 0, totalPages: 1, data: [] });
     }
 
     const totalResult = await query<any[]>(
