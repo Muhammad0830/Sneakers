@@ -16,7 +16,7 @@ import {
   ShoppingCart,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProductCard from "@/components/ProductCard";
 import useApiQuery from "@/hooks/useApiQuery";
 import {
@@ -158,6 +158,7 @@ export default function ShopClient() {
   const [page, setPage] = useState(1);
   const limit = 12;
   const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
+  const hasShownDummyInfo = useRef(false);
 
   useEffect(() => {
     setPage(1);
@@ -184,6 +185,14 @@ export default function ShopClient() {
       setTimeout(() => hideLoadingToast(), 1000);
     }
   }, [isLoading]);
+
+  // dummt data working toast
+  useEffect(() => {
+    if (!isLoading && !data && !hasShownDummyInfo.current) {
+      showToast("info", t("Info"), t("Dummy data working"));
+      hasShownDummyInfo.current = true; // prevent duplicates
+    }
+  }, [showToast, t, data, isLoading]);
 
   const localDataProducts: Product[] = localData.products;
   const localtotal = localDataProducts.length;
@@ -257,11 +266,6 @@ export default function ShopClient() {
   const activeFiltersInOrder = activeOrder.map((name) =>
     specificFilters.find((f) => f.name === name)
   );
-
-  /* dummy data working toast */
-  // if (!isLoading && !data) {
-  //   showToast("info", "Backend error", "Dummy data working");
-  // }
 
   return (
     <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">

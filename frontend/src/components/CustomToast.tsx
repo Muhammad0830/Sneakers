@@ -36,7 +36,9 @@ const CustomToast = () => {
 
   return (
     <div className="fixed flex items-center gap-2 bottom-6 right-6 z-50">
-      {toasts.map((toast) => {
+      {toasts.map((toast, index, array) => {
+        const reverseIndex = array.length - 1 - index;
+        console.log("reverseIndex", reverseIndex);
         const isLoading = toast.type === "loading";
 
         if (isLoading)
@@ -44,7 +46,7 @@ const CustomToast = () => {
             <div
               key={toast.id}
               className={cn(
-                "absolute translate-x-[0%] opacity-100 flex items-center cursor-pointer gap-2 text-black dark:text-white right-0 bottom-0 bg-white border-[1px] border-primary dark:bg-black transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pb-3 pt-2 rounded-md z-50 transform",
+                "absolute opacity-100 flex items-center cursor-pointer gap-2 text-black dark:text-white right-0 bottom-0 bg-white border-[1px] border-primary dark:bg-black transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pb-3 pt-2 rounded-md z-50 transform",
                 toast.visible
                   ? "translate-x-[0%] opacity-100"
                   : "translate-x-[50%] opacity-0"
@@ -60,12 +62,16 @@ const CustomToast = () => {
             onClick={() => removeToast(toast.id)}
             key={toast.id}
             className={cn(
-              "absolute cursor-pointer block text-black dark:text-white right-0 bottom-0 bg-white border-[2px] dark:bg-black translate-x-[50%] opacity-0 transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pb-3 pt-2 rounded-md z-50 transform", //shadow-[0_0_10px_2px_#22222250]
+              "absolute cursor-pointer block text-black dark:text-white right-0 bottom-0 bg-white border-[2px] dark:bg-black opacity-0 transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pb-3 pt-2 rounded-md z-50 transform", //shadow-[0_0_10px_2px_#22222250]
               typeStyles[toast.type][0],
               toast.visible
                 ? "translate-x-[0%] opacity-100"
                 : "translate-x-[50%] opacity-0"
+              // toast.type === "error" && "z-[100]",
             )}
+            style={{
+              transform: `translateY(-${reverseIndex * 90}px)`,
+            }}
           >
             <div className="md:text-lg text-[16px] font-bold text-nowrap text-start mb-1">
               {toast.title}

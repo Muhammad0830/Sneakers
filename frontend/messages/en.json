@@ -66,6 +66,8 @@
     "Shop": {
       "Loading the data": "Loading the data...",
       "Error": "Error",
-      "Connection failed": "Connection failed"
+      "Connection failed": "Connection failed",
+      "Info": "Info",
+      "Dummy data working": "Dummy data working"
     }
 }

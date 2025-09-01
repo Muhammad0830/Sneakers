@@ -28,7 +28,7 @@ const useApiQuery = <T,>(url: string, key: string | (string | number)[]) => {
 
   useEffect(() => {
     if (error && !hasShownError.current) {
-      showToast("error", t("Error"), t("Connection failed"));
+      showToast("error", t("Error occured"), t("Internal server error"));
       hasShownError.current = true; // prevent duplicates
     }
   }, [error, showToast, t]);
