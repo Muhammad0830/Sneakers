@@ -62,5 +62,12 @@
       "goHome": "Go Home",
       "notFoundTitle": "Page Not Found",
       "notFoundDescription": "Sorry, the page you're looking for doesn't exist."
-    } 
+    },
+    "Shop": {
+      "Loading the data": "Loading the data...",
+      "Error": "Error",
+      "Connection failed": "Connection failed",
+      "Info": "Info",
+      "Dummy data working": "Dummy data working"
+    }
 }

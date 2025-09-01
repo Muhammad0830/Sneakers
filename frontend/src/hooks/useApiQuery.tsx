@@ -1,19 +1,21 @@
+import { useCustomToast } from "@/context/CustomToastContext";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
+import { useEffect, useRef } from "react";
 
 const BaseURL = "http://localhost:3001/sneakers";
 
-const useApiQuery = <T,>(
-  url: string,
-  key: string | (string | number)[]
-) => {
+const useApiQuery = <T,>(url: string, key: string | (string | number)[]) => {
+  const { showToast } = useCustomToast();
+  const t = useTranslations("Shop");
+  const hasShownError = useRef(false);
+
   const { data, error, isLoading, refetch } = useQuery<T>({
-    queryKey: Array.isArray(key) ? key : [key], // ✅ allow array or string
+    queryKey: Array.isArray(key) ? key : [key],
     queryFn: async () => {
       const response = await fetch(`${BaseURL}${url}`, {
         method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!response.ok) {
@@ -24,7 +26,13 @@ const useApiQuery = <T,>(
     },
   });
 
+  useEffect(() => {
+    if (error && !hasShownError.current) {
+      showToast("error", t("Error occured"), t("Internal server error"));
+      hasShownError.current = true; // prevent duplicates
+    }
+  }, [error, showToast, t]);
+
   return { data, error, isLoading, refetch };
 };
-
 export default useApiQuery;
