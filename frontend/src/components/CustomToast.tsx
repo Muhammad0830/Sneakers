@@ -38,7 +38,6 @@ const CustomToast = () => {
     <div className="fixed flex items-center gap-2 bottom-6 right-6 z-50">
       {toasts.map((toast, index, array) => {
         const reverseIndex = array.length - 1 - index;
-        console.log("reverseIndex", reverseIndex);
         const isLoading = toast.type === "loading";
 
         if (isLoading)
