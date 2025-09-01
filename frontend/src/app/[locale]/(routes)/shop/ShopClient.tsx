@@ -28,6 +28,7 @@ import {
 import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
 import { useCustomToast } from "@/context/CustomToastContext";
+import { useTranslations } from "next-intl";
 
 function hasChanges(
   defaultValues: {
@@ -156,7 +157,11 @@ export default function ShopClient() {
   const [sortingDialogOpen, setSortingDialogOpen] = useState(false);
   const [page, setPage] = useState(1);
   const limit = 12;
-  const { showToast } = useCustomToast();
+  const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
+
+  useEffect(() => {
+    setPage(1);
+  }, [appliedFilters, selectedFilter]);
 
   const queryString = buildQueryString(
     appliedFilters,
@@ -165,10 +170,20 @@ export default function ShopClient() {
     selectedFilter || undefined
   );
 
-  const { data, isLoading, error, refetch } = useApiQuery<ProductsDataProps>(
+  const { data, isLoading, refetch } = useApiQuery<ProductsDataProps>(
     `/?${queryString}`,
     ["Sneakers", page, limit, queryString]
   );
+
+  const t = useTranslations("Shop");
+
+  useEffect(() => {
+    if (isLoading) {
+      showLoadingToast(t("Loading the data"));
+    } else {
+      setTimeout(() => hideLoadingToast(), 1000);
+    }
+  }, [isLoading]);
 
   const localDataProducts: Product[] = localData.products;
   const localtotal = localDataProducts.length;
@@ -187,10 +202,6 @@ export default function ShopClient() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [page]);
-
-  if (error) {
-    console.log("error", error);
-  }
 
   const toggleFilter = (
     name: string,
@@ -247,21 +258,13 @@ export default function ShopClient() {
     specificFilters.find((f) => f.name === name)
   );
 
+  /* dummy data working toast */
+  // if (!isLoading && !data) {
+  //   showToast("info", "Backend error", "Dummy data working");
+  // }
+
   return (
     <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mt-4 flex flex-col">
-      {/* loading fetch */}
-      <div
-        className={`fixed flex items-center gap-2 bottom-6 right-6 translate-x-[0%] transition-transform duration-700  bg-white dark:bg-[#222222] shadow-[0_0_10px_2px_#22222250] dark:shadow-[0_0_10px_2px_#ffffff40] px-3 py-3 rounded-md z-50 ${
-          isLoading ? "translate-x-[0%]" : "translate-x-[200%]"
-        }`}
-        style={{
-          transitionDelay: isLoading ? "500ms" : "0ms",
-        }}
-      >
-        <span>Loading the data...</span>
-        <div className="h-6 w-6 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-      </div>
-
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
