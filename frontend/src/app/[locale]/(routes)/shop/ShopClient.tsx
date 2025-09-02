@@ -29,6 +29,10 @@ import localData from "@/data_frontend/data.json";
 import { useCustomToast } from "@/context/CustomToastContext";
 import { useTranslations } from "next-intl";
 import ShopPageFilterPopOver from "@/components/ShopPageFilterPopOver";
+import {
+  SkeletonProducts,
+  SkeletonPagination,
+} from "@/components/SkeletonShopPage";
 
 function hasChanges(
   defaultValues: {
@@ -632,7 +636,9 @@ export default function ShopClient() {
 
       {/* product cards */}
       <div className="w-full lg:mt-16 md:mt-10 mt-6 mb-4">
-        {products.length <= 0 ? (
+        {isLoading ? (
+          <SkeletonProducts />
+        ) : products.length <= 0 ? (
           <div className="w-full">
             No products found, please try changing the filter or the search
             query.
@@ -658,67 +664,71 @@ export default function ShopClient() {
           <ChevronRight size={20} color="var(--primary)" />
         </Button>
 
-        <div className="flex items-center gap-2">
-          <Button
-            isHoverable={page > 1}
-            isCursorPointer={page > 1}
-            onClick={() => {
-              setPage(page > 1 ? page - 1 : page);
-              refetch();
-            }}
-            className={`h-10 flex items-center justify-center ${
-              page > 1 ? "" : "bg-primary/50"
-            } sm:text-md text-sm`}
-          >
-            Previous
-          </Button>
-          {page === 1 ? null : (
+        {isLoading ? (
+          <SkeletonPagination />
+        ) : (
+          <div className="flex items-center gap-2">
             <Button
-              variants="borderedWithShadow"
+              isHoverable={page > 1}
+              isCursorPointer={page > 1}
               onClick={() => {
-                setPage(1);
+                setPage(page > 1 ? page - 1 : page);
                 refetch();
               }}
-              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
+              className={`h-10 flex items-center justify-center ${
+                page > 1 ? "" : "bg-primary/50"
+              } sm:text-md text-sm`}
             >
-              1
+              Previous
             </Button>
-          )}
-          <Button
-            variants="border"
-            disabled
-            isCursorPointer={false}
-            className="border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm"
-          >
-            {page}
-          </Button>
-          {page === totalPages ? null : (
+            {page === 1 ? null : (
+              <Button
+                variants="borderedWithShadow"
+                onClick={() => {
+                  setPage(1);
+                  refetch();
+                }}
+                className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
+              >
+                1
+              </Button>
+            )}
             <Button
+              variants="border"
+              disabled
+              isCursorPointer={false}
+              className="border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm"
+            >
+              {page}
+            </Button>
+            {page === totalPages ? null : (
+              <Button
+                onClick={() => {
+                  setPage(totalPages || 1);
+                  refetch();
+                }}
+                variants="borderedWithShadow"
+                className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
+              >
+                {totalPages}
+              </Button>
+            )}
+            <Button
+              isHoverable={page < totalPages}
+              variants="outlined"
+              isCursorPointer={page < totalPages}
               onClick={() => {
-                setPage(totalPages || 1);
+                setPage(page < totalPages ? page + 1 : page);
                 refetch();
               }}
-              variants="borderedWithShadow"
-              className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
+              className={`h-10 flex items-center justify-center ${
+                page < totalPages ? "" : "bg-primary/50"
+              } sm:text-md text-sm`}
             >
-              {totalPages}
+              Next
             </Button>
-          )}
-          <Button
-            isHoverable={page < totalPages}
-            variants="outlined"
-            isCursorPointer={page < totalPages}
-            onClick={() => {
-              setPage(page < totalPages ? page + 1 : page);
-              refetch();
-            }}
-            className={`h-10 flex items-center justify-center ${
-              page < totalPages ? "" : "bg-primary/50"
-            } sm:text-md text-sm`}
-          >
-            Next
-          </Button>
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Sorting Dialog for mobile and desktop */}
