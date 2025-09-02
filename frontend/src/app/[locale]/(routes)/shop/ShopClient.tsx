@@ -198,6 +198,26 @@ export default function ShopClient() {
     }
   }, [showToast, t, data, isLoading]);
 
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        parentRef.current &&
+        !parentRef.current.contains(event.target as Node)
+      ) {
+        setSelectedPopUp(null);
+      }
+    }
+
+    if (selectedPopUp) {
+      document.addEventListener("mouseup", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mouseup", handleClickOutside);
+    };
+  }, [selectedPopUp]);
+
   const localDataProducts: Product[] = localData.products;
   const localtotal = localDataProducts.length;
   const localTotalPages = Math.ceil(localtotal / limit);
@@ -276,7 +296,7 @@ export default function ShopClient() {
       <div className="mb-2">pathname: Home/shop</div>
 
       {/* filtering */}
-      <div className="z-40 flex-row sm:flex hidden items-center lg:gap-12.5 md:gap-6 justify-between self-center relative mb-16 lg:w-auto w-full">
+      <div className="z-40 flex-row sm:flex hidden items-center lg:gap-12.5 md:gap-6 justify-center gap-2 self-center relative mb-16 lg:w-auto w-full">
         <Button
           onClick={() => {
             toggleFilter("All", "none");
@@ -290,38 +310,45 @@ export default function ShopClient() {
         >
           All
         </Button>
-        {specificFilters
-          ? specificFilters.map((filter: MoreFiltersType, index: number) => {
-              const currentName = selectedPopUp?.name || "";
-              const currentValues = selectedValuesMap[currentName] || [];
 
-              const existing = appliedFilters.find(
-                (f) => f.name === currentName
-              );
+        <div
+          ref={parentRef}
+          className=" items-center flex lg:gap-12.5 gap-2 justify-between md:gap-6 "
+        >
+          {specificFilters
+            ? specificFilters.map((filter: MoreFiltersType, index: number) => {
+                const currentName = selectedPopUp?.name || "";
+                const currentValues = selectedValuesMap[currentName] || [];
 
-              return (
-                <div className="relative z-40" key={index}>
-                  <ShopPageFilterPopOver
-                    selectedPopUp={selectedPopUp}
-                    filter={filter}
-                    index={index}
-                    selectedValuesMap={selectedValuesMap}
-                    setSelectedValuesMap={setSelectedValuesMap}
-                    setSelectedPopUp={setSelectedPopUp}
-                    existing={existing}
-                    currentName={currentName}
-                    currentValues={currentValues}
-                    toggleFilter={toggleFilter}
-                    defaultValues={defaultValues}
-                    appliedFilters={appliedFilters}
-                    showToast={showToast}
-                    hasChanges={hasChanges}
-                    arraysHaveSameValues={arraysHaveSameValues}
-                  />
-                </div>
-              );
-            })
-          : null}
+                const existing = appliedFilters.find(
+                  (f) => f.name === currentName
+                );
+
+                return (
+                  <div className="relative z-40" key={index}>
+                    <ShopPageFilterPopOver
+                      selectedPopUp={selectedPopUp}
+                      filter={filter}
+                      index={index}
+                      selectedValuesMap={selectedValuesMap}
+                      setSelectedValuesMap={setSelectedValuesMap}
+                      setSelectedPopUp={setSelectedPopUp}
+                      existing={existing}
+                      currentName={currentName}
+                      currentValues={currentValues}
+                      toggleFilter={toggleFilter}
+                      defaultValues={defaultValues}
+                      appliedFilters={appliedFilters}
+                      showToast={showToast}
+                      hasChanges={hasChanges}
+                      arraysHaveSameValues={arraysHaveSameValues}
+                    />
+                  </div>
+                );
+              })
+            : null}
+        </div>
+
         <div className="relative">
           <Button
             onClick={() => {
