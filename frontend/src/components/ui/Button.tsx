@@ -15,6 +15,7 @@ type ButtonProps = {
   custom?: boolean;
   isCursorPointer?: boolean;
   isHoverable?: boolean;
+  ref?: React.Ref<HTMLButtonElement>;
 };
 
 const Button = ({
@@ -30,10 +31,12 @@ const Button = ({
   custom,
   isCursorPointer,
   isHoverable,
+  ref,
 }: ButtonProps) => {
   const t = useTranslations("Home");
   return (
     <button
+      ref={ref}
       className={`relative overflow-visible group buttonWrapper ${wrapperClassName}`}
       onClick={onClick}
       type={type}

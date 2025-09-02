@@ -16,6 +16,10 @@
   box-shadow: 0px 0px 10px var(--primary);
 }
 
+.borderWithShadow.popUpActive:hover {
+  box-shadow: 0px 0px 0px var(--primary);
+}
+
 .buttonWrapper:has(.linkDiv:hover) .borderWithShadow {
   box-shadow: 0px 0px 10px var(--primary);
 }
@@ -127,7 +131,7 @@
 @media (max-width: 1023px) {
   .productCard:hover .cardButtonsWrapper,
   .productCard:hover .cardButtons {
-    translate: none; 
+    translate: none;
     transition: none;
   }
 }
