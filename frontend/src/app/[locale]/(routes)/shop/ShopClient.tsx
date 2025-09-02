@@ -202,14 +202,10 @@ export default function ShopClient() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      console.log("working outside");
-      console.log("parentRef.current", parentRef.current);
-      if (parentRef.current) console.log("true", true);
       if (
         parentRef.current &&
         !parentRef.current.contains(event.target as Node)
       ) {
-        console.log("working");
         setSelectedPopUp(null);
       }
     }
