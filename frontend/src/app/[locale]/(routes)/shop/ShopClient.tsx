@@ -184,7 +184,7 @@ export default function ShopClient() {
     } else {
       setTimeout(() => hideLoadingToast(), 1000);
     }
-  }, [isLoading]);
+  }, [isLoading]); // eslint-disable-line
 
   // dummt data working toast
   useEffect(() => {
@@ -297,22 +297,6 @@ export default function ShopClient() {
 
               return (
                 <div className="relative z-40" key={index}>
-                  <Button
-                    onClick={() => {
-                      if (selectedPopUp?.name === filter.name) {
-                        setSelectedPopUp(null);
-                      } else {
-                        setSelectedPopUp(filter);
-                      }
-                    }}
-                    className={`text-xl border-[2px] lg:min-w-[6rem] min-w-[4rem] z-20 ${
-                      filter.isActive ? "active" : ""
-                    }`}
-                    variants="borderedWithShadow"
-                  >
-                    {filter.name}
-                  </Button>
-
                   <ShopPageFilterPopOver
                     selectedPopUp={selectedPopUp}
                     filter={filter}
