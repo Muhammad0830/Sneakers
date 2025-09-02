@@ -202,10 +202,14 @@ export default function ShopClient() {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      console.log("working outside");
+      console.log("parentRef.current", parentRef.current);
+      if (parentRef.current) console.log("true", true);
       if (
         parentRef.current &&
         !parentRef.current.contains(event.target as Node)
       ) {
+        console.log("working");
         setSelectedPopUp(null);
       }
     }
@@ -311,7 +315,10 @@ export default function ShopClient() {
           All
         </Button>
 
-        <div className=" items-center flex lg:gap-12.5 gap-2 justify-between md:gap-6 ">
+        <div
+          ref={parentRef}
+          className=" items-center flex lg:gap-12.5 gap-2 justify-between md:gap-6 "
+        >
           {specificFilters
             ? specificFilters.map((filter: MoreFiltersType, index: number) => {
                 const currentName = selectedPopUp?.name || "";
