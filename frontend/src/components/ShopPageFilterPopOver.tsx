@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 import FilterPopOver from "./filterPopOver";
 import { appliedFiltersType, MoreFiltersType } from "@/types/types";
 import Button from "./ui/Button";
@@ -67,9 +67,39 @@ const ShopPageFilterPopOver = ({
   hasChanges,
   arraysHaveSameValues,
 }: Props) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        buttonRef.current &&
+        buttonRef.current.contains(event.target as Node)
+      ) {
+        return;
+      }
+
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target as Node)
+      ) {
+        setSelectedPopUp(null);
+      }
+    }
+
+    if (selectedPopUp) {
+      document.addEventListener("mouseup", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mouseup", handleClickOutside);
+    };
+  }, [selectedPopUp]); // eslint-disable-line
+
   return (
     <>
       <Button
+        ref={buttonRef}
         onClick={() => {
           if (selectedPopUp?.name === filter.name) {
             setSelectedPopUp(null);
@@ -90,6 +120,7 @@ const ShopPageFilterPopOver = ({
         className={`popup absolute border border-primary bg-white dark:bg-black p-2 rounded-md z-10 left-[50%] translate-x-[-50%] flex justify-center ${
           selectedPopUp?.name === filter.name ? "active" : "inactive"
         }`}
+        ref={containerRef}
       >
         <div className="flex flex-col gap-2 relative overflow-hidden">
           <FilterPopOver
