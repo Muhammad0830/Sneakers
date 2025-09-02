@@ -1,6 +1,5 @@
 "use client";
 
-import FilterPopOver from "@/components/filterPopOver";
 import Button from "@/components/ui/Button";
 import {
   MoreFiltersType,
@@ -29,6 +28,7 @@ import MobileFilterSort from "@/components/MobileFilterComponent";
 import localData from "@/data_frontend/data.json";
 import { useCustomToast } from "@/context/CustomToastContext";
 import { useTranslations } from "next-intl";
+import ShopPageFilterPopOver from "@/components/ShopPageFilterPopOver";
 
 function hasChanges(
   defaultValues: {
@@ -313,149 +313,23 @@ export default function ShopClient() {
                     {filter.name}
                   </Button>
 
-                  <div
-                    className={`popup absolute border border-primary bg-white dark:bg-black p-2 rounded-md z-10 left-[50%] translate-x-[-50%] flex justify-center ${
-                      selectedPopUp?.name === filter.name
-                        ? "active"
-                        : "inactive"
-                    }`}
-                  >
-                    <div className="flex flex-col gap-2 relative overflow-hidden">
-                      <FilterPopOver
-                        Filter={filter.name}
-                        index={index}
-                        selectedValues={selectedValuesMap[filter.name] || []}
-                        setSelectedValues={(newValues: string[]) => {
-                          setSelectedValuesMap((prev) => ({
-                            ...prev,
-                            [filter.name]: newValues,
-                          }));
-                        }}
-                      />
-                      <div className="flex items-center gap-2 justify-between">
-                        <button
-                          onClick={() => {
-                            setSelectedPopUp(null);
-                          }}
-                          className="z-10 bg-primary rounded-sm border-blue-700 px-3 py-0.5 cursor-pointer text-white"
-                        >
-                          Close
-                        </button>
-                        <button
-                          className={`overflow-hidden relative rounded-sm flex justify-center border-blue-700 px-1.5 py-0.5 transition-colors duration-300 cursor-pointer text-white ${
-                            !existing ||
-                            !(
-                              JSON.stringify(currentValues) ===
-                              JSON.stringify(existing.selectedValues)
-                            )
-                              ? "bg-blue-500"
-                              : "bg-red-500"
-                          }`}
-                          onClick={() => {
-                            if (
-                              (currentName === "Size" ||
-                                currentName === "Color" ||
-                                currentName === "Price" ||
-                                currentName === "Gender") &&
-                              hasChanges(
-                                defaultValues,
-                                selectedValuesMap,
-                                currentName
-                              ) === false &&
-                              filter.isActive
-                            ) {
-                              toggleFilter(currentName, "remove");
-                            } else if (
-                              (currentName === "Size" ||
-                                currentName === "Color" ||
-                                currentName === "Price" ||
-                                currentName === "Gender") &&
-                              hasChanges(
-                                defaultValues,
-                                selectedValuesMap,
-                                currentName
-                              ) === false
-                            ) {
-                              showToast(
-                                "warning",
-                                "Warning",
-                                "Please make at least one change"
-                              );
-                            } else if (selectedPopUp?.name) {
-                              if (currentValues.length === 0) {
-                                showToast(
-                                  "warning",
-                                  "Warning",
-                                  "Please select at least one value"
-                                );
-                                return;
-                              }
-
-                              if (!existing) {
-                                toggleFilter(currentName, "apply");
-                              } else if (
-                                JSON.stringify(currentValues) ===
-                                JSON.stringify(existing.selectedValues)
-                              ) {
-                                toggleFilter(currentName, "remove");
-                              } else {
-                                toggleFilter(currentName, "update");
-                              }
-                            }
-                          }}
-                        >
-                          <span
-                            className={`absolute transition-transform duration-300 ${
-                              filter.isActive &&
-                              appliedFilters.some(
-                                (f) => f.name === selectedPopUp?.name
-                              )
-                                ? "translate-x-[300%]"
-                                : "translate-x-0"
-                            }`}
-                          >
-                            Apply
-                          </span>
-                          <span
-                            className={`absolute transition-transform duration-300 ${
-                              filter.isActive &&
-                              arraysHaveSameValues(
-                                selectedValuesMap[filter.name],
-                                appliedFilters.find(
-                                  (f) => f.name === selectedPopUp?.name
-                                )?.selectedValues
-                              )
-                                ? "translate-x-0"
-                                : filter.isActive &&
-                                  selectedValuesMap[filter.name] !==
-                                    appliedFilters.find(
-                                      (f) => f.name === selectedPopUp?.name
-                                    )?.selectedValues
-                                ? "translate-x-[300%]"
-                                : "-translate-x-[300%]"
-                            }`}
-                          >
-                            Cancel
-                          </span>
-                          <span
-                            className={`relative transition-transform duration-300 ${
-                              filter.isActive &&
-                              !arraysHaveSameValues(
-                                selectedValuesMap[filter.name],
-                                appliedFilters.find(
-                                  (f) => f.name === selectedPopUp?.name
-                                )?.selectedValues
-                              )
-                                ? "translate-x-0"
-                                : "-translate-x-[300%]"
-                            }`}
-                          >
-                            Update
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                  <ShopPageFilterPopOver
+                    selectedPopUp={selectedPopUp}
+                    filter={filter}
+                    index={index}
+                    selectedValuesMap={selectedValuesMap}
+                    setSelectedValuesMap={setSelectedValuesMap}
+                    setSelectedPopUp={setSelectedPopUp}
+                    existing={existing}
+                    currentName={currentName}
+                    currentValues={currentValues}
+                    toggleFilter={toggleFilter}
+                    defaultValues={defaultValues}
+                    appliedFilters={appliedFilters}
+                    showToast={showToast}
+                    hasChanges={hasChanges}
+                    arraysHaveSameValues={arraysHaveSameValues}
+                  />
                 </div>
               );
             })
