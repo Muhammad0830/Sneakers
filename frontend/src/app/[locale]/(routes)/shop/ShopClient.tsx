@@ -196,7 +196,7 @@ export default function ShopClient() {
 
   const localDataProducts: Product[] = localData.products;
   const localtotal = localDataProducts.length;
-  const localTotalPages = localtotal / limit;
+  const localTotalPages = Math.ceil(localtotal / limit);
 
   const {
     data: products,
