@@ -163,10 +163,15 @@ export default function ShopClient() {
   const limit = 12;
   const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
   const hasShownDummyInfo = useRef(false);
+  const [useLocal, setUseLocal] = useState(false);
+  const [localPage, setLocalPage] = useState(1);
+  const t = useTranslations("Shop");
+  const parentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setPage(1);
-  }, [appliedFilters, selectedFilter]);
+    if (useLocal) setPage(1);
+    else setPage(1);
+  }, [appliedFilters, selectedFilter, useLocal]);
 
   const queryString = buildQueryString(
     appliedFilters,
@@ -175,30 +180,37 @@ export default function ShopClient() {
     selectedFilter || undefined
   );
 
-  const { data, isLoading, refetch } = useApiQuery<ProductsDataProps>(
+  const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
     `/?${queryString}`,
-    ["Sneakers", page, limit, queryString]
+    ["Sneakers", page, limit, queryString],
+    !useLocal
   );
 
-  const t = useTranslations("Shop");
-
   useEffect(() => {
+    if (isError) {
+      setUseLocal(true);
+    }
+  }, [isError]);
+
+  // loading and dummt data working toast
+  useEffect(() => {
+    // loading
     if (isLoading) {
       showLoadingToast(t("Loading the data"));
     } else {
       setTimeout(() => hideLoadingToast(), 1000);
     }
-  }, [isLoading]); // eslint-disable-line
 
-  // dummt data working toast
-  useEffect(() => {
+    // dummy data
     if (!isLoading && !data && !hasShownDummyInfo.current) {
       showToast("info", t("Info"), t("Dummy data working"));
       hasShownDummyInfo.current = true; // prevent duplicates
     }
-  }, [showToast, t, data, isLoading]);
+  }, [data, isLoading]); // eslint-disable-line
 
-  const parentRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page, localPage]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -222,19 +234,25 @@ export default function ShopClient() {
   const localtotal = localDataProducts.length;
   const localTotalPages = Math.ceil(localtotal / limit);
 
-  const {
-    data: products,
-    totalPages,
-    total,
-  } = data || {
-    data: localDataProducts,
-    totalPages: localTotalPages,
-    total: localtotal,
+  const localPageProducts = localDataProducts.slice(
+    (localPage - 1) * limit,
+    localPage * limit
+  );
+
+  const products = !useLocal && data?.data ? data.data : localPageProducts;
+  const totalPages =
+    !useLocal && data?.totalPages ? data?.totalPages : localTotalPages;
+  const total = !useLocal && data?.total ? data?.total : localtotal;
+
+  const handleNext = () => {
+    if (useLocal) setLocalPage((p) => Math.min(p + 1, localTotalPages));
+    else setPage((p) => Math.min(p + 1, totalPages ?? 1));
   };
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page]);
+  const handlePrev = () => {
+    if (useLocal) setLocalPage((p) => Math.max(p - 1, 1));
+    else setPage((p) => Math.max(p - 1, 1));
+  };
 
   const toggleFilter = (
     name: string,
@@ -696,60 +714,65 @@ export default function ShopClient() {
         ) : (
           <div className="flex items-center gap-2">
             <Button
-              isHoverable={page > 1}
-              isCursorPointer={page > 1}
+              isHoverable={useLocal ? localPage > 1 : page > 1}
+              isCursorPointer={useLocal ? localPage > 1 : page > 1}
               onClick={() => {
-                setPage(page > 1 ? page - 1 : page);
-                refetch();
+                handlePrev();
               }}
               className={`h-10 flex items-center justify-center ${
-                page > 1 ? "" : "bg-primary/50"
+                page === 1 && localPage === 1 ? "bg-primary/50" : ""
               } sm:text-md text-sm`}
             >
               Previous
             </Button>
-            {page === 1 ? null : (
+            {(!useLocal && page !== 1) || (useLocal && localPage !== 1) ? (
               <Button
                 variants="borderedWithShadow"
                 onClick={() => {
-                  setPage(1);
-                  refetch();
+                  if (useLocal) setLocalPage(1);
+                  else setPage(1);
                 }}
                 className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
               >
                 1
               </Button>
-            )}
+            ) : null}
             <Button
               variants="border"
               disabled
               isCursorPointer={false}
               className="border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm"
             >
-              {page}
+              {useLocal ? localPage : page}
             </Button>
-            {page === totalPages ? null : (
+            {(!useLocal && page !== totalPages) ||
+            (useLocal && localPage !== localTotalPages) ? (
               <Button
                 onClick={() => {
-                  setPage(totalPages || 1);
-                  refetch();
+                  if (useLocal) setLocalPage(totalPages || 1);
+                  else setPage(totalPages || 1);
                 }}
                 variants="borderedWithShadow"
                 className={`border border-primary w-10 h-10 flex justify-center items-center sm:text-md text-sm`}
               >
-                {totalPages}
+                {useLocal ? localTotalPages : totalPages}
               </Button>
-            )}
+            ) : null}
             <Button
-              isHoverable={page < totalPages}
+              isHoverable={
+                useLocal ? localPage < localTotalPages : page < totalPages
+              }
               variants="outlined"
-              isCursorPointer={page < totalPages}
+              isCursorPointer={
+                useLocal ? localPage < localTotalPages : page < totalPages
+              }
               onClick={() => {
-                setPage(page < totalPages ? page + 1 : page);
-                refetch();
+                handleNext();
               }}
               className={`h-10 flex items-center justify-center ${
-                page < totalPages ? "" : "bg-primary/50"
+                page === totalPages || localPage === localTotalPages
+                  ? "bg-primary/50"
+                  : ""
               } sm:text-md text-sm`}
             >
               Next

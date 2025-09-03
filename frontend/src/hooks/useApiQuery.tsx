@@ -5,12 +5,16 @@ import { useEffect, useRef } from "react";
 
 const BaseURL = "http://localhost:3001/sneakers";
 
-const useApiQuery = <T,>(url: string, key: string | (string | number)[]) => {
+const useApiQuery = <T,>(
+  url: string,
+  key: string | (string | number)[],
+  enabled?: boolean
+) => {
   const { showToast } = useCustomToast();
   const t = useTranslations("Shop");
   const hasShownError = useRef(false);
 
-  const { data, error, isLoading, refetch } = useQuery<T>({
+  const { data, error, isLoading, refetch, isError } = useQuery<T>({
     queryKey: Array.isArray(key) ? key : [key],
     queryFn: async () => {
       const response = await fetch(`${BaseURL}${url}`, {
@@ -24,6 +28,8 @@ const useApiQuery = <T,>(url: string, key: string | (string | number)[]) => {
 
       return response.json();
     },
+    retry: 1,
+    enabled: enabled,
   });
 
   useEffect(() => {
@@ -33,6 +39,6 @@ const useApiQuery = <T,>(url: string, key: string | (string | number)[]) => {
     }
   }, [error, showToast, t]);
 
-  return { data, error, isLoading, refetch };
+  return { data, error, isLoading, refetch, isError };
 };
 export default useApiQuery;
