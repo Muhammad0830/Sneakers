@@ -1,4 +1,5 @@
 "use client";
+import RecommendedProducts from "@/components/RecommendedProducts";
 import Button from "@/components/ui/Button";
 import {
   ArrowLeft,
@@ -265,7 +266,7 @@ const ProductIdClient = () => {
       </div>
 
       {/* recommended products */}
-      <div>...</div>
+      <RecommendedProducts />
     </div>
   );
 };

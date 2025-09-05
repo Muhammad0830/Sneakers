@@ -6,6 +6,7 @@ import {
   Filters,
   appliedFiltersType,
   Product,
+  ProductsDataProps,
 } from "@/types/types";
 import {
   ChevronDown,
@@ -134,14 +135,6 @@ const defaultValues: {
   Price: ["", ""],
   Color: ["White", "Black", "Red", "Lightblue", "Lightgreen", "Pink"],
 };
-
-interface ProductsDataProps {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  data: Product[];
-}
 
 export default function ShopClient() {
   const [selectedFilter, setSelectedFilter] = useState<Filters | null>(null);
