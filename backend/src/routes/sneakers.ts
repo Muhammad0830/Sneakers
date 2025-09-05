@@ -20,9 +20,15 @@ sneakersRouter.get("/", async (req: any, res: any) => {
     const maxPrice = req.query.maxPrice ? Number(req.query.maxPrice) : null;
 
     const allowedSortFields = ["popular", "sale", "top", "new"];
-    const sortBy = allowedSortFields.includes(req.query.sortBy as string)
-      ? (req.query.sortBy as string)
-      : "id";
+    let sortBy = "id";
+    if (allowedSortFields.includes(req.query.sortBy as string)) {
+      if (req.query.sortBy === "new") sortBy = "created_at";
+      else if (req.query.sortBy === "top") sortBy = "rating";
+      else if (req.query.sortBy === "popular") sortBy = "JSON_LENGTH(reviews)";
+      else if (req.query.sortBy === "sale") sortBy = "discount_value";
+      else sortBy = req.query.sortBy as string;
+    }
+
     const order = req.query.order === "desc" ? "DESC" : "ASC";
 
     const whereClauses: string[] = [];
@@ -82,7 +88,15 @@ sneakersRouter.get("/", async (req: any, res: any) => {
       whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
 
     const data = await query<Product[]>(
-      `SELECT * FROM products ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
+      `SELECT p.* ${
+        sortBy === "discount_value"
+          ? ", COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value"
+          : ""
+      } FROM products as p LEFT JOIN on_sale as s ON p.id = s.product_id ${
+        sortBy === "discount_value"
+          ? "AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'"
+          : ""
+      } ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
       params
     );
 

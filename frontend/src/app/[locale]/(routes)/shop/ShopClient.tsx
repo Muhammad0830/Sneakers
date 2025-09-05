@@ -433,16 +433,16 @@ export default function ShopClient() {
                     if (moreFilter.name !== selectedFilter?.name) {
                       setSelectedFilter({
                         ...moreFilter,
-                        isAsc: true,
+                        isAsc: false,
                         isActive: true,
                       });
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
-                      selectedFilter.isAsc
+                      !selectedFilter.isAsc
                     ) {
                       setSelectedFilter({
                         ...moreFilter,
-                        isAsc: false,
+                        isAsc: true,
                         isActive: true,
                       });
                     } else {
@@ -690,8 +690,8 @@ export default function ShopClient() {
           </div>
         ) : (
           <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3">
-            {products?.map((product: Product) => {
-              return <ProductCard product={product} key={product.id} />;
+            {products?.map((product: Product, index: number) => {
+              return <ProductCard product={product} key={index} />;
             })}
           </div>
         )}
@@ -799,12 +799,12 @@ export default function ShopClient() {
                   }`}
                   onClick={() => {
                     if (moreFilter.name !== selectedFilter?.name) {
-                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                      setSelectedFilter({ ...moreFilter, isAsc: false });
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
-                      selectedFilter.isAsc
+                      !selectedFilter.isAsc
                     ) {
-                      setSelectedFilter({ ...moreFilter, isAsc: false });
+                      setSelectedFilter({ ...moreFilter, isAsc: true });
                     } else {
                       setSelectedFilter(null);
                     }
