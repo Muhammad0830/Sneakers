@@ -12,6 +12,7 @@ sneakersRouter.get("/", async (req: any, res: any) => {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 12;
     const offset = (page - 1) * limit;
+    const fetchType = req.query.fetchType as string;
 
     const genders = req.query.gender; // can be string or array
     const colors = req.query.color;
@@ -126,6 +127,7 @@ sneakersRouter.get("/", async (req: any, res: any) => {
         color: finalColors,
         size: finalSizes,
       })),
+      hasMore: fetchType === "scroll" ? offset + limit < total : false,
     });
   } catch (err: any) {
     if (res.status) {
