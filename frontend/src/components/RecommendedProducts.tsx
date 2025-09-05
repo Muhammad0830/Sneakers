@@ -46,8 +46,6 @@ const RecommendedProducts = () => {
     };
   }, [isLoading, hasMore]);
 
-  console.log("data", data);
-
   if (isError)
     showToast("error", t("Error Occured"), t("Internal Server Error"));
 
