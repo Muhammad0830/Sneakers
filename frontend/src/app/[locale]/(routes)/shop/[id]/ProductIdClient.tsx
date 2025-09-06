@@ -294,13 +294,17 @@ const ProductIdClient = () => {
 
       {/* product description */}
       <div className="md:mt-20 sm:mt-12 mb-4">
-        <div className="text-xl font-bold mb-2">Description</div>
+        <div className="md:text-2xl sm:text-xl text-lg font-bold mb-2">
+          Description
+        </div>
         <div className="font-semibold">{product.description}</div>
       </div>
 
       {/* product key features */}
       <div className="mb-4">
-        <div className="text-xl font-bold mb-2">Key Features</div>
+        <div className="md:text-2xl sm:text-xl text-lg font-bold mb-2">
+          Key Features
+        </div>
         <ul className="list-disc ml-7">
           {product.keyFeatures.map((f, index) => (
             <li className="font-semibold" key={index}>

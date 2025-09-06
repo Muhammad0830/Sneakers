@@ -127,7 +127,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
           <div className="z-10 bg-background absolute left-0 right-0 bottom-0 top-0"></div>
 
-          <div className="absolute cardButtonsWrapper -translate-y-[0%] top-0 py-1 z-0 left-0 right-0 bg-background transition-transform duration-200 flex items-center justify-between">
+          <div className="absolute cardButtonsWrapper -translate-y-[0%] top-0 py-1 z-0 left-0 right-0 bg-transparent transition-transform duration-200 flex items-center justify-between">
             <div className="flex items-center gap-2 ml-[2px]">
               <div className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-transform duration-300">
                 <ThumbsUp size={16} color="black" />
