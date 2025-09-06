@@ -236,6 +236,7 @@ export default function ShopClient() {
   const totalPages =
     !useLocal && data?.totalPages ? data?.totalPages : localTotalPages;
   const total = !useLocal && data?.total ? data?.total : localtotal;
+  const isDummyDataWorking = products === localPageProducts;
 
   const handleNext = () => {
     if (useLocal) setLocalPage((p) => Math.min(p + 1, localTotalPages));
@@ -353,6 +354,7 @@ export default function ShopClient() {
                       showToast={showToast}
                       hasChanges={hasChanges}
                       arraysHaveSameValues={arraysHaveSameValues}
+                      isDummyDataWorking={isDummyDataWorking}
                     />
                   </div>
                 );
@@ -429,6 +431,12 @@ export default function ShopClient() {
                         isAsc: false,
                         isActive: true,
                       });
+                      if (isDummyDataWorking)
+                        showToast(
+                          "error",
+                          t("Error"),
+                          t("Some functions may not work properly")
+                        );
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
                       !selectedFilter.isAsc
@@ -793,6 +801,12 @@ export default function ShopClient() {
                   onClick={() => {
                     if (moreFilter.name !== selectedFilter?.name) {
                       setSelectedFilter({ ...moreFilter, isAsc: false });
+                      if (isDummyDataWorking)
+                        showToast(
+                          "error",
+                          t("Error"),
+                          t("Some functions may not work properly")
+                        );
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
                       !selectedFilter.isAsc
