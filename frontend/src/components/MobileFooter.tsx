@@ -22,7 +22,7 @@ const MobileFooterSections = dynamic(
 const MobileFooter = ({ className }: { className?: string }) => {
   return (
     <div
-      className={`${className} w-full py-4 px-4 flex flex-col items-center bg-[#D1D1D1]`}
+      className={`${className} w-full py-4 px-4 flex flex-col items-center bg-[#D1D1D1] dark:bg-black`}
     >
       <MobileFooterSections title="Support">
         <div className="flex flex-col items-center">
