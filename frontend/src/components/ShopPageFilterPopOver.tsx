@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction } from "react";
 import FilterPopOver from "./filterPopOver";
 import { appliedFiltersType, MoreFiltersType } from "@/types/types";
 import Button from "./ui/Button";
+import { useTranslations } from "next-intl";
 
 interface Props {
   selectedPopUp: MoreFiltersType | null;
@@ -48,6 +49,7 @@ interface Props {
     a: string[] | appliedFiltersType[] | undefined,
     b: string[] | appliedFiltersType[] | undefined
   ) => boolean | undefined;
+  isDummyDataWorking: boolean;
 }
 
 const ShopPageFilterPopOver = ({
@@ -66,7 +68,9 @@ const ShopPageFilterPopOver = ({
   showToast,
   hasChanges,
   arraysHaveSameValues,
+  isDummyDataWorking,
 }: Props) => {
+  const t = useTranslations("Shop");
   return (
     <>
       <Button
@@ -158,6 +162,12 @@ const ShopPageFilterPopOver = ({
 
                   if (!existing) {
                     toggleFilter(currentName, "apply");
+                    if (isDummyDataWorking)
+                      showToast(
+                        "error",
+                        t("Internal server error"),
+                        "Some functions may not work properly"
+                      );
                   } else if (
                     JSON.stringify(currentValues) ===
                     JSON.stringify(existing.selectedValues)

@@ -47,7 +47,7 @@ const RecommendedProducts = () => {
   }, [isLoading, hasMore]);
 
   if (isError)
-    showToast("error", t("Error Occured"), t("Internal Server Error"));
+    showToast("error", t("Error Occured"), t("Internal server error"));
 
   return (
     <div>
