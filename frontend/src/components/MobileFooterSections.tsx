@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 const MobileFooterSections = ({
   children,
@@ -42,7 +42,7 @@ const MobileFooterSections = ({
       className={`relative w-full overflow-hidden transition-all duration-300`}
       style={{ height: open ? buttonHeight + linksHeight : buttonHeight }}
     >
-      <div className="relative z-20 bg-[#D1D1D1] w-full mx-auto">
+      <div className="relative z-20 bg-[#D1D1D1] dark:bg-black w-full mx-auto">
         <button
           ref={button}
           onClick={handleClick}
@@ -58,8 +58,8 @@ const MobileFooterSections = ({
       </div>
       <div
         className={`absolute w-full ${
-          open ? "translate-y-[0%]" : "-translate-y-[250%]"
-        } transition-translate duration-300 z-0 text-center py-2`}
+          open ? "opacity-100 translate-y-[0%]" : "opacity-0 translate-y-[50%]"
+        } transition-all duration-300 z-0 text-center py-2`}
         ref={supportLinksRef}
       >
         {children}
