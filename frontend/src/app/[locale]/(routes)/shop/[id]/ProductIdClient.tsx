@@ -11,14 +11,23 @@ import {
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ProductIdClient = () => {
   const params = useParams();
   const id = params?.id;
   const [selectedVariant, setSelectedVariant] = useState(0);
   const { theme } = useTheme();
-  const width = window.innerWidth;
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const product = {
     id: 1,
