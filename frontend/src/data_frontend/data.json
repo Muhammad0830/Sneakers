@@ -11,7 +11,15 @@
             "price": "19.99",
             "rating": "4.35",
             "reviews": ["Great product!", "Fits well"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit",
+                "Reinforced stitching for long-lasting durability",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 2,
@@ -24,7 +32,14 @@
             "price": "29.99",
             "rating": "4.1",
             "reviews": ["Nice design", "Comfortable"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Lightweight build for all-day comfort",
+                "Flexible sole for natural movement"
+            ]
         },
         {
             "id": 3,
@@ -37,7 +52,15 @@
             "price": "39.99",
             "rating": "3.85",
             "reviews": ["Good quality", "Would buy again"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort",
+                "Sleek, modern design that suits any outfit",
+                "Flexible sole for natural movement",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 4,
@@ -50,7 +73,14 @@
             "price": "49.99",
             "rating": "4.5",
             "reviews": ["Love the colors", "Perfect fit"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit",
+                "Reinforced stitching for long-lasting durability",
+                "Breathable mesh or knit upper for maximum airflow"
+            ]
         },
         {
             "id": 5,
@@ -63,7 +93,14 @@
             "price": "59.99",
             "rating": "4.7",
             "reviews": ["Amazing shoe!", "Value for money"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Lightweight build for all-day comfort",
+                "Flexible sole for natural movement",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 6,
@@ -71,25 +108,39 @@
             "description": "Product 6`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["white", "black", "yellow"],
-            "size": ["XS", "S", "M", "L"],
-            "price": "19.99",
-            "rating": "3.95",
-            "reviews": ["Stylish", "Good for running"],
-            "gender": "kids"
+            "color": ["black", "white"],
+            "size": ["S", "M", "L"],
+            "price": "24.99",
+            "rating": "4.0",
+            "reviews": ["Decent shoe", "Comfortable fit"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit"
+            ]
         },
         {
-            "id": 7,
-            "title": "Product 7",
-            "description": "Product 7`s description",
-            "image": null,
-            "created_at": "2025-08-16 16:09:36",
-            "color": ["black", "lightgreen"],
-            "size": ["S", "M", "L"],
-            "price": "29.99",
-            "rating": "4.25",
-            "reviews": ["Solid build", "Comfortable to wear"],
-            "gender": "men"
+        "id": 7,
+        "title": "Product 7",
+        "description": "Product 7`s description",
+        "image": null,
+        "created_at": "2025-08-16 16:09:36",
+        "color": ["red", "yellow", "black"],
+        "size": ["M", "L"],
+        "price": "34.99",
+        "rating": "3.9",
+        "reviews": ["Looks stylish", "Runs small"],
+        "gender": "women",
+        "variants": ["image", "image", "image"],
+        "keyFeatures": [
+            "Lightweight build for all-day comfort",
+            "Flexible sole for natural movement",
+            "Available in multiple colorways",
+            "Reinforced stitching for long-lasting durability"
+        ]
         },
         {
             "id": 8,
@@ -97,12 +148,19 @@
             "description": "Product 8`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["red", "black"],
-            "size": ["M", "L"],
-            "price": "39.99",
-            "rating": "4.6",
-            "reviews": ["Great color combo", "Durable material"],
-            "gender": "women"
+            "color": ["blue", "white"],
+            "size": ["XS", "S", "M"],
+            "price": "44.99",
+            "rating": "4.2",
+            "reviews": ["Very comfy", "Nice material"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Sleek, modern design that suits any outfit",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Durable rubber outsole for enhanced grip"
+            ]
         },
         {
             "id": 9,
@@ -110,12 +168,19 @@
             "description": "Product 9`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["white", "pink"],
-            "size": ["XS", "S", "M", "L"],
-            "price": "19.99",
-            "rating": "4.05",
-            "reviews": ["Lovely design", "Perfect for daily use"],
-            "gender": "kids"
+            "color": ["green", "black", "white"],
+            "size": ["S", "M", "L", "XL"],
+            "price": "54.99",
+            "rating": "4.6",
+            "reviews": ["Solid quality", "Worth the price"],
+            "gender": "women",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit",
+                "Available in multiple colorways",
+                "Flexible sole for natural movement"
+            ]
         },
         {
             "id": 10,
@@ -123,12 +188,19 @@
             "description": "Product 10`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["black", "red", "pink", "white", "lightblue"],
-            "size": ["S", "M", "L", "XL"],
-            "price": "29.99",
-            "rating": "4.45",
-            "reviews": ["Trendy", "Good fit"],
-            "gender": "men"
+            "color": ["black", "orange"],
+            "size": ["M", "L", "XL"],
+            "price": "64.99",
+            "rating": "4.8",
+            "reviews": ["Best purchase!", "Highly recommend"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort",
+                "Reinforced stitching for long-lasting durability",
+                "Sleek, modern design that suits any outfit"
+            ]
         },
         {
             "id": 11,
@@ -136,12 +208,19 @@
             "description": "Product 11`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["red", "lightgreen", "pink"],
-            "size": ["M", "L", "XL"],
-            "price": "39.99",
-            "rating": "3.75",
-            "reviews": ["Looks great", "Comfortable on feet"],
-            "gender": "women"
+            "color": ["white", "teal", "black"],
+            "size": ["XS", "S", "M", "L"],
+            "price": "22.99",
+            "rating": "4.0",
+            "reviews": ["Good everyday shoe", "Nice colors"],
+            "gender": "women",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Lightweight build for all-day comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 12,
@@ -149,12 +228,19 @@
             "description": "Product 12`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["lightblue", "white", "black"],
-            "size": ["S", "M", "L", "XL"],
-            "price": "49.99",
-            "rating": "4.8",
-            "reviews": ["Premium quality", "Worth the price"],
-            "gender": "men"
+            "color": ["black", "gray"],
+            "size": ["M", "L", "XL"],
+            "price": "32.99",
+            "rating": "4.3",
+            "reviews": ["Nice design", "Feels premium"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Reinforced stitching for long-lasting durability",
+                "Sleek, modern design that suits any outfit",
+                "Flexible sole for natural movement"
+            ]
         },
         {
             "id": 13,
@@ -162,12 +248,19 @@
             "description": "Product 13`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["lightgreen", "black", "red"],
-            "size": ["S", "M", "L", "XL"],
-            "price": "59.99",
-            "rating": "4.2",
-            "reviews": ["Elegant style", "Very durable"],
-            "gender": "men"
+            "color": ["blue", "white"],
+            "size": ["S", "M", "L"],
+            "price": "42.99",
+            "rating": "3.95",
+            "reviews": ["Comfortable", "Could be more durable"],
+            "gender": "women",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort",
+                "Available in multiple colorways",
+                "Lightweight build for all-day comfort"
+            ]
         },
         {
             "id": 14,
@@ -175,12 +268,19 @@
             "description": "Product 14`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["white", "black", "pink"],
-            "size": ["XS", "S", "M", "L"],
-            "price": "19.99",
-            "rating": "4.0",
-            "reviews": ["Nice pink color", "Kids love it"],
-            "gender": "kids"
+            "color": ["red", "black", "white"],
+            "size": ["L", "XL"],
+            "price": "52.99",
+            "rating": "4.5",
+            "reviews": ["Perfect fit", "Looks amazing"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit",
+                "Reinforced stitching for long-lasting durability",
+                "Breathable mesh or knit upper for maximum airflow"
+            ]
         },
         {
             "id": 15,
@@ -188,12 +288,19 @@
             "description": "Product 15`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["black", "lightblue", "white"],
-            "size": ["S", "M", "L", "XL"],
-            "price": "29.99",
-            "rating": "4.55",
-            "reviews": ["Great comfort", "Modern design"],
-            "gender": "women"
+            "color": ["yellow", "black"],
+            "size": ["XS", "S", "M"],
+            "price": "62.99",
+            "rating": "4.6",
+            "reviews": ["Bright and stylish", "Love it"],
+            "gender": "women",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Lightweight build for all-day comfort",
+                "Flexible sole for natural movement",
+                "Available in multiple colorways",
+                "Reinforced stitching for long-lasting durability"
+            ]
         },
         {
             "id": 16,
@@ -201,12 +308,19 @@
             "description": "Product 16`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["red", "lightblue", "white", "black"],
-            "size": ["M", "L", "XL"],
-            "price": "39.99",
-            "rating": "4.65",
-            "reviews": ["Versatile", "Good for sports"],
-            "gender": "kids"
+            "color": ["green", "white"],
+            "size": ["M", "L"],
+            "price": "27.99",
+            "rating": "3.8",
+            "reviews": ["Nice budget shoe", "Runs slightly large"],
+            "gender": "men",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Sleek, modern design that suits any outfit"
+            ]
         },
         {
             "id": 17,
@@ -214,12 +328,19 @@
             "description": "Product 17`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["blue", "white", "red"],
+            "color": ["black", "red"],
             "size": ["S", "M", "L", "XL"],
-            "price": "24.99",
-            "rating": "4.15",
-            "reviews": ["Comfortable fabric", "Nice fit"],
-            "gender": "men"
+            "price": "37.99",
+            "rating": "4.2",
+            "reviews": ["Good running shoe", "Solid quality"],
+            "gender": "women",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Flexible sole for natural movement",
+                "Reinforced stitching for long-lasting durability",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 18,
@@ -227,12 +348,19 @@
             "description": "Product 18`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["pink", "lightblue"],
-            "size": ["M", "L"],
-            "price": "34.99",
-            "rating": "4.35",
-            "reviews": ["Pretty colors", "Good material"],
-            "gender": "women"
+            "color": ["blue", "black"],
+            "size": ["XS", "S"],
+            "price": "47.99",
+            "rating": "4.4",
+            "reviews": ["Stylish design", "Comfortable fit"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Sleek, modern design that suits any outfit",
+                "Durable rubber outsole for enhanced grip",
+                "Lightweight build for all-day comfort"
+            ]
         },
         {
             "id": 19,
@@ -240,12 +368,19 @@
             "description": "Product 19`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["black", "yellow", "green"],
-            "size": ["XS", "S", "M"],
-            "price": "44.99",
-            "rating": "4.1",
-            "reviews": ["Strong sole", "Good quality"],
-            "gender": "kids"
+            "color": ["orange", "black", "white"],
+            "size": ["M", "L"],
+            "price": "57.99",
+            "rating": "4.7",
+            "reviews": ["Love the fit", "Very durable"],
+            "gender": "women",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Reinforced stitching for long-lasting durability",
+                "Flexible sole for natural movement",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort"
+            ]
         },
         {
             "id": 20,
@@ -253,12 +388,19 @@
             "description": "Product 20`s description",
             "image": null,
             "created_at": "2025-08-16 16:09:36",
-            "color": ["white", "lightgreen", "gray"],
+            "color": ["gray", "white"],
             "size": ["L", "XL"],
-            "price": "54.99",
-            "rating": "4.5",
-            "reviews": ["Stylish look", "Fits perfectly"],
-            "gender": "men"
+            "price": "67.99",
+            "rating": "4.9",
+            "reviews": ["Best shoe ever", "Worth every penny"],
+            "gender": "men",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Sleek, modern design that suits any outfit",
+                "Cushioned midsole for superior comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 21,
@@ -271,7 +413,14 @@
             "price": "64.99",
             "rating": "4.65",
             "reviews": ["Premium design", "Very comfy"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Sleek, modern design that suits any outfit",
+                "Flexible sole for natural movement",
+                "Breathable mesh or knit upper for maximum airflow"
+            ]
         },
         {
             "id": 22,
@@ -284,7 +433,14 @@
             "price": "19.99",
             "rating": "3.9",
             "reviews": ["Kids love it", "Bright colors"],
-            "gender": "kids"
+            "gender": "kids",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Lightweight build for all-day comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 23,
@@ -297,7 +453,14 @@
             "price": "29.99",
             "rating": "4.25",
             "reviews": ["Solid style", "Nice everyday wear"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Reinforced stitching for long-lasting durability",
+                "Cushioned midsole for superior comfort",
+                "Sleek, modern design that suits any outfit",
+                "Durable rubber outsole for enhanced grip"
+            ]
         },
         {
             "id": 24,
@@ -310,7 +473,14 @@
             "price": "39.99",
             "rating": "4.4",
             "reviews": ["Very elegant", "Soft fabric"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Flexible sole for natural movement",
+                "Lightweight build for all-day comfort",
+                "Available in multiple colorways",
+                "Breathable mesh or knit upper for maximum airflow"
+            ]
         },
         {
             "id": 25,
@@ -323,7 +493,14 @@
             "price": "24.99",
             "rating": "4.05",
             "reviews": ["Great for play", "Durable"],
-            "gender": "kids"
+            "gender": "kids",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Durable rubber outsole for enhanced grip",
+                "Reinforced stitching for long-lasting durability",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Lightweight build for all-day comfort"
+            ]
         },
         {
             "id": 26,
@@ -336,7 +513,14 @@
             "price": "34.99",
             "rating": "4.55",
             "reviews": ["Classic design", "Comfortable to wear"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Sleek, modern design that suits any outfit",
+                "Flexible sole for natural movement",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Cushioned midsole for superior comfort"
+            ]
         },
         {
             "id": 27,
@@ -349,7 +533,14 @@
             "price": "44.99",
             "rating": "4.2",
             "reviews": ["Beautiful colors", "Good texture"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image"],
+            "keyFeatures": [
+                "Cushioned midsole for superior comfort",
+                "Durable rubber outsole for enhanced grip",
+                "Reinforced stitching for long-lasting durability",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 28,
@@ -362,7 +553,14 @@
             "price": "19.99",
             "rating": "3.95",
             "reviews": ["Kids enjoy it", "Lightweight"],
-            "gender": "kids"
+            "gender": "kids",
+            "variants": ["image", "image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Lightweight build for all-day comfort",
+                "Flexible sole for natural movement",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Available in multiple colorways"
+            ]
         },
         {
             "id": 29,
@@ -375,7 +573,14 @@
             "price": "59.99",
             "rating": "4.7",
             "reviews": ["Premium quality", "Very stylish"],
-            "gender": "men"
+            "gender": "men",
+            "variants": ["image", "image", "image", "image"],
+            "keyFeatures": [
+                "Sleek, modern design that suits any outfit",
+                "Breathable mesh or knit upper for maximum airflow",
+                "Durable rubber outsole for enhanced grip",
+                "Cushioned midsole for superior comfort"
+            ]
         },
         {
             "id": 30,
@@ -388,7 +593,14 @@
             "price": "49.99",
             "rating": "4.6",
             "reviews": ["Lovely product", "Perfect for outings"],
-            "gender": "women"
+            "gender": "women",
+            "variants": ["image", "image", "image", "image", "image"],
+            "keyFeatures": [
+                "Breathable mesh or knit upper for maximum airflow",
+                "Reinforced stitching for long-lasting durability",
+                "Flexible sole for natural movement",
+                "Lightweight build for all-day comfort"
+            ]
         }
     ],
     "testimonials": [

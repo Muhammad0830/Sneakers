@@ -138,6 +138,42 @@ sneakersRouter.get("/", async (req: any, res: any) => {
   }
 });
 
+sneakersRouter.get("/:id", async (req: any, res: any) => {
+  try {
+    const id = parseInt(req.params.id as string);
+    const data = await query<Product[]>(
+      `SELECT p.*, COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from 
+        FROM products as p
+        LEFT JOIN on_sale as s ON p.id = s.product_id
+        WHERE p.id = :id`,
+      {
+        id,
+      }
+    );
+
+    console.log("data[0]", data[0]);
+
+    if (data.length <= 0) {
+      return res.status(404).json({ message: "no data found" });
+    }
+
+    const finalColors = data[0].color.split(", ");
+    const finalSizes = data[0].size.split(", ");
+
+    res.status(200).json({
+      ...data[0],
+      color: finalColors,
+      size: finalSizes,
+    });
+  } catch (err: any) {
+    if (res.status) {
+      res.status(500).json({ message: err.message });
+    } else {
+      throw new Error(err.message);
+    }
+  }
+});
+
 sneakersRouter.get("/trending", async (req: any, res: any) => {
   try {
     const data = await query<Trending[]>("SELECT * FROM trending");

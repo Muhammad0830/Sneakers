@@ -1,5 +1,8 @@
 "use client";
 import RecommendedProducts from "@/components/RecommendedProducts";
+import { useCustomToast } from "@/context/CustomToastContext";
+import useApiQuery from "@/hooks/useApiQuery";
+import { Product } from "@/types/types";
 import {
   ArrowLeft,
   ArrowRight,
@@ -8,10 +11,11 @@ import {
   Star,
   ThumbsUp,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const ProductIdClient = () => {
   const params = useParams();
@@ -19,6 +23,22 @@ const ProductIdClient = () => {
   const [selectedVariant, setSelectedVariant] = useState(0);
   const { theme } = useTheme();
   const [width, setWidth] = useState(0);
+  const [product, setProduct] = useState<Product>();
+  const hasErrorRef = useRef(false);
+
+  const t = useTranslations("Shop");
+
+  const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
+
+  const { data, isLoading, isError } = useApiQuery<Product>(`/${id}`, [
+    "Sneakers",
+  ]);
+
+  useEffect(() => {
+    if (data) {
+      setProduct(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -29,51 +49,23 @@ const ProductIdClient = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const product = {
-    id: 1,
-    title: "Sneakers 2",
-    price: 49.99,
-    gender: "Men",
-    rating: 4.5,
-    reviews: [
-      {
-        id: 1,
-        title: "Review 1",
-        content: "Content 1",
-        rating: 4.5,
-        user: {
-          id: 1,
-          name: "User 1",
-          avatar: "https://i.pravatar.cc/150?img=1",
-        },
-      },
-      {
-        id: 2,
-        title: "Review 2",
-        content: "Content 2",
-        rating: 4.5,
-        user: {
-          id: 2,
-          name: "User 2",
-          avatar: "https://i.pravatar.cc/150?img=2",
-        },
-      },
-    ],
-    colors: ["#ffffff", "#000000", "#ff0000", "#00ff00"],
-    sizes: ["XS", "S", "M", "L", "XL"],
-    description: `Step into comfort and style with our all-new Sneakers – the perfect fusion of performance, durability, and everyday fashion. Designed for those on the move, these sneakers feature a lightweight, breathable upper, a cushioned insole for all-day support, and a rubber outsole that delivers reliable grip and traction.Whether you're hitting the gym, exploring the city, or just keeping it casual, these sneakers adapt to your lifestyle with effortless ease. Minimalist in design yet bold in attitude, they pair perfectly with jeans, joggers, or athleisure wear.`,
-    image: null,
-    variants: ["image", "image", "image", "image"],
-    keyFeatures: [
-      "Breathable mesh or knit upper for maximum airflow",
-      "Cushioned midsole for superior comfort",
-      "Durable rubber outsole for enhanced grip",
-      "Sleek, modern design that suits any outfit",
-      "Available in multiple colorways",
-    ],
-  };
+  useEffect(() => {
+    if (isError && !hasErrorRef.current) {
+      showToast("error", t("Error occured"), t("Internal server error"));
+      hasErrorRef.current = true;
+    }
+  }, [isError]); // eslint-disable-line
+
+  useEffect(() => {
+    if (isLoading) showLoadingToast("Loading the data");
+    else setTimeout(() => hideLoadingToast(), 1000);
+  }, [isLoading]); // eslint-disable-line
 
   if (!id) return notFound();
+
+  if (!product) {
+    return;
+  }
 
   return (
     <div className="mt-4 lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px]">
@@ -91,11 +83,11 @@ const ProductIdClient = () => {
               <span>{product.title}</span>
               <span className="sm:hidden inline-block">{product.price}$</span>
             </div>
-            <div className="smLflex hidden items-center justify-between gap-2">
+            <div className="sm:flex hidden items-center justify-between gap-2">
               <div className="lg:text-3xl sm:text-xl font-bold">
                 {product.price}$
               </div>
-              <div className="flex items-center gap-2 bg-primary rounded-full px-2">
+              <div className="hidden sm:flex items-center gap-2 bg-primary rounded-full px-2">
                 <span className="font-bold lg:text-2xl sm:text-lg text-[16px] text-white">
                   {product.rating}
                 </span>
@@ -117,7 +109,7 @@ const ProductIdClient = () => {
               <div>
                 <div className="sm:text-[16px] text-[12px]">Choose a size</div>
                 <div className="flex gap-1 items-center mb-1">
-                  {product.sizes.map((size, index) => {
+                  {product.size.map((size, index) => {
                     return (
                       <button
                         className="px-1 py-0.5 lg:min-w-[30px] sm:min-w-[25px] min-w-[20px] border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm lg:text-[16px] sm:text-[14px] text-[12px]"
@@ -129,12 +121,12 @@ const ProductIdClient = () => {
                   })}
                 </div>
               </div>
-              <div className="flex items-center gap-2 bg-primary rounded-full px-2">
+              <div className="flex sm:hidden items-center gap-2 bg-primary rounded-full px-2">
                 <span className="font-bold lg:text-2xl sm:text-lg text-[16px] text-white">
                   {product.rating}
                 </span>
                 <Star
-                  className="lg:hidden block"
+                  className="block"
                   color="yellow"
                   size={18}
                   fill="yellow"
@@ -144,7 +136,7 @@ const ProductIdClient = () => {
             <div>
               <div className="sm:text-[16px] text-[12px]">Choose a color</div>
               <div className="flex items-center gap-1">
-                {product.colors.map((color, index) => {
+                {product.color.map((color, index) => {
                   return (
                     <button
                       style={{ backgroundColor: `${color}` }}

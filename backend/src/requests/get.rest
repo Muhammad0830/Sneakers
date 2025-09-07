@@ -1,1 +1,1 @@
-GET http://localhost:3001/sneakers
+GET http://localhost:3001/sneakers/1
