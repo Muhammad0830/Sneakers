@@ -89,15 +89,10 @@ sneakersRouter.get("/", async (req: any, res: any) => {
       whereClauses.length > 0 ? "WHERE " + whereClauses.join(" AND ") : "";
 
     const data = await query<Product[]>(
-      `SELECT p.* ${
-        sortBy === "discount_value"
-          ? ", COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value"
-          : ""
-      } FROM products as p LEFT JOIN on_sale as s ON p.id = s.product_id ${
-        sortBy === "discount_value"
-          ? "AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'"
-          : ""
-      } ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
+      `SELECT p.*, COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value 
+        FROM products as p LEFT JOIN on_sale as s ON p.id = s.product_id 
+        AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
+        ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
       params
     );
 

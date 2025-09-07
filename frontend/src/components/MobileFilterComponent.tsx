@@ -211,12 +211,20 @@ export default function MobileFilterSort({
                 key={index}
                 onClick={() => {
                   if (moreFilter.name !== selectedFilter?.name) {
-                    setSelectedFilter({ ...moreFilter, isAsc: true });
+                    setSelectedFilter({
+                      ...moreFilter,
+                      isAsc: false,
+                      isActive: true,
+                    });
                   } else if (
                     moreFilter.name == selectedFilter?.name &&
-                    selectedFilter.isAsc
+                    !selectedFilter.isAsc
                   ) {
-                    setSelectedFilter({ ...moreFilter, isAsc: false });
+                    setSelectedFilter({
+                      ...moreFilter,
+                      isAsc: true,
+                      isActive: true,
+                    });
                   } else {
                     setSelectedFilter(null);
                   }
