@@ -50,8 +50,14 @@ export interface Product {
   rating: string;
   reviews: string[];
   gender?: string;
+  variants: string[];
+  keyFeatures: string[];
   created_at?: string;
   updated_at?: string;
+  discount_type?: string;
+  discount_value?: string;
+  sale_to?: string;
+  sale_from?: string;
 }
 
 export interface ProductsDataProps {
