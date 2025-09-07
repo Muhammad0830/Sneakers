@@ -6,11 +6,13 @@ import Image from "next/image";
 import { MessageCircle, Star, StarIcon, ThumbsUp } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const colors = product.color;
   const sizes = product.size;
   const { theme } = useTheme();
+  const t = useTranslations("Shop");
 
   const rating = Number(product.rating).toFixed(1);
 
@@ -35,9 +37,22 @@ const ProductCard = ({ product }: { product: Product }) => {
           </div>
 
           {/* gender badge */}
-          <div className="absolute cursor-pointer z-30 hidden lg:flex capitalize top-3 font-semibold text-sm left-3 bg-primary border-primary text-white px-1 rounded-sm">
+          <div className="absolute cursor-pointer z-30 flex capitalize top-3 font-semibold text-sm left-3 bg-primary border-primary text-white px-1 rounded-sm">
             {product.gender}
           </div>
+
+          {/* discount badge */}
+          {product.discount_type ? (
+            <div className="absolute aspect-square px-2.5 pt-0.5 flex flex-col rounded-full rounded-bl-none justify-center items-center cursor-pointer z-30 top-0 right-0 -translate-y-[30%] translate-x-[30%] group-hover:translate-y-0 group-hover:translate-x-0 group-hover:top-3 group-hover:right-3 group-hover:rounded-bl-full bg-yellow-300 transition-all duration-300">
+              <span className="text-sm font-bold  text-[#383838]">
+                {t("Sale")}
+              </span>
+              <span className="text-[12px] font-bold  text-[#383838]">
+                {Number(product.discount_value).toFixed(0)}
+                {product.discount_type === "percentage" ? "%" : "$"}
+              </span>
+            </div>
+          ) : null}
 
           <div
             style={{
@@ -59,7 +74,26 @@ const ProductCard = ({ product }: { product: Product }) => {
                 {product.title}
               </div>
               <div className="text-center text-2xl font-bold">
-                {product.price}$
+                {product.discount_type ? (
+                  <div className="flex justify-center items-end">
+                    <span className="line-through text-[#22222250] text-lg">
+                      {product.price}$
+                    </span>
+                    <span>
+                      /
+                      {(
+                        Number(product.price) -
+                        (product.discount_type === "percentage"
+                          ? Number(product.price) *
+                            (Number(product.discount_value) / 100)
+                          : Number(product.discount_value))
+                      ).toFixed(2)}
+                      $
+                    </span>
+                  </div>
+                ) : (
+                  <span>{product.price}$</span>
+                )}
               </div>
             </div>
 
@@ -69,8 +103,27 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <span className="text-center sm:text-lg text-md font-semibold">
                   {product.title}
                 </span>
-                <span className="text-center sm:text-lg text-md font-bold">
-                  {product.price}$
+                <span className="text-center text-[16px] font-bold">
+                  {product.discount_type ? (
+                    <div className="flex sm:flex-col flex-row items-end relative">
+                      <span className="sm:absolute bottom-[75%] line-through text-[#22222250] text-[12px]">
+                        {product.price}$
+                      </span>
+                      <span className="sm:hidden flex">/</span>
+                      <span>
+                        {(
+                          Number(product.price) -
+                          (product.discount_type === "percentage"
+                            ? Number(product.price) *
+                              (Number(product.discount_value) / 100)
+                            : Number(product.discount_value))
+                        ).toFixed(2)}
+                        $
+                      </span>
+                    </div>
+                  ) : (
+                    <span>{product.price}$</span>
+                  )}
                 </span>
               </div>
               <div className="flex flex-row justify-between gap-2 items-center w-full">

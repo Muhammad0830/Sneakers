@@ -78,18 +78,67 @@ const ProductIdClient = () => {
       <div className="relative w-full sm:flex items-center gap-4 mb-4 mt-5">
         {/* product info card */}
         <div className="sm:absolute z-20 h-full right-0 top-0 sm:w-1/2 w-full flex items-center justify-center">
-          <div className="sm:p-5 p-3 sm:mt-5 flex sm:w-auto sm:min-w-auto min-w-[clamp(280px,70vw,400px)] flex-col sm:gap-1 rounded-2xl dark:shadow-[0px_0px_15px_1px_#ffffff50] shadow-[0px_0px_15px_1px_#00000080] backdrop-blur-xs bg-white/70 dark:bg-black/70">
+          <div className="relative sm:p-5 p-3 sm:mt-5 flex sm:w-auto sm:min-w-auto min-w-[clamp(280px,70vw,400px)] flex-col sm:gap-1 rounded-2xl dark:shadow-[0px_0px_15px_1px_#ffffff50] shadow-[0px_0px_15px_1px_#00000080] backdrop-blur-xs bg-white/70 dark:bg-black/70">
+            {/* discount badge */}
+            {product.discount_type ? (
+              <div className="absolute top-0 right-0 -translate-y-[50%] translate-x-[20%] bg-yellow-300 text-black px-2 py-0 sm:px-3 sm:py-0.5 rounded-full">
+                <span className="text-sm font-bold">On Sale</span>
+              </div>
+            ) : null}
+
             <div className="font-bold lg:text-2xl sm:text-xl text-[16px] flex justify-between">
               <span>{product.title}</span>
-              <span className="sm:hidden inline-block">{product.price}$</span>
+              <span className="sm:hidden inline-block">
+                {product.discount_type ? (
+                  <div className="flex justify-center items-end">
+                    <span className="line-through text-[#22222250] text-[13px]">
+                      {product.price}$
+                    </span>
+                    <span>
+                      /
+                      {(
+                        Number(product.price) -
+                        (product.discount_type === "percentage"
+                          ? Number(product.price) *
+                            (Number(product.discount_value) / 100)
+                          : Number(product.discount_value))
+                      ).toFixed(2)}
+                      $
+                    </span>
+                  </div>
+                ) : (
+                  <span>{product.price}$</span>
+                )}
+              </span>
             </div>
-            <div className="sm:flex hidden items-center justify-between gap-2">
-              <div className="lg:text-3xl sm:text-xl font-bold">
-                {product.price}$
+            <div className="sm:flex hidden items-center justify-between gap-4">
+              <div className="font-bold">
+                {product.discount_type ? (
+                  <div className="flex justify-center items-end">
+                    <span className="line-through text-[#22222250] lg:text-xl sm:text-[16px]">
+                      {product.price}$
+                    </span>
+                    <span className="lg:text-3xl sm:text-xl">
+                      /
+                      {(
+                        Number(product.price) -
+                        (product.discount_type === "percentage"
+                          ? Number(product.price) *
+                            (Number(product.discount_value) / 100)
+                          : Number(product.discount_value))
+                      ).toFixed(2)}
+                      $
+                    </span>
+                  </div>
+                ) : (
+                  <span className="lg:text-3xl sm:text-xl font-bold">
+                    {product.price}$
+                  </span>
+                )}
               </div>
               <div className="hidden sm:flex items-center gap-2 bg-primary rounded-full px-2">
                 <span className="font-bold lg:text-2xl sm:text-lg text-[16px] text-white">
-                  {product.rating}
+                  {Number(product.rating).toFixed(1)}
                 </span>
                 <Star
                   className="lg:block hidden"
@@ -123,7 +172,7 @@ const ProductIdClient = () => {
               </div>
               <div className="flex sm:hidden items-center gap-2 bg-primary rounded-full px-2">
                 <span className="font-bold lg:text-2xl sm:text-lg text-[16px] text-white">
-                  {product.rating}
+                  {Number(product.rating).toFixed(1)}
                 </span>
                 <Star
                   className="block"
@@ -162,11 +211,15 @@ const ProductIdClient = () => {
               </button>
               <div className="flex items-center gap-2">
                 <button className="lg:rounded-md rounded-sm lg:px-3 lg:py-2 px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all">
-                  <span className="lg:block hidden">Rate</span>
+                  <span className="lg:block hidden text-white font-semibold">
+                    Rate
+                  </span>
                   <ThumbsUp size={18} color="white" />
                 </button>
                 <button className="lg:rounded-md rounded-sm lg:px-3 lg:py-2 px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all">
-                  <span className="lg:block hidden">Comment</span>
+                  <span className="lg:block hidden text-white font-semibold">
+                    Comment
+                  </span>
                   <MessageCircle size={18} color="white" />
                 </button>
               </div>

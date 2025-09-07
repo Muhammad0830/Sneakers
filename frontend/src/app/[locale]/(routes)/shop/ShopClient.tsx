@@ -782,7 +782,7 @@ export default function ShopClient() {
         )}
       </div>
 
-      {/* Sorting Dialog for mobile and desktop */}
+      {/* Sorting Dialog for tablet and small desktop */}
       <Dialog open={sortingDialogOpen} onOpenChange={setSortingDialogOpen}>
         <DialogContent className="bg-white dark:bg-black sm:min-w-[350px] min-w-[250px] w-[50vw] px-4 py-3 rounded-md">
           <DialogTitle className="text-xl">Sorts</DialogTitle>
@@ -800,7 +800,11 @@ export default function ShopClient() {
                   }`}
                   onClick={() => {
                     if (moreFilter.name !== selectedFilter?.name) {
-                      setSelectedFilter({ ...moreFilter, isAsc: false });
+                      setSelectedFilter({
+                        ...moreFilter,
+                        isAsc: false,
+                        isActive: true,
+                      });
                       if (isDummyDataWorking)
                         showToast(
                           "error",
@@ -811,7 +815,11 @@ export default function ShopClient() {
                       moreFilter.name == selectedFilter?.name &&
                       !selectedFilter.isAsc
                     ) {
-                      setSelectedFilter({ ...moreFilter, isAsc: true });
+                      setSelectedFilter({
+                        ...moreFilter,
+                        isAsc: true,
+                        isActive: true,
+                      });
                     } else {
                       setSelectedFilter(null);
                     }
