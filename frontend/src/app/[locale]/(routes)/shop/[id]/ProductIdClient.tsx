@@ -1,8 +1,11 @@
 "use client";
 import RecommendedProducts from "@/components/RecommendedProducts";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useCustomToast } from "@/context/CustomToastContext";
 import useApiQuery from "@/hooks/useApiQuery";
+import { cn } from "@/lib/utils";
 import { Product } from "@/types/types";
+import { DialogTitle } from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
   ArrowRight,
@@ -21,24 +24,21 @@ const ProductIdClient = () => {
   const params = useParams();
   const id = params?.id;
   const [selectedVariant, setSelectedVariant] = useState(0);
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedColor, setSelectedColor] = useState("");
   const { theme } = useTheme();
   const [width, setWidth] = useState(0);
   const [product, setProduct] = useState<Product>();
   const hasErrorRef = useRef(false);
 
   const t = useTranslations("Shop");
+  const productT = useTranslations("Product");
 
   const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
 
-  const { data, isLoading, isError } = useApiQuery<Product>(`/${id}`, [
+  const { data, isLoading, isError } = useApiQuery<Product>(`/product/${id}`, [
     "Sneakers",
   ]);
-
-  useEffect(() => {
-    if (data) {
-      setProduct(data);
-    }
-  }, [data]);
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -48,6 +48,12 @@ const ProductIdClient = () => {
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      setProduct(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (isError && !hasErrorRef.current) {
@@ -161,7 +167,15 @@ const ProductIdClient = () => {
                   {product.size.map((size, index) => {
                     return (
                       <button
-                        className="px-1 py-0.5 lg:min-w-[30px] sm:min-w-[25px] min-w-[20px] border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm lg:text-[16px] sm:text-[14px] text-[12px]"
+                        onClick={() => setSelectedSize(size)}
+                        className={cn(
+                          "px-1 cursor-pointer py-0.5 lg:min-w-[30px] sm:min-w-[25px] min-w-[20px] border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm lg:text-[16px] sm:text-[14px] text-[12px] transition-all duration-300",
+                          selectedSize === size
+                            ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
+                            : selectedSize === "" && index === 0
+                            ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
+                            : "inset-shadow-[0px_0px_0px_0px_var(--primary)] border-primary"
+                        )}
                         key={index}
                       >
                         {size}
@@ -184,14 +198,37 @@ const ProductIdClient = () => {
             </div>
             <div>
               <div className="sm:text-[16px] text-[12px]">Choose a color</div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1.5">
                 {product.color.map((color, index) => {
                   return (
                     <button
-                      style={{ backgroundColor: `${color}` }}
-                      className={`sm:w-[25px] w-[20px] aspect-square border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm`}
+                      onClick={() => setSelectedColor(color)}
                       key={index}
-                    ></button>
+                      className="relative flex items-center justify-center sm:w-[25px] w-[20px] aspect-square cursor-pointer"
+                    >
+                      <div
+                        style={{ backgroundColor: `${color}` }}
+                        className={cn(
+                          `z-10 relative aspect-square border border-black/50 dark:border-white/50 sm:rounded-sm rounded-[4px] transition-all duration-300`,
+                          selectedColor === color
+                            ? "sm:w-[20px] w-[15px]"
+                            : selectedColor === "" && index === 0
+                            ? "sm:w-[20px] w-[15px]"
+                            : "sm:w-[25px] w-[20px]"
+                        )}
+                        key={index}
+                      ></div>
+                      <div
+                        className={cn(
+                          "absolute rounded-sm border border-primary bg-primary/50 transition-all duration-300",
+                          selectedColor === color
+                            ? "-inset-[2px]"
+                            : selectedColor === "" && index === 0
+                            ? "-inset-[2px]"
+                            : "-inset-[0px]"
+                        )}
+                      ></div>
+                    </button>
                   );
                 })}
               </div>
@@ -352,6 +389,112 @@ const ProductIdClient = () => {
           Description
         </div>
         <div className="font-semibold">{product.description}</div>
+      </div>
+
+      {/* product reviews */}
+      <div className="mb-4">
+        <div className="md:text-2xl sm:text-xl text-lg font-bold mb-2 flex w-full items-center justify-between">
+          <span>Reviews</span>
+          {product.reviews.length > 6 && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <span className="text-primary md:text-[16px] text-xs font-semibold cursor-pointer">
+                  {productT("See All")}
+                </span>
+              </DialogTrigger>
+              <DialogContent className="sm:min-w-[80vw] w-auto min-w-[300px] max-h-[80svh] overflow-auto">
+                <DialogTitle className="lg:text-xl font-bold sm:text-lg text-[16px]">
+                  Reviews
+                </DialogTitle>
+                <div className="font-semibold grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-start gap-1 md:overflow-x-visible overflow-x-scroll">
+                  {product.reviews.map((r, index) => {
+                    if (index >= 6) return;
+
+                    return (
+                      <div
+                        key={index}
+                        className="flex-shrink-0 md:px-2.5 md:py-2 sm:px-2 sm:py-1.5 p-1.5 rounded-md border bg-white dark:bg-black"
+                      >
+                        <div className="flex items-center justify-between sm:gap-2 gap-1 mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className="md:w-10 w-6 aspect-square rounded-full bg-primary"></div>
+                            <div className="flex flex-col">
+                              <div className="sm:text-sm text-[10px] font-semibold">
+                                Abdukayumov M.
+                              </div>
+                              <div className="sm:text-xs text-[10px] text-gray-500">
+                                2025.09.08
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <span className="text-sm sm:text-[16px]">4.5</span>
+                            <Star
+                              color="yellow"
+                              size={12}
+                              fill="yellow"
+                              className="sm:hidden flex"
+                            />
+                            <Star
+                              color="yellow"
+                              size={16}
+                              fill="yellow"
+                              className="hidden sm:flex"
+                            />
+                          </div>
+                        </div>
+                        <p className="sm:text-sm text-xs">{r}</p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </DialogContent>
+            </Dialog>
+          )}
+        </div>
+
+        <div className="font-semibold flex md:grid lg:grid-cols-3 grid-cols-2 items-start gap-1 md:overflow-x-visible overflow-x-scroll">
+          {product.reviews.map((r, index) => {
+            if (width >= 768 && index >= 6) return;
+
+            return (
+              <div
+                key={index}
+                className="flex-shrink-0 md:w-auto sm:w-[40vw] w-[55vw] md:px-2.5 md:py-2 sm:px-2 sm:py-1.5 p-1.5 rounded-md border bg-white dark:bg-black"
+              >
+                <div className="flex items-center justify-between sm:gap-2 gap-1 mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className="md:w-10 w-6 aspect-square rounded-full bg-primary"></div>
+                    <div className="flex flex-col">
+                      <div className="sm:text-sm text-[10px] font-semibold">
+                        Abdukayumov M.
+                      </div>
+                      <div className="sm:text-xs text-[10px] text-gray-500">
+                        2025.09.08
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <span className="text-sm sm:text-[16px]">4.5</span>
+                    <Star
+                      color="yellow"
+                      size={12}
+                      fill="yellow"
+                      className="sm:hidden flex"
+                    />
+                    <Star
+                      color="yellow"
+                      size={16}
+                      fill="yellow"
+                      className="hidden sm:flex"
+                    />
+                  </div>
+                </div>
+                <p className="sm:text-sm text-xs">{r}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* product key features */}
