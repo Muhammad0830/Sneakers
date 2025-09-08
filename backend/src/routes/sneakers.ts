@@ -133,7 +133,7 @@ sneakersRouter.get("/", async (req: any, res: any) => {
   }
 });
 
-sneakersRouter.get("/:id", async (req: any, res: any) => {
+sneakersRouter.get("/product/:id", async (req: any, res: any) => {
   try {
     const id = parseInt(req.params.id as string);
     const data = await query<Product[]>(
@@ -145,8 +145,6 @@ sneakersRouter.get("/:id", async (req: any, res: any) => {
         id,
       }
     );
-
-    console.log("data[0]", data[0]);
 
     if (data.length <= 0) {
       return res.status(404).json({ message: "no data found" });
