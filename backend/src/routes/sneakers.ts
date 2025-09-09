@@ -1,6 +1,5 @@
 import express from "express";
 import { createPool } from "../db/mysql";
-import { RowDataPacket, FieldPacket } from "mysql2";
 import { query } from "../middlewares/helper";
 import { Product, Trending, Testimonial } from "../types/snaekers";
 const pool = createPool();
