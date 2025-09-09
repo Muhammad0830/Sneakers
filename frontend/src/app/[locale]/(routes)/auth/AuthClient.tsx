@@ -19,11 +19,12 @@ export default function AuthClient() {
   const [mode, setMode] = useState<"signin" | "signup">(
     modeFromUrl === "signin" ? "signin" : "signup"
   );
-  const [customMode, setCustomMode] = useState<"signin" | "signup">("signup");
+  const [customMode, setCustomMode] = useState<"signin" | "signup">(
+    modeFromUrl === "signin" ? "signin" : "signup"
+  );
 
   useEffect(() => {
     setMode(modeFromUrl === "signin" ? "signin" : "signup");
-    setCustomMode(modeFromUrl === "signin" ? "signin" : "signup");
   }, [modeFromUrl]);
 
   return (
@@ -89,7 +90,7 @@ export default function AuthClient() {
                 {t("Already have an Account?")}
                 <Link
                   onClick={() => setCustomMode("signin")}
-                  href={`/auth?mode=signin}`}
+                  href={`/auth?mode=signin`}
                 >
                   <span className="text-primary font-semibold underline">
                     {t("sign in")}
@@ -147,7 +148,7 @@ export default function AuthClient() {
                 {t("Don't have an Account?")}
                 <Link
                   onClick={() => setCustomMode("signup")}
-                  href={`/auth?mode=signup}`}
+                  href={`/auth?mode=signup`}
                 >
                   <span className="text-primary font-semibold underline">
                     {t("sign up")}
