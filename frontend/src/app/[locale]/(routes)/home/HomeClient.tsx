@@ -541,7 +541,6 @@ const HomeClient = () => {
                 )}
               </span>
               <span className="text-start sm:block hidden">
-                {" "}
                 {t(
                   "**If you are not signed up or signed in, please sign in/up first before writing here"
                 )}
