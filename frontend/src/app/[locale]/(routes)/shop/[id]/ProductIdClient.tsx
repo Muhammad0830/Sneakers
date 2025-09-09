@@ -19,6 +19,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
+import LocalData from "@/data_frontend/data.json";
 
 const ProductIdClient = () => {
   const params = useParams();
@@ -30,11 +31,13 @@ const ProductIdClient = () => {
   const [width, setWidth] = useState(0);
   const [product, setProduct] = useState<Product>();
   const hasErrorRef = useRef(false);
+  const LocalProduct: Product | undefined = LocalData.products.find(
+    (p) => p.id === Number(id)
+  );
 
-  const t = useTranslations("Shop");
   const productT = useTranslations("Product");
 
-  const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
+  const { showLoadingToast, hideLoadingToast } = useCustomToast();
 
   const { data, isLoading, isError } = useApiQuery<Product>(`/product/${id}`, [
     "Sneakers",
@@ -52,15 +55,16 @@ const ProductIdClient = () => {
   useEffect(() => {
     if (data) {
       setProduct(data);
+    } else {
+      setProduct(LocalProduct);
     }
-  }, [data]);
+  }, [data, LocalProduct]);
 
   useEffect(() => {
     if (isError && !hasErrorRef.current) {
-      showToast("error", t("Error occured"), t("Internal server error"));
       hasErrorRef.current = true;
     }
-  }, [isError]); // eslint-disable-line
+  }, [isError]);
 
   useEffect(() => {
     if (isLoading) showLoadingToast("Loading the data");
