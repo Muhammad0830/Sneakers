@@ -88,10 +88,8 @@ export default function AuthClient() {
               <div className="text-center flex gap-2 items-center justify-center">
                 {t("Already have an Account?")}
                 <Link
-                  onClick={() =>
-                    setCustomMode(mode === "signin" ? "signup" : "signin")
-                  }
-                  href={`/auth?mode=${mode === "signin" ? "signup" : "signin"}`}
+                  onClick={() => setCustomMode("signin")}
+                  href={`/auth?mode=signin}`}
                 >
                   <span className="text-primary font-semibold underline">
                     {t("sign in")}
@@ -148,10 +146,8 @@ export default function AuthClient() {
               <div className="text-center flex gap-2 items-center justify-center">
                 {t("Don't have an Account?")}
                 <Link
-                  onClick={() =>
-                    setCustomMode(mode === "signin" ? "signup" : "signin")
-                  }
-                  href={`/auth?mode=${mode === "signin" ? "signup" : "signin"}`}
+                  onClick={() => setCustomMode("signup")}
+                  href={`/auth?mode=signup}`}
                 >
                   <span className="text-primary font-semibold underline">
                     {t("sign up")}
