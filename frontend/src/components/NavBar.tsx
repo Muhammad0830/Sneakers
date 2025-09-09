@@ -25,7 +25,7 @@ const data = {
     },
     {
       name: "Sign Up",
-      href: "/signup",
+      href: "/auth?mode=signup",
     },
   ],
 };
@@ -93,7 +93,7 @@ const NavBar = () => {
               </LinkComponent>
             </div>
             <div className="lg:text-xl text-xl">
-              <LinkComponent animated={"signup" === pathName} href="/signup">
+              <LinkComponent animated={"signup" === pathName} href="/auth?mode=signup">
                 {t("signup")}
               </LinkComponent>
             </div>
@@ -133,7 +133,7 @@ const NavBar = () => {
 
           {/* just for mobile and Tablet */}
           <div className="text-md sm:hidden">
-            <LinkComponent href={"/signup"}>{t("signup")}</LinkComponent>
+            <LinkComponent href={"/auth?mode=signup"}>{t("signup")}</LinkComponent>
           </div>
           <SimpleButton
             onClick={() => setOpen((prev) => !prev)}

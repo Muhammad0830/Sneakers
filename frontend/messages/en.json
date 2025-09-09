@@ -75,5 +75,22 @@
     },
     "Product": {
       "See All": "See All"
+    },
+    "Auth": {
+      "SignUp": "Sign Up",
+      "Create an account and shop your favorites!": "Create an account and shop your favorites!",
+      "Enter your details below": "Enter your details below",
+      "Register": "Register",
+      "withGoogle": "with Google",
+      "sign up": "Sign up",
+      "sign in": "Sign in",
+      "Name": "Name",
+      "Email": "Email",
+      "Password": "Password",
+      "Already have an Account?": "Already have an Account?",
+      "Don't have an Account?": "Don't have an Account?",
+      "Login": "Login",
+      "Welcome back": "Welcome back! Continue shopping with ease.",
+      "Sign In": "Sign In"
     }
 }
