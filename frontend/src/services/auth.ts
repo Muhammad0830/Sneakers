@@ -1,9 +1,9 @@
 import api, { setAccessToken } from "@/lib/api";
 
 export async function registerUser(data: {
+  name: string;
   email: string;
   password: string;
-  name: string;
 }) {
   const res = await api.post("/auth/signup", data);
   setAccessToken(res.data.accessToken);
@@ -18,7 +18,7 @@ export async function loginUser(data: { email: string; password: string }) {
     // eslint-disable-next-line
   } catch (err: any) {
     const message = err.message;
-    throw new Error(message)
+    throw new Error(message);
   }
 }
 
