@@ -13,6 +13,7 @@ const RecommendedProducts = () => {
   const limit = 12;
   const { showToast, showLoadingToast, hideLoadingToast } = useCustomToast();
   const t = useTranslations("Shop");
+  const toastT = useTranslations("Toast");
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [useLocal, setUseLocal] = useState(false);
   const hasShownDummyInfo = useRef(false);
@@ -41,7 +42,7 @@ const RecommendedProducts = () => {
 
     // dummy data
     if (!isLoading && !data && !hasShownDummyInfo.current) {
-      showToast("info", t("Info"), t("Dummy data working"));
+      showToast("info", toastT("Info"), toastT("Dummy data working"));
       hasShownDummyInfo.current = true; // prevent duplicates
     }
 

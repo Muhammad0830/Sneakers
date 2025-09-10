@@ -11,7 +11,7 @@ const useApiQuery = <T,>(
   enabled?: boolean
 ) => {
   const { showToast } = useCustomToast();
-  const t = useTranslations("Shop");
+  const toastT = useTranslations("Toast");
   const hasShownError = useRef(false);
 
   const { data, error, isLoading, refetch, isError } = useQuery<T>({
@@ -34,10 +34,10 @@ const useApiQuery = <T,>(
 
   useEffect(() => {
     if (error && !hasShownError.current) {
-      showToast("error", t("Error occured"), t("Internal server error"));
+      showToast("error", toastT("Error occured"), toastT("Internal server error"));
       hasShownError.current = true; // prevent duplicates
     }
-  }, [error, showToast, t]);
+  }, [error, showToast, toastT]);
 
   return { data, error, isLoading, refetch, isError };
 };

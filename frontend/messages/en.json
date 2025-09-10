@@ -64,14 +64,8 @@
       "notFoundDescription": "Sorry, the page you're looking for doesn't exist."
     },
     "Shop": {
-      "Loading the data": "Loading the data...",
-      "Error": "Error",
-      "Connection failed": "Connection failed",
-      "Info": "Info",
-      "Dummy data working": "Dummy data working",
-      "Error occured": "Error occured",
-      "Internal server error": "Internal server error",
-      "Sale": "Sale"
+      "Sale": "Sale",
+      "Loading the data": "Loading the data..."
     },
     "Product": {
       "See All": "See All"
@@ -92,5 +86,27 @@
       "Login": "Login",
       "Welcome back": "Welcome back! Continue shopping with ease.",
       "Sign In": "Sign In"
+    },
+    "Toast": {
+      "Success": "Success",
+      "Error": "Error",
+      "Warning": "Warning",
+      "Info": "Info",
+      "Loading the data": "Loading the data...",
+      "Connection failed": "Connection failed",
+      "Dummy data working": "Dummy data working",
+      "Successfull": "Successfull!",
+      "Welcome back": "Welcome back!",
+      "Your journey begins here": "Your journey begins here!",
+      "Failed to register": "Failed to register",
+      "Please try again": "Please try again.",
+      "Failed to login": "Failed to login.",
+      "Please check your credentials and try again": "Please check your credentials and try again.",
+      "Failed to perform the action": "Failed to perform the action.",
+      "Please fill all the fields": "Please fill all the fields",
+      "Internal server error": "Internal server error",
+      "Error occured": "Error occured",
+      "Some functions may not work properly": "Some functions may not work properly",
+      "Please make at least one change": "Please make at least one change"
     }
 }

@@ -7,7 +7,6 @@ import { LoadingProvider } from "@/context/LoadingContext";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import GlobalLoader from "@/components/GlobalLoader";
 import CustomToast from "@/components/CustomToast";
-// import { LoadingProvider } from "@/context/LoadingContext";
 
 export default async function LocaleLayout({
   children,

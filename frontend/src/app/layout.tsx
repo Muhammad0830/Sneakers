@@ -9,6 +9,7 @@ import Providers from "../context/ReactQueryProvider";
 import { ThemeProvider } from "next-themes";
 import { Analytics } from "@vercel/analytics/next";
 import { CustomToastProvider } from "@/context/CustomToastContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "My App",
@@ -31,9 +32,11 @@ export default function RootLayout({
       <head />
       <body className={`antialiased ${openSans.className}`}>
         <Providers>
-          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-            <CustomToastProvider>{children}</CustomToastProvider>
-          </ThemeProvider>
+          <AuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+              <CustomToastProvider>{children}</CustomToastProvider>
+            </ThemeProvider>
+          </AuthProvider>
         </Providers>
         <Analytics />
       </body>

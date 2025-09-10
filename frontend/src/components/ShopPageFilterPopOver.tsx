@@ -70,7 +70,7 @@ const ShopPageFilterPopOver = ({
   arraysHaveSameValues,
   isDummyDataWorking,
 }: Props) => {
-  const t = useTranslations("Shop");
+  const toastT = useTranslations("Toast");
   return (
     <>
       <Button
@@ -147,15 +147,15 @@ const ShopPageFilterPopOver = ({
                 ) {
                   showToast(
                     "warning",
-                    "Warning",
-                    "Please make at least one change"
+                    toastT("Warning"),
+                    toastT("Please make at least one change")
                   );
                 } else if (selectedPopUp?.name) {
                   if (currentValues.length === 0) {
                     showToast(
                       "warning",
-                      "Warning",
-                      "Please select at least one value"
+                      toastT("Warning"),
+                      toastT("Please make at least one change")
                     );
                     return;
                   }
@@ -165,8 +165,8 @@ const ShopPageFilterPopOver = ({
                     if (isDummyDataWorking)
                       showToast(
                         "error",
-                        t("Internal server error"),
-                        "Some functions may not work properly"
+                        toastT("Internal server error"),
+                        toastT("Some functions may not work properly")
                       );
                   } else if (
                     JSON.stringify(currentValues) ===
