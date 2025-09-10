@@ -159,6 +159,7 @@ export default function ShopClient() {
   const [useLocal, setUseLocal] = useState(false);
   const [localPage, setLocalPage] = useState(1);
   const t = useTranslations("Shop");
+  const toastT = useTranslations("Toast");
   const parentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -196,7 +197,7 @@ export default function ShopClient() {
 
     // dummy data
     if (!isLoading && !data && !hasShownDummyInfo.current) {
-      showToast("info", t("Info"), t("Dummy data working"));
+      showToast("info", toastT("Info"), toastT("Dummy data working"));
       hasShownDummyInfo.current = true; // prevent duplicates
     }
   }, [data, isLoading]); // eslint-disable-line
@@ -434,8 +435,8 @@ export default function ShopClient() {
                       if (isDummyDataWorking)
                         showToast(
                           "error",
-                          t("Error"),
-                          t("Some functions may not work properly")
+                          toastT("Error"),
+                          toastT("Some functions may not work properly")
                         );
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
@@ -808,8 +809,8 @@ export default function ShopClient() {
                       if (isDummyDataWorking)
                         showToast(
                           "error",
-                          t("Error"),
-                          t("Some functions may not work properly")
+                          toastT("Error"),
+                          toastT("Some functions may not work properly")
                         );
                     } else if (
                       moreFilter.name == selectedFilter?.name &&
