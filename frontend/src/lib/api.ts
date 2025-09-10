@@ -45,7 +45,6 @@ api.interceptors.response.use(
       } catch (err) {
         if (!isAuthPage && !isLoggingOut) {
           isLoggingOut = true;
-          if (window.location.href.includes("auth")) return;
           window.location.href = "/auth?mode=signin";
         }
       }
