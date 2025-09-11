@@ -18,7 +18,7 @@ export async function loginUser(data: { email: string; password: string }) {
     // eslint-disable-next-line
   } catch (err: any) {
     const message = err.message;
-    throw new Error(message);
+    console.error("login failed", message);
   }
 }
 

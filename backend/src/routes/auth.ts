@@ -156,7 +156,8 @@ authRouter.post("/refresh", async (req: any, res: any) => {
     res.cookie(COOKIE_NAME, newRefreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      path: "/",
       maxAge: REFRESH_EXPIRES_MS,
     });
 

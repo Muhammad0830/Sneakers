@@ -11,6 +11,7 @@ import Image from "next/image";
 import GoogleIconSVG from "@/components/ui/GoogleIconSVG";
 import { useAuth } from "@/context/AuthContext";
 import { useCustomToast } from "@/context/CustomToastContext";
+import { useRouter } from "next/navigation";
 
 export default function AuthClient() {
   const searchParams = useSearchParams();
@@ -31,6 +32,7 @@ export default function AuthClient() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     setMode(modeFromUrl === "signin" ? "signin" : "signup");
@@ -68,6 +70,7 @@ export default function AuthClient() {
             : "Come back anytime"
         )
       );
+      if (success === "signup" || success === "login") router.push("/");
       setSuccess(null);
     }
   }, [success]); // eslint-disable-line
