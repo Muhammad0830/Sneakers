@@ -81,12 +81,12 @@ const HomeClient = () => {
   const [width, setWidth] = useState(0);
 
   const { data: testimonialsApi = [] } = useApiQuery<TestimonialType[]>(
-    "/testimonials",
+    "/sneakers/testimonials",
     "Testimonials"
   );
 
   const { data: productsApi = [], error } = useApiQuery<Trending[]>(
-    "/trending",
+    "/sneakers/trending",
     "Trending"
   );
 

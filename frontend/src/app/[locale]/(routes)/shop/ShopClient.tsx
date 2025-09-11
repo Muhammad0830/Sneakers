@@ -175,7 +175,7 @@ export default function ShopClient() {
   );
 
   const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
-    `/?${queryString}`,
+    `/sneakers/?${queryString}`,
     ["Sneakers", page, limit, queryString],
     !useLocal
   );

@@ -39,7 +39,7 @@ const ProductIdClient = () => {
 
   const { showLoadingToast, hideLoadingToast } = useCustomToast();
 
-  const { data, isLoading, isError } = useApiQuery<Product>(`/product/${id}`, [
+  const { data, isLoading, isError } = useApiQuery<Product>(`/sneakers/product/${id}`, [
     "Sneakers",
   ]);
 

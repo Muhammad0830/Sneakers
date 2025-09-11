@@ -19,7 +19,7 @@ const RecommendedProducts = () => {
   const hasShownDummyInfo = useRef(false);
 
   const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
-    `/?page=${page}&limit=${limit}&fetchType=scroll`,
+    `/sneakers/?page=${page}&limit=${limit}&fetchType=scroll`,
     ["Sneakers", page, limit],
     !useLocal
   );
