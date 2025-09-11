@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
-const BaseURL = "http://localhost:3001/sneakers";
+const BaseURL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
 const useApiQuery = <T,>(
   url: string,
@@ -34,7 +34,11 @@ const useApiQuery = <T,>(
 
   useEffect(() => {
     if (error && !hasShownError.current) {
-      showToast("error", toastT("Error occured"), toastT("Internal server error"));
+      showToast(
+        "error",
+        toastT("Error occured"),
+        toastT("Internal server error")
+      );
       hasShownError.current = true; // prevent duplicates
     }
   }, [error, showToast, toastT]);
