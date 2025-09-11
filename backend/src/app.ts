@@ -9,12 +9,24 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 // enable CORS for the frontend origin
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://sneakers-l9jb.vercel.app",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(cookieParser());
 
