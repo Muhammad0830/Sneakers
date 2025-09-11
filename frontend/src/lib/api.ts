@@ -28,7 +28,6 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
-      const isAuthPage = window.location.pathname.startsWith("/auth");
 
       try {
         const res = await axios.post(
@@ -43,8 +42,9 @@ api.interceptors.response.use(
         return api(originalRequest);
         // eslint-disable-next-line
       } catch (err) {
-        if (!isAuthPage && !isLoggingOut) {
+        if (!isLoggingOut) {
           isLoggingOut = true;
+          if (window.location.pathname.includes("auth")) return;
           window.location.href = "/auth?mode=signin";
         }
       }
