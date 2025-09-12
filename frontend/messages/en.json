@@ -3,7 +3,9 @@
       "home": "Home",
       "shop": "Shop",
       "contact": "Contact",
-      "signup": "Sign Up"
+      "signup": "Sign Up",
+      "Profile": "Profile",
+      "Cart": "Cart"
     },
     "Home": {
       "MainTitle": "WE PROVIDE THE BEST OF THE SNEAKERS YOU HAVE EVER SEEN",
