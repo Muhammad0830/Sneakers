@@ -76,7 +76,7 @@ const ProductCard = ({ product }: { product: Product }) => {
               <div className="text-center text-2xl font-bold">
                 {product.discount_type ? (
                   <div className="flex justify-center items-end">
-                    <span className="line-through text-[#22222250] text-lg">
+                    <span className="line-through text-[#22222250] dark:text-[#ffffff70] text-lg">
                       {product.price}$
                     </span>
                     <span>
@@ -106,7 +106,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <span className="text-center text-[16px] font-bold">
                   {product.discount_type ? (
                     <div className="flex sm:flex-col flex-row items-end relative">
-                      <span className="sm:absolute bottom-[75%] line-through text-[#22222250] text-[12px]">
+                      <span className="sm:absolute bottom-[75%] line-through text-[#22222250] dark:text-[#ffffff70] text-[12px]">
                         {product.price}$
                       </span>
                       <span className="sm:hidden flex">/</span>
