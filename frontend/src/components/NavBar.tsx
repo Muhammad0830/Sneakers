@@ -114,12 +114,38 @@ const NavBar = () => {
                   {t("Cart")}
                 </LinkComponent>
               ) : (
-                <LinkComponent
-                  animated={"auth" === pathName}
-                  href="/auth?mode=signup"
-                >
-                  {t("signup")}
-                </LinkComponent>
+                <div className="relative group/child">
+                  <LinkComponent
+                    animated={"auth" === pathName}
+                    href="/auth?mode=signup"
+                    className="z-30"
+                  >
+                    {t("signup")}
+                  </LinkComponent>
+
+                  {pathName !== "auth" && (
+                    <div
+                      className={cn(
+                        "absolute inset-[50%] opacity-0 bg-white dark:bg-black border-primary border rounded-md transition-all duration-300",
+                        "group-hover/child:-inset-2 group-hover/child:-bottom-10 group-hover/child:opacity-100"
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "absolute bottom-2 -inset-x-8 flex justify-center z-30 translate-y-[100%] transition-all duration-300",
+                          "group-hover/child:translate-y-0"
+                        )}
+                      >
+                        <LinkComponent
+                          animated={"auth" === pathName}
+                          href="/auth?mode=signin"
+                        >
+                          {t("signin")}
+                        </LinkComponent>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </nav>
@@ -133,7 +159,10 @@ const NavBar = () => {
               {user ? null : (
                 <button
                   onClick={() => {
-                    showToast("warning", toastT("Please sign in or sign up first"));
+                    showToast(
+                      "warning",
+                      toastT("Please sign in or sign up first")
+                    );
                   }}
                   className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5"
                 >
