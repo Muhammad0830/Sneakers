@@ -8,6 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
+import { useCustomToast } from "@/context/CustomToastContext";
 
 const logo = "SNEAKER";
 
@@ -34,6 +35,7 @@ const data = {
 
 const NavBar = () => {
   const t = useTranslations("NavBar");
+  const toastT = useTranslations("Toast");
   const [size, setSize] = useState(20);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -43,6 +45,7 @@ const NavBar = () => {
   const { user } = useAuth();
   const router = useRouter();
   const [width, setWidth] = useState<number | null>(null);
+  const { showToast } = useCustomToast();
 
   useEffect(() => setMounted(true), []);
 
@@ -128,9 +131,14 @@ const NavBar = () => {
                 <Search size={size} color="var(--color-varBlack)" />
               </div>
               {user ? null : (
-                <div className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5">
+                <button
+                  onClick={() => {
+                    showToast("warning", toastT("Please sign in or sign up first"));
+                  }}
+                  className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5"
+                >
                   <ShoppingCart size={size} color="var(--color-varBlack)" />
-                </div>
+                </button>
               )}
               <div className="p-1 cursor-pointer rounded-full hover:bg-varBlack/5">
                 <Globe size={size} color="var(--color-varBlack)" />
@@ -175,7 +183,7 @@ const NavBar = () => {
           </div>
 
           {/* just for mobile and Tablet */}
-          <div className="flex items-center gap-2 justify-end">
+          <div className="flex items-center gap-2 justify-end lg:hidden">
             {user && (width ? width <= 1024 : true) ? (
               <button
                 onClick={() => router.push("/profile")}

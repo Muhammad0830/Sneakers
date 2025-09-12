@@ -61,12 +61,12 @@ const CustomToast = () => {
             onClick={() => removeToast(toast.id)}
             key={toast.id}
             className={cn(
-              "absolute cursor-pointer block text-black dark:text-white right-0 bottom-0 bg-white border-[2px] dark:bg-black opacity-0 transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pb-3 pt-2 rounded-md z-50 transform", //shadow-[0_0_10px_2px_#22222250]
+              "absolute cursor-pointer block text-black dark:text-white right-0 bottom-0 bg-white border-[2px] dark:bg-black opacity-0 transition-all duration-300 dark:shadow-[0_0_10px_2px_#ffffff40] px-3 pt-2 rounded-md z-50 transform", //shadow-[0_0_10px_2px_#22222250]
+              toast.message ? "pb-3" : "pb-1",
               typeStyles[toast.type][0],
               toast.visible
                 ? "translate-x-[0%] opacity-100"
                 : "translate-x-[50%] opacity-0"
-              // toast.type === "error" && "z-[100]",
             )}
             style={{
               transform: `translateY(-${reverseIndex * 90}px)`,
@@ -76,9 +76,10 @@ const CustomToast = () => {
               {toast.title}
             </div>
             <div
-              className={
-                "md:text-[16px] relative text-sm text-nowrap px-1.5 py-0.5 rounded-[4px]"
-              }
+              className={cn(
+                "md:text-[16px] relative text-sm text-nowrap px-1.5 py-0.5 rounded-[4px]",
+                toast.message ? "" : "hidden"
+              )}
             >
               <span>{toast.message}</span>
               <div
