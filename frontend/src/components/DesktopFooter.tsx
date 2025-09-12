@@ -8,8 +8,15 @@ import {
   faTelegram,
 } from "@fortawesome/free-brands-svg-icons";
 import LinkComponent from "@/components/ui/Link";
+import { useCustomToast } from "@/context/CustomToastContext";
+import { useTranslations } from "next-intl";
+import { useAuth } from "@/context/AuthContext";
 
 const DesktopFooter = ({ className }: { className?: string }) => {
+  const { showToast } = useCustomToast();
+  const toastT = useTranslations("Toast");
+  const { user } = useAuth();
+
   return (
     <div
       className={`bg-[#D1D1D1] dark:bg-black w-full lg:px-12 px-8 py-6 gap-4 flex-wrap justify-between flex ${className}`}
@@ -29,15 +36,42 @@ const DesktopFooter = ({ className }: { className?: string }) => {
       <div className="md:flex-2 w-[45%]">
         <div className="lg:text-3xl text-xl font-bold mb-2">Account</div>
         <p className="lg:text-lg text-md font-normal">
-          <LinkComponent href={"/profile"}>My Account</LinkComponent>
+          {user ? (
+            <LinkComponent href={"/profile"}>My Account</LinkComponent>
+          ) : (
+            <LinkComponent
+              onClick={() => {
+                showToast("warning", toastT("Please sign in or sign up first"));
+              }}
+            >
+              My Account
+            </LinkComponent>
+          )}
         </p>
         <p className="lg:text-lg text-md font-normal flex items-center gap-1">
-          <LinkComponent href={"/auth/login"}>Login</LinkComponent>
+          <LinkComponent href={"/auth?mode=signin"}>Login</LinkComponent>
           <span className="cursor-default"> / </span>
-          <LinkComponent href={"/auth/register"}>Register</LinkComponent>
+          <LinkComponent href={"/auth?mode=signup"}>Register</LinkComponent>
         </p>
         <p className="lg:text-lg text-md font-normal">
-          <LinkComponent href={"/cart"}>Cart</LinkComponent>
+          {user ? (
+            <LinkComponent
+              onClick={() => {
+                showToast("warning", toastT("Please sign in or sign up first"));
+              }}
+              href={"/cart"}
+            >
+              Cart
+            </LinkComponent>
+          ) : (
+            <LinkComponent
+              onClick={() => {
+                showToast("warning", toastT("Please sign in or sign up first"));
+              }}
+            >
+              Cart
+            </LinkComponent>
+          )}
         </p>
       </div>
 

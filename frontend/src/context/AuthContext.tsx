@@ -9,9 +9,11 @@ import {
 import { usePathname } from "next/navigation";
 
 type User = {
-  id: number;
-  email: string;
-  name: string;
+  user: {
+    id: number;
+    email: string;
+    name: string;
+  };
 };
 
 type AuthContextType = {

@@ -9,9 +9,10 @@ import {
   faTelegram,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
+import { useAuth } from "@/context/AuthContext";
+import { useCustomToast } from "@/context/CustomToastContext";
+import { useTranslations } from "next-intl";
 
-//  handling hydration error || problem: height: 0px in the MobileFooterSections component
-//  style={{ height: open ? buttonHeight + linksHeight : buttonHeight }}
 const MobileFooterSections = dynamic(
   () => import("@/components/MobileFooterSections"),
   {
@@ -20,6 +21,10 @@ const MobileFooterSections = dynamic(
 );
 
 const MobileFooter = ({ className }: { className?: string }) => {
+  const { user } = useAuth();
+  const { showToast } = useCustomToast();
+  const toastT = useTranslations("Toast");
+
   return (
     <div
       className={`${className} w-full py-4 px-4 flex flex-col items-center bg-[#D1D1D1] dark:bg-black`}
@@ -36,15 +41,40 @@ const MobileFooter = ({ className }: { className?: string }) => {
 
       <MobileFooterSections title="Account">
         <div className="flex flex-col items-center">
-          <LinkComponent className="text-xl" href={"/profile"}>
-            My Account
-          </LinkComponent>
-          <LinkComponent className="text-xl" href={"/auth/login"}>
+          {user ? (
+            <LinkComponent className="text-xl" href={"/profile"}>
+              My Account
+            </LinkComponent>
+          ) : (
+            <LinkComponent
+              className="text-xl"
+              onClick={() =>
+                showToast("warning", toastT("Please sign in or sign up first"))
+              }
+            >
+              My Account
+            </LinkComponent>
+          )}
+          <LinkComponent className="text-xl" href={"/auth?mode=signin"}>
             Login
           </LinkComponent>
-          <LinkComponent className="text-xl" href={"/auth/register"}>
+          <LinkComponent className="text-xl" href={"/auth?mode=signup"}>
             Register
           </LinkComponent>
+          {user ? (
+            <LinkComponent className="text-xl" href={"/cart"}>
+              Cart
+            </LinkComponent>
+          ) : (
+            <LinkComponent
+              className="text-xl"
+              onClick={() =>
+                showToast("warning", toastT("Please sign in or sign up first"))
+              }
+            >
+              Cart
+            </LinkComponent>
+          )}
         </div>
       </MobileFooterSections>
 

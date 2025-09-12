@@ -1,12 +1,11 @@
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import NavBar from "@/components/NavBar";
-import Footer from "@/components/Footer";
 import { LoadingProvider } from "@/context/LoadingContext";
 import FullScreenLoader from "@/components/FullScreenLoader";
 import GlobalLoader from "@/components/GlobalLoader";
 import CustomToast from "@/components/CustomToast";
+import NavChildrenFooter from "@/components/NavChildrenFooter";
 
 export default async function LocaleLayout({
   children,
@@ -28,11 +27,7 @@ export default async function LocaleLayout({
           <GlobalLoader />
           <FullScreenLoader />
           <div className="min-h-screen flex flex-col relative">
-            <NavBar />
-            <div className="pt-18 flex-1 overflow-hidden">{children}</div>
-            <Footer />
-
-            {/* toast */}
+            <NavChildrenFooter>{children}</NavChildrenFooter>
             <CustomToast />
           </div>
         </LoadingProvider>

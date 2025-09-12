@@ -3,7 +3,10 @@
       "home": "Home",
       "shop": "Shop",
       "contact": "Contact",
-      "signup": "Sign Up"
+      "signup": "Sign Up",
+      "signin": "Sign In",
+      "Profile": "Profile",
+      "Cart": "Cart"
     },
     "Home": {
       "MainTitle": "WE PROVIDE THE BEST OF THE SNEAKERS YOU HAVE EVER SEEN",
@@ -107,6 +110,7 @@
       "Internal server error": "Internal server error",
       "Error occured": "Error occured",
       "Some functions may not work properly": "Some functions may not work properly",
-      "Please make at least one change": "Please make at least one change"
+      "Please make at least one change": "Please make at least one change",
+      "Please sign in or sign up first": "Please sign in or sign up first!"
     }
 }

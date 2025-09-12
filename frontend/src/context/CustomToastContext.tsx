@@ -15,7 +15,7 @@ interface Toast {
 interface CustomToastContextType {
   toasts: Toast[];
   showToast: {
-    (type: Exclude<ToastType, "loading">, title: string, message: string): void;
+    (type: ToastType, title: string, message?: string): void;
     (type: "loading", message: string): void;
   };
   removeToast: (id: string) => void;
