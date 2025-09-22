@@ -1,4 +1,4 @@
-import api, { setAccessToken } from "@/lib/api";
+import api, { setAccessToken, clearAccessToken } from "@/lib/api";
 
 export async function registerUser(data: {
   name: string;
@@ -23,6 +23,7 @@ export async function loginUser(data: { email: string; password: string }) {
 }
 
 export async function logoutUser() {
+  clearAccessToken();
   await api.post("/auth/logout");
 }
 

@@ -7,14 +7,7 @@ import {
   registerUser,
 } from "@/services/auth";
 import { usePathname } from "next/navigation";
-
-type User = {
-  user: {
-    id: number;
-    email: string;
-    name: string;
-  };
-};
+import { User } from "@/types/types";
 
 type AuthContextType = {
   user: User | null;
@@ -46,8 +39,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   );
 
   useEffect(() => {
-    if (pathname.startsWith("/auth")) return;
-
     getProfile()
       .then((u) => setUser(u))
       .catch(() => setUser(null))

@@ -58,7 +58,10 @@ export default function AuthClient() {
   }, [error]); // eslint-disable-line
 
   useEffect(() => {
-    if (success) {
+    if (
+      success &&
+      (success === "login" || success === "signup" || success === "logout")
+    ) {
       showToast(
         "success",
         toastT("Successfull"),
@@ -70,8 +73,8 @@ export default function AuthClient() {
             : "Come back anytime"
         )
       );
-      if (success === "signup" || success === "login") router.push("/");
       setSuccess(null);
+      if (success === "signup" || success === "login") router.push("/");
     }
   }, [success]); // eslint-disable-line
 

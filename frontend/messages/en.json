@@ -6,7 +6,8 @@
       "signup": "Sign Up",
       "signin": "Sign In",
       "Profile": "Profile",
-      "Cart": "Cart"
+      "Cart": "Cart",
+      "Logout": "Logout"
     },
     "Home": {
       "MainTitle": "WE PROVIDE THE BEST OF THE SNEAKERS YOU HAVE EVER SEEN",
@@ -111,6 +112,7 @@
       "Error occured": "Error occured",
       "Some functions may not work properly": "Some functions may not work properly",
       "Please make at least one change": "Please make at least one change",
-      "Please sign in or sign up first": "Please sign in or sign up first!"
+      "Please sign in or sign up first": "Please sign in or sign up first!",
+      "Come back anytime": "Come back anytime"
     }
 }

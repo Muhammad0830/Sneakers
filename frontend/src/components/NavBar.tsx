@@ -4,11 +4,12 @@ import { Search, ShoppingCart, Globe, Moon, Sun, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import LinkComponent from "./ui/Link";
 import SimpleButton from "@/components/ui/SimpleButton";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useCustomToast } from "@/context/CustomToastContext";
+import ProfileButton from "./ProfileButton";
 
 const logo = "SNEAKER";
 
@@ -43,7 +44,6 @@ const NavBar = () => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const { user } = useAuth();
-  const router = useRouter();
   const [width, setWidth] = useState<number | null>(null);
   const { showToast } = useCustomToast();
 
@@ -70,13 +70,6 @@ const NavBar = () => {
   }, []);
 
   if (!mounted) return null;
-
-  const profileText = user?.user.name
-    .split(" ")
-    .map((n, index) => (index < 2 ? n[0] : null)) // get first letters of first two words
-    .filter(Boolean) // remove null values
-    .join("")
-    .toUpperCase();
 
   return (
     <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/50 backdrop-blur-xs py-4 lg:px-6 px-4 flex items-center justify-between shadow-gray-500/20 shadow-lg">
@@ -195,38 +188,20 @@ const NavBar = () => {
               </button>
             </div>
             {user && (width ? width >= 1024 : true) ? (
-              <button
-                onClick={() => router.push("/profile")}
-                className="aspect-square h-9 rounded-full flex items-center justify-center cursor-pointer bg-primary"
-              >
-                <span
-                  className={cn(
-                    "text-white font-bold",
-                    profileText?.length === 1 ? "text-[16px]" : "text-[14px]"
-                  )}
-                >
-                  {profileText}
-                </span>
-              </button>
+              <ProfileButton user={user} />
             ) : null}
           </div>
 
           {/* just for mobile and Tablet */}
           <div className="flex items-center gap-2 justify-end lg:hidden">
+            <SimpleButton
+              onClick={() => setOpen((prev) => !prev)}
+              className="lg:hidden flex justify-center items-center"
+            >
+              <Menu size={30} color="var(--color-varBlack)" />
+            </SimpleButton>
             {user && (width ? width <= 1024 : true) ? (
-              <button
-                onClick={() => router.push("/profile")}
-                className="aspect-square h-9 rounded-full flex items-center justify-center cursor-pointer bg-primary"
-              >
-                <span
-                  className={cn(
-                    "text-white font-bold",
-                    profileText?.length === 1 ? "text-[16px]" : "text-[14px]"
-                  )}
-                >
-                  {profileText}
-                </span>
-              </button>
+              <ProfileButton user={user} />
             ) : (
               <div className="text-md sm:hidden">
                 <LinkComponent href={"/auth?mode=signup"}>
@@ -234,12 +209,6 @@ const NavBar = () => {
                 </LinkComponent>
               </div>
             )}
-            <SimpleButton
-              onClick={() => setOpen((prev) => !prev)}
-              className="lg:hidden flex justify-center items-center"
-            >
-              <Menu size={30} color="var(--color-varBlack)" />
-            </SimpleButton>
           </div>
         </div>
       </div>
