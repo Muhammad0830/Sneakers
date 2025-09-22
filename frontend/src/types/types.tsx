@@ -68,3 +68,11 @@ export interface ProductsDataProps {
   data: Product[];
   hasMore?: boolean;
 }
+
+export type User = {
+  user: {
+    id: number;
+    email: string;
+    name: string;
+  };
+};

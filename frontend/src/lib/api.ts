@@ -7,6 +7,10 @@ export const setAccessToken = (at: string) => {
   accessToken = at;
 };
 
+export const clearAccessToken = () => {
+  accessToken = null;
+};
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:10000",
   withCredentials: true,
