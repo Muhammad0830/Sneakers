@@ -126,5 +126,12 @@
       "Favourites": "Favourites",
       "Go to the Cart": "Go to the Cart",
       "Save": "Save"
+    }, 
+    "cart": {
+      "Home": "Home",
+      "PathName": "PathName",
+      "Cart": "Cart",
+      "Profile": "Profile"
+
     }
 }
