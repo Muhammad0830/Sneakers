@@ -1,9 +1,9 @@
+"use client";
 import { useCustomToast } from "@/context/CustomToastContext";
+import api from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
-
-const BaseURL = `${process.env.NEXT_PUBLIC_API_URL}`;
 
 const useApiQuery = <T,>(
   url: string,
@@ -17,16 +17,8 @@ const useApiQuery = <T,>(
   const { data, error, isLoading, refetch, isError } = useQuery<T>({
     queryKey: Array.isArray(key) ? key : [key],
     queryFn: async () => {
-      const response = await fetch(`${BaseURL}${url}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      return response.json();
+      const response = await api.get(url);
+      return response.data;
     },
     retry: 1,
     enabled: enabled,
