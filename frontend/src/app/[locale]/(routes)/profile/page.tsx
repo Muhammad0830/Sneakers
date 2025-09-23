@@ -16,7 +16,6 @@ const Profile = () => {
   const [name, setName] = useState("");
   const t = useTranslations("Profile");
   const toastT = useTranslations("Toast");
-  // const { user } = useAuth();
   const router = useRouter();
   const { showToast } = useCustomToast();
 
