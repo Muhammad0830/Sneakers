@@ -113,6 +113,18 @@
       "Some functions may not work properly": "Some functions may not work properly",
       "Please make at least one change": "Please make at least one change",
       "Please sign in or sign up first": "Please sign in or sign up first!",
-      "Come back anytime": "Come back anytime"
+      "Come back anytime": "Come back anytime",
+      "Your profile has been updated": "Your profile has been updated"
+    },
+    "Profile": {
+      "Home": "Home",
+      "PathName": "PathName",
+      "Profile": "Profile",
+      "Your Profile": "Your Profile",
+      "Upload Profile Picture": "Upload Profile Picture",
+      "Edit Name": "Edit Name",
+      "Favourites": "Favourites",
+      "Go to the Cart": "Go to the Cart",
+      "Save": "Save"
     }
 }

@@ -23,3 +23,10 @@ export async function createUser(
   );
   return res.insertId as number;
 }
+
+export async function updateUser(id: number, name: string) {
+  const res = await query(`UPDATE users SET name = :name WHERE id = :id`, {
+    id: id,
+    name: name,
+  });
+}

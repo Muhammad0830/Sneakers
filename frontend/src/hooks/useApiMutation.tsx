@@ -1,3 +1,4 @@
+"use client";
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import api from "@/lib/api";
 import { useTranslations } from "next-intl";

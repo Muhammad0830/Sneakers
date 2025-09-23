@@ -10,7 +10,7 @@ const NavChildrenFooter = ({ children }: { children: React.ReactNode }) => {
   if (loading) return null;
 
   return (
-    <div>
+    <div className="min-h-screen flex flex-col justify-between">
       <NavBar />
       <div className="pt-18 flex-1 overflow-hidden">{children}</div>
       <Footer />
