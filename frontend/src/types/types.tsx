@@ -58,6 +58,7 @@ export interface Product {
   discount_value?: string;
   sale_to?: string;
   sale_from?: string;
+  is_liked?: boolean;
 }
 
 export interface ProductsDataProps {

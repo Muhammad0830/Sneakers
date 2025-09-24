@@ -2,7 +2,7 @@ import express from "express";
 import { createPool } from "../db/mysql";
 import { query } from "../middlewares/helper";
 import { Product, Trending, Testimonial } from "../types/snaekers";
-const pool = createPool();
+import { optionalAuth, requireAuth } from "../middlewares/auth";
 
 const sneakersRouter = express.Router();
 
@@ -132,39 +132,69 @@ sneakersRouter.get("/", async (req: any, res: any) => {
   }
 });
 
-sneakersRouter.get("/product/:id", async (req: any, res: any) => {
-  try {
-    const id = parseInt(req.params.id as string);
-    const data = await query<Product[]>(
-      `SELECT p.*, COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from 
+sneakersRouter.get(
+  "/product/:id",
+  optionalAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const id = parseInt(req.params.id as string);
+      const userId = req.user?.userId ?? null;
+      console.log("userId", userId);
+
+      let data;
+
+      if (!userId) {
+        data = await query<Product[]>(
+          `SELECT p.*,
+        COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from 
         FROM products as p
         LEFT JOIN on_sale as s ON p.id = s.product_id
+        AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
         WHERE p.id = :id`,
-      {
-        id,
+          {
+            id,
+          }
+        );
+      } else {
+        data = await query<Product[]>(
+          `SELECT p.*,
+        case when f.id is not null then 1 else 0 end as is_liked,
+        COALESCE(s.discount_type, NULL) as discount_type, COALESCE(s.discount_value, NULL) as discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from 
+        FROM products as p
+        LEFT JOIN on_sale as s ON p.id = s.product_id
+        AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
+        left join favouriteProducts f on p.id = f.productId and f.userId = :userId
+        WHERE p.id = :id`,
+          {
+            id,
+            userId,
+          }
+        );
       }
-    );
 
-    if (data.length <= 0) {
-      return res.status(404).json({ message: "no data found" });
-    }
+      console.log("data", data);
 
-    const finalColors = data[0].color.split(", ");
-    const finalSizes = data[0].size.split(", ");
+      if (data.length <= 0) {
+        return res.status(404).json({ message: "no data found" });
+      }
 
-    res.status(200).json({
-      ...data[0],
-      color: finalColors,
-      size: finalSizes,
-    });
-  } catch (err: any) {
-    if (res.status) {
-      res.status(500).json({ message: err.message });
-    } else {
-      throw new Error(err.message);
+      const finalColors = data[0].color.split(", ");
+      const finalSizes = data[0].size.split(", ");
+
+      res.status(200).json({
+        ...data[0],
+        color: finalColors,
+        size: finalSizes,
+      });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
     }
   }
-});
+);
 
 sneakersRouter.get("/trending", async (req: any, res: any) => {
   try {
@@ -196,6 +226,60 @@ sneakersRouter.get("/testimonials", async (req: any, res: any) => {
   } catch (err: any) {
     if (res.status) {
       return res.status(500).json({ message: err.message });
+    } else {
+      throw new Error(err.message);
+    }
+  }
+});
+
+sneakersRouter.post("/product/like", async (req: any, res: any) => {
+  try {
+    const { id, userId } = req.body;
+
+    if (!id || !userId) {
+      return res.status(400).json({ message: "invalid request" });
+    }
+
+    const data = await query(
+      `INSERT INTO favouriteProducts (productId, userId) 
+      VALUES (:productId, :userId)`,
+      {
+        productId: id,
+        userId: userId,
+      }
+    );
+
+    return res.status(200).json({ message: "success" });
+  } catch (err: any) {
+    if (res.status) {
+      res.status(500).json({ message: err.message });
+    } else {
+      throw new Error(err.message);
+    }
+  }
+});
+
+sneakersRouter.post("/product/unlike", async (req: any, res: any) => {
+  try {
+    const { id, userId } = req.body;
+
+    if (!id || !userId) {
+      return res.status(400).json({ message: "invalid request" });
+    }
+
+    const data = await query(
+      `DELETE FROM favouriteProducts 
+      WHERE productId = :productId AND userId = :userId`,
+      {
+        productId: id,
+        userId: userId,
+      }
+    );
+
+    res.status(200).json({ message: "success" });
+  } catch (err: any) {
+    if (res.status) {
+      res.status(500).json({ message: err.message });
     } else {
       throw new Error(err.message);
     }

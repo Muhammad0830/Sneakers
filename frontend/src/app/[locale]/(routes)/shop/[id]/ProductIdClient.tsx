@@ -9,6 +9,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
   ArrowRight,
+  Heart,
   MessageCircle,
   ShoppingCart,
   Star,
@@ -20,6 +21,8 @@ import Image from "next/image";
 import { notFound, useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import LocalData from "@/data_frontend/data.json";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { useAuth } from "@/context/AuthContext";
 
 const ProductIdClient = () => {
   const params = useParams();
@@ -34,14 +37,41 @@ const ProductIdClient = () => {
   const LocalProduct: Product | undefined = LocalData.products.find(
     (p) => p.id === Number(id)
   );
+  const [liked, setLiked] = useState(false);
+  const [rated, setRated] = useState(false);
+  const [likeDialog, setLikeDialog] = useState(false);
 
-  const productT = useTranslations("Product");
+  const { user } = useAuth();
 
-  const { showLoadingToast, hideLoadingToast } = useCustomToast();
+  const t = useTranslations("Product");
+  const toastT = useTranslations("Toast");
 
-  const { data, isLoading, isError } = useApiQuery<Product>(`/sneakers/product/${id}`, [
-    "Sneakers",
-  ]);
+  const { showLoadingToast, hideLoadingToast, showToast } = useCustomToast();
+
+  const { data, isLoading, isError } = useApiQuery<Product>(
+    `/sneakers/product/${id}`,
+    ["Sneakers"]
+  );
+
+  const { mutate: likeProduct } = useApiMutation<
+    {
+      message: string;
+    },
+    {
+      id: number;
+      userId: number;
+    }
+  >("/sneakers/product/like", "post");
+
+  const { mutate: unlikeProduct } = useApiMutation<
+    {
+      message: string;
+    },
+    {
+      id: number;
+      userId: number;
+    }
+  >("/sneakers/product/unlike", "post");
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -55,6 +85,7 @@ const ProductIdClient = () => {
   useEffect(() => {
     if (data) {
       setProduct(data);
+      if (data.is_liked !== undefined) setLiked(data.is_liked);
     } else {
       setProduct(LocalProduct);
     }
@@ -70,6 +101,75 @@ const ProductIdClient = () => {
     if (isLoading) showLoadingToast("Loading the data");
     else setTimeout(() => hideLoadingToast(), 1000);
   }, [isLoading]); // eslint-disable-line
+
+  const handleAddToCart = () => {
+    console.log("add to cart");
+  };
+
+  const handleLikeAction = () => {
+    if (user?.user?.id) {
+      if (!liked) {
+        likeProduct(
+          { id: Number(id), userId: user.user.id },
+          {
+            onSuccess: () => {
+              setLiked(true);
+              showToast(
+                "success",
+                toastT("Success"),
+                toastT("You liked this product")
+              );
+            },
+            onError: (data) => {
+              showToast(
+                "error",
+                toastT("Error"),
+                toastT("Internal server error")
+              );
+              console.error("liking error", data.message);
+            },
+          }
+        );
+      } else {
+        unlikeProduct(
+          { id: Number(id), userId: user.user.id },
+          {
+            onSuccess: () => {
+              setLiked(false);
+              showToast(
+                "success",
+                toastT("Success"),
+                toastT("You liked this product")
+              );
+            },
+            onError: (data) => {
+              showToast(
+                "error",
+                toastT("Error"),
+                toastT("Internal server error")
+              );
+              console.error("unliking error", data.message);
+            },
+          }
+        );
+      }
+    } else {
+      showToast(
+        "info",
+        toastT("To make this action"),
+        toastT("Please sign in or sign up first")
+      );
+    }
+  };
+
+  const handleRate = () => {
+    console.log("rate");
+    setRated(!rated);
+  };
+
+  const handleComment = () => {
+    console.log("comment");
+  };
 
   if (!id) return notFound();
 
@@ -166,7 +266,9 @@ const ProductIdClient = () => {
             </div>
             <div className="flex items-center justify-between gap-2">
               <div>
-                <div className="sm:text-[16px] text-[12px]">Choose a size</div>
+                <div className="sm:text-[16px] text-[12px]">
+                  {t("Choose a size")}
+                </div>
                 <div className="flex gap-1 items-center mb-1">
                   {product.size.map((size, index) => {
                     return (
@@ -201,7 +303,9 @@ const ProductIdClient = () => {
               </div>
             </div>
             <div>
-              <div className="sm:text-[16px] text-[12px]">Choose a color</div>
+              <div className="sm:text-[16px] text-[12px]">
+                {t("Choose a color")}
+              </div>
               <div className="flex items-center gap-1.5">
                 {product.color.map((color, index) => {
                   return (
@@ -239,29 +343,59 @@ const ProductIdClient = () => {
             </div>
             <div className="flex items-center justify-between gap-2 lg:font-bold lg:text-lg sm:text-[16px] text-[14px]">
               <span>
-                Delivery: <span className="text-primary">Free</span>
+                {t("Delivery")}:{" "}
+                <span className="text-primary">{t("Free")}</span>
               </span>
-              <span>For {product.gender}</span>
+              <span>{t(`For ${product.gender}`)}</span>
             </div>
-            <div className="flex sm:justify-center justify-between items-center gap-2">
-              <button className="lg:rounded-md rounded-sm lg:px-3 lg:py-2 px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all">
+            <div className="flex sm:justify-center justify-between items-center lg:gap-2 gap-1">
+              <button
+                onClick={() => handleAddToCart()}
+                className="rounded-sm px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
+              >
                 <span className="lg:text-[16px] text-[12px] text-white font-semibold">
-                  Add to Cart
+                  {t("Add to Cart")}
                 </span>
                 <ShoppingCart size={18} color="white" />
               </button>
-              <div className="flex items-center gap-2">
-                <button className="lg:rounded-md rounded-sm lg:px-3 lg:py-2 px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all">
+              <div className="flex items-center lg:gap-2 gap-1">
+                <button
+                  onClick={() => handleRate()}
+                  className="rounded-sm lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
+                >
                   <span className="lg:block hidden text-white font-semibold">
-                    Rate
+                    {t("Rate")}
                   </span>
-                  <ThumbsUp size={18} color="white" />
+                  <ThumbsUp
+                    size={18}
+                    color="white"
+                    fill={rated ? "white" : "transparent"}
+                  />
                 </button>
-                <button className="lg:rounded-md rounded-sm lg:px-3 lg:py-2 px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all">
+                <button
+                  onClick={() => handleComment()}
+                  className="rounded-sm lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
+                >
                   <span className="lg:block hidden text-white font-semibold">
-                    Comment
+                    {t("Comment")}
                   </span>
                   <MessageCircle size={18} color="white" />
+                </button>
+                <button
+                  onClick={() => {
+                    if (!liked) {
+                      handleLikeAction();
+                    } else {
+                      setLikeDialog(true);
+                    }
+                  }}
+                  className="rounded-sm self-stretch lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
+                >
+                  <Heart
+                    size={18}
+                    color="white"
+                    fill={liked ? "white" : "transparent"}
+                  />
                 </button>
               </div>
             </div>
@@ -403,7 +537,7 @@ const ProductIdClient = () => {
             <Dialog>
               <DialogTrigger asChild>
                 <span className="text-primary md:text-[16px] text-xs font-semibold cursor-pointer">
-                  {productT("See All")}
+                  {t("See All")}
                 </span>
               </DialogTrigger>
               <DialogContent className="sm:min-w-[80vw] w-auto min-w-[300px] max-h-[80svh] overflow-auto">
@@ -517,6 +651,33 @@ const ProductIdClient = () => {
 
       {/* recommended products */}
       <RecommendedProducts />
+
+      {/* like dialog */}
+      <Dialog open={likeDialog} onOpenChange={setLikeDialog}>
+        <DialogContent
+          className="w-[300px] p-4"
+          aria-description="are you sure to unlike"
+        >
+          <DialogTitle>{t("You are unliking this product?")}</DialogTitle>
+          <div className="flex gap-2 justify-between items-center">
+            <button
+              onClick={() => {
+                handleLikeAction();
+                setLikeDialog(false);
+              }}
+              className="cursor-pointer px-2 py-0.5 rounded-sm border border-primary text-primary bg-white dark:bg-black"
+            >
+              {t("Yes")}
+            </button>
+            <button
+              onClick={() => setLikeDialog(false)}
+              className="cursor-pointer px-2 py-0.5 rounded-sm text-white bg-primary"
+            >
+              {t("Close")}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

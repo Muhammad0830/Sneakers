@@ -3,7 +3,7 @@
 import React from "react";
 import { Product } from "@/types/types";
 import Image from "next/image";
-import { MessageCircle, Star, StarIcon, ThumbsUp } from "lucide-react";
+import { Heart, MessageCircle, Star, StarIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -183,7 +183,7 @@ const ProductCard = ({ product }: { product: Product }) => {
           <div className="absolute cardButtonsWrapper -translate-y-[0%] top-0 py-1 z-0 left-0 right-0 bg-transparent transition-transform duration-200 flex items-center justify-between">
             <div className="flex items-center gap-2 ml-[2px]">
               <div className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-transform duration-300">
-                <ThumbsUp size={16} color="black" />
+                <Heart size={16} color="black" />
               </div>
               <div className="p-1 cursor-pointer rounded-2xl bg-white text-black border-1 border-black/20 dark:border-transparent cardButtons translate-y-[150%] transition-transform duration-300 delay-75">
                 <MessageCircle size={16} color="black" />
