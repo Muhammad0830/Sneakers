@@ -88,7 +88,8 @@
       "Delivery: Free": "Delivery: Free",
       "Yes": "Yes",
       "Close": "Close",
-      "You are unliking this product?": "You are unliking this product?"
+      "You are unliking this product?": "You are unliking this product?",
+      "Cancel": "Cancel"
     },
     "Auth": {
       "SignUp": "Sign Up",
@@ -133,7 +134,8 @@
       "Come back anytime": "Come back anytime",
       "Your profile has been updated": "Your profile has been updated",
       "You liked this product": "You liked this product",
-      "You unliked this product": "You unliked this product"
+      "You unliked this product": "You unliked this product",
+      "Rated successfully": "Rated successfully"
     },
     "Profile": {
       "Home": "Home",

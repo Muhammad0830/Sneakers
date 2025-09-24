@@ -3,7 +3,12 @@ import { createPool } from "../db/mysql";
 import { query } from "../middlewares/helper";
 import { Product, Trending, Testimonial } from "../types/snaekers";
 import { optionalAuth, requireAuth } from "../middlewares/auth";
-import { AddToCart, LikeProduct, UnLikeProduct } from "../models/product";
+import {
+  AddToCart,
+  LikeProduct,
+  RateProduct,
+  UnLikeProduct,
+} from "../models/product";
 
 const sneakersRouter = express.Router();
 
@@ -161,6 +166,7 @@ sneakersRouter.get(
       const userId = req.user?.userId ?? null;
 
       let data;
+      let inCartProducts;
 
       if (!userId) {
         data = await query<Product[]>(
@@ -178,26 +184,28 @@ sneakersRouter.get(
         data = await query<Product[]>(
           `SELECT p.*,
             case when f.id is not null then 1 else 0 end as is_liked,
-            COALESCE(s.discount_type, NULL) as discount_type, COALESCE(s.discount_value, NULL) as discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from 
+            COALESCE(s.discount_type, NULL) as discount_type, COALESCE(s.discount_value, NULL) as discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from,
+            rp.rating as ratedByUser
             FROM products as p
             LEFT JOIN on_sale as s ON p.id = s.product_id
             AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
             left join favouriteProducts f on p.id = f.productId and f.userId = :userId
+            left join ratedProducts rp on p.id = rp.productId and rp.userId = :userId
             WHERE p.id = :id`,
           {
             id,
             userId,
           }
         );
-      }
 
-      const inCartProducts = await query(
-        `SELECT size, color, quantity FROM inCartProducts WHERE productId = :productId and userId = :userId`,
-        {
-          productId: id,
-          userId,
-        }
-      );
+        inCartProducts = await query(
+          `SELECT size, color, quantity FROM inCartProducts WHERE productId = :productId and userId = :userId`,
+          {
+            productId: id,
+            userId,
+          }
+        );
+      }
 
       if (data.length <= 0) {
         return res.status(404).json({ message: "no data found" });
@@ -307,6 +315,26 @@ sneakersRouter.post("/product/addtocart", async (req: any, res: any) => {
     }
 
     await AddToCart(productId, userId, quantity, size, color);
+
+    return res.status(200).json({ message: "success" });
+  } catch (err: any) {
+    if (res.status) {
+      res.status(500).json({ message: err.message });
+    } else {
+      throw new Error(err.message);
+    }
+  }
+});
+
+sneakersRouter.post("/product/rate", async (req: any, res: any) => {
+  try {
+    const { id, userId, rating } = req.body;
+
+    if (!id || !userId || !rating) {
+      return res.status(400).json({ message: "invalid request" });
+    }
+
+    await RateProduct(id, userId, rating);
 
     return res.status(200).json({ message: "success" });
   } catch (err: any) {
