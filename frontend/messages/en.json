@@ -72,7 +72,23 @@
       "Loading the data": "Loading the data..."
     },
     "Product": {
-      "See All": "See All"
+      "See All": "See All",
+      "Choose a size": "Choose a size",
+      "Choose a color": "Choose a color",
+      "Add to Cart": "Add to Cart",
+      "Like": "Like",
+      "Rate": "Rate",
+      "Comment": "Comment",
+      "Delivery": "Delivery",
+      "Free": "Free",
+      "For men": "For Men",
+      "For women": "For Women",
+      "For kids": "For Kids",
+      "On Sale": "On Sale",
+      "Delivery: Free": "Delivery: Free",
+      "Yes": "Yes",
+      "Close": "Close",
+      "You are unliking this product?": "You are unliking this product?"
     },
     "Auth": {
       "SignUp": "Sign Up",
@@ -112,9 +128,12 @@
       "Error occured": "Error occured",
       "Some functions may not work properly": "Some functions may not work properly",
       "Please make at least one change": "Please make at least one change",
+      "To make this action": "To make this action",
       "Please sign in or sign up first": "Please sign in or sign up first!",
       "Come back anytime": "Come back anytime",
-      "Your profile has been updated": "Your profile has been updated"
+      "Your profile has been updated": "Your profile has been updated",
+      "You liked this product": "You liked this product",
+      "You unliked this product": "You unliked this product"
     },
     "Profile": {
       "Home": "Home",
