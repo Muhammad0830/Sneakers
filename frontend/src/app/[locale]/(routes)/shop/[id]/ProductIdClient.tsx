@@ -12,7 +12,6 @@ import {
   Heart,
   MessageCircle,
   Star,
-  ThumbsUp,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
@@ -23,6 +22,7 @@ import LocalData from "@/data_frontend/data.json";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useAuth } from "@/context/AuthContext";
 import AddToCart from "@/components/AddToCart";
+import RateDropdown from "@/components/RateDropdown";
 
 type ProductIdClientLikeProps = {
   id: number;
@@ -35,6 +35,12 @@ type ProductIdClientMutateProps = {
   quantity: number;
   size: string;
   color: string;
+};
+
+type ProductIdClientRateProps = {
+  id: number;
+  userId: number;
+  rating: number;
 };
 
 type ResponseProps = {
@@ -58,6 +64,7 @@ const ProductIdClient = () => {
   const [rated, setRated] = useState(false);
   const [addedToCart, setAddedToCart] = useState(0);
   const [inCartProducts, setInCartProducts] = useState<inCartProducts[]>([]);
+  const [rating, setRating] = useState(1);
 
   const { user } = useAuth();
 
@@ -94,6 +101,11 @@ const ProductIdClient = () => {
     ProductIdClientMutateProps
   >("/sneakers/product/addToCart", "post");
 
+  const { mutate: rateProduct } = useApiMutation<
+    ResponseProps,
+    ProductIdClientRateProps
+  >("/sneakers/product/rate", "post");
+
   useEffect(() => {
     setWidth(window.innerWidth);
 
@@ -110,6 +122,13 @@ const ProductIdClient = () => {
       setSelectedSize(data.size[0]);
       if (data.is_liked !== undefined) setLiked(data.is_liked);
       if (data.inCartProducts) setInCartProducts(data.inCartProducts);
+      if (data.ratedByUser) {
+        setRating(data.ratedByUser);
+        setRated(true);
+      } else {
+        setRating(1);
+        setRated(false);
+      }
     } else {
       setProduct(LocalProduct);
     }
@@ -226,8 +245,29 @@ const ProductIdClient = () => {
   };
 
   const handleRate = () => {
-    console.log("rate");
-    setRated(!rated);
+    if (user?.user?.id) {
+      rateProduct(
+        { id: Number(id), userId: user.user.id, rating: rating },
+        {
+          onSuccess: () => {
+            showToast(
+              "success",
+              toastT("Success"),
+              toastT("Rated successfully")
+            );
+            setRated(true);
+          },
+          onError: (data) => {
+            showToast(
+              "error",
+              toastT("Error"),
+              toastT("Internal server error")
+            );
+            console.error("rate error", data.message);
+          },
+        }
+      );
+    } else warnAboutSignIn();
   };
 
   const handleComment = () => {
@@ -423,19 +463,12 @@ const ProductIdClient = () => {
               />
 
               <div className="flex items-center lg:gap-2 gap-1">
-                <button
-                  onClick={() => handleRate()}
-                  className="rounded-sm lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
-                >
-                  <span className="lg:block hidden text-white font-semibold">
-                    {t("Rate")}
-                  </span>
-                  <ThumbsUp
-                    size={18}
-                    color="white"
-                    fill={rated ? "white" : "transparent"}
-                  />
-                </button>
+                <RateDropdown
+                  handleRate={handleRate}
+                  rated={rated}
+                  rating={rating}
+                  setRating={setRating}
+                />
                 <button
                   onClick={() => handleComment()}
                   className="rounded-sm lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"

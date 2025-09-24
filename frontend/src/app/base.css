@@ -3,6 +3,14 @@
 *::after {
   box-sizing: border-box;
 }
+input.no-spinner::-webkit-outer-spin-button,
+input.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input.no-spinner[type="number"] {
+  -moz-appearance: textfield;
+}
 .theme-light {
   --brand-primary: rgb(138, 180, 248);
   --brand-secondary: rgb(193, 168, 226);

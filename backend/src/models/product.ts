@@ -93,3 +93,43 @@ export const AddToCart = async (
     throw new Error(err);
   }
 };
+
+export const RateProduct = async (
+  productId: number,
+  userId: number,
+  rating: number
+) => {
+  try {
+    const result = await query(
+      `SELECT * FROM ratedProducts WHERE userId = :userId AND productId = :productId`,
+      {
+        productId,
+        userId,
+      }
+    );
+
+    if (result.length > 0) {
+      await query(
+        `UPDATE ratedProducts SET rating = :rating WHERE userId = :userId AND productId = :productId`,
+        {
+          productId,
+          userId,
+          rating,
+        }
+      );
+      return;
+    }
+
+    await query(
+      `INSERT INTO ratedProducts (productId, userId, rating) VALUES (:productId, :userId, :rating)`,
+      {
+        productId,
+        userId,
+        rating,
+      }
+    );
+    return;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};

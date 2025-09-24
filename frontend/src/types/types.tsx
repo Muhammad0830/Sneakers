@@ -66,6 +66,7 @@ export interface Product {
   sale_from?: string;
   is_liked?: boolean;
   inCartProducts?: inCartProducts[];
+  ratedByUser?: number;
 }
 
 export interface ProductsDataProps {
