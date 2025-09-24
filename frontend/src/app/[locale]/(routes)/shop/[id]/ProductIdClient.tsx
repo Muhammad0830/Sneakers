@@ -4,14 +4,13 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useCustomToast } from "@/context/CustomToastContext";
 import useApiQuery from "@/hooks/useApiQuery";
 import { cn } from "@/lib/utils";
-import { Product } from "@/types/types";
+import { inCartProducts, Product } from "@/types/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import {
   ArrowLeft,
   ArrowRight,
   Heart,
   MessageCircle,
-  ShoppingCart,
   Star,
   ThumbsUp,
 } from "lucide-react";
@@ -23,6 +22,24 @@ import React, { useEffect, useRef, useState } from "react";
 import LocalData from "@/data_frontend/data.json";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useAuth } from "@/context/AuthContext";
+import AddToCart from "@/components/AddToCart";
+
+type ProductIdClientLikeProps = {
+  id: number;
+  userId: number;
+};
+
+type ProductIdClientMutateProps = {
+  id: number;
+  userId: number;
+  quantity: number;
+  size: string;
+  color: string;
+};
+
+type ResponseProps = {
+  message: string;
+};
 
 const ProductIdClient = () => {
   const params = useParams();
@@ -39,7 +56,8 @@ const ProductIdClient = () => {
   );
   const [liked, setLiked] = useState(false);
   const [rated, setRated] = useState(false);
-  const [likeDialog, setLikeDialog] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(0);
+  const [inCartProducts, setInCartProducts] = useState<inCartProducts[]>([]);
 
   const { user } = useAuth();
 
@@ -48,30 +66,33 @@ const ProductIdClient = () => {
 
   const { showLoadingToast, hideLoadingToast, showToast } = useCustomToast();
 
+  const warnAboutSignIn = () => {
+    showToast(
+      "info",
+      toastT("To make this action"),
+      toastT("Please sign in or sign up first")
+    );
+  };
+
   const { data, isLoading, isError } = useApiQuery<Product>(
     `/sneakers/product/${id}`,
     ["Sneakers"]
   );
 
   const { mutate: likeProduct } = useApiMutation<
-    {
-      message: string;
-    },
-    {
-      id: number;
-      userId: number;
-    }
+    ResponseProps,
+    ProductIdClientLikeProps
   >("/sneakers/product/like", "post");
 
   const { mutate: unlikeProduct } = useApiMutation<
-    {
-      message: string;
-    },
-    {
-      id: number;
-      userId: number;
-    }
+    ResponseProps,
+    ProductIdClientLikeProps
   >("/sneakers/product/unlike", "post");
+
+  const { mutate: addToCart } = useApiMutation<
+    ResponseProps,
+    ProductIdClientMutateProps
+  >("/sneakers/product/addToCart", "post");
 
   useEffect(() => {
     setWidth(window.innerWidth);
@@ -85,7 +106,10 @@ const ProductIdClient = () => {
   useEffect(() => {
     if (data) {
       setProduct(data);
+      setSelectedColor(data.color[0]);
+      setSelectedSize(data.size[0]);
       if (data.is_liked !== undefined) setLiked(data.is_liked);
+      if (data.inCartProducts) setInCartProducts(data.inCartProducts);
     } else {
       setProduct(LocalProduct);
     }
@@ -102,8 +126,53 @@ const ProductIdClient = () => {
     else setTimeout(() => hideLoadingToast(), 1000);
   }, [isLoading]); // eslint-disable-line
 
-  const handleAddToCart = () => {
-    console.log("add to cart");
+  const handleAddToCart = (newAddedToCart: number) => {
+    const hasSelected = inCartProducts.some(
+      (p) => p.size === selectedSize && p.color === selectedColor
+    );
+
+    if (newAddedToCart === 0) {
+      setInCartProducts((prev) =>
+        prev.filter((p) => p.size !== selectedSize || p.color !== selectedColor)
+      );
+    } else {
+      if (hasSelected) {
+        setInCartProducts((prev) =>
+          prev.map((p) =>
+            p.size === selectedSize && p.color === selectedColor
+              ? { ...p, quantity: newAddedToCart }
+              : p
+          )
+        );
+      } else {
+        setInCartProducts((prev) => [
+          ...prev,
+          { size: selectedSize, color: selectedColor, quantity: 1 },
+        ]);
+      }
+    }
+
+    if (user?.user?.id) {
+      addToCart(
+        {
+          id: Number(id),
+          userId: user.user.id,
+          quantity: newAddedToCart,
+          size: selectedSize || product?.size[0] || "",
+          color: selectedColor || product?.color[0] || "",
+        },
+        {
+          onError: (data) => {
+            showToast(
+              "error",
+              toastT("Error"),
+              toastT("Internal server error")
+            );
+            console.error("adding to cart error", data.message);
+          },
+        }
+      );
+    }
   };
 
   const handleLikeAction = () => {
@@ -139,7 +208,7 @@ const ProductIdClient = () => {
               showToast(
                 "success",
                 toastT("Success"),
-                toastT("You liked this product")
+                toastT("You unliked this product")
               );
             },
             onError: (data) => {
@@ -153,13 +222,7 @@ const ProductIdClient = () => {
           }
         );
       }
-    } else {
-      showToast(
-        "info",
-        toastT("To make this action"),
-        toastT("Please sign in or sign up first")
-      );
-    }
+    } else warnAboutSignIn();
   };
 
   const handleRate = () => {
@@ -349,15 +412,16 @@ const ProductIdClient = () => {
               <span>{t(`For ${product.gender}`)}</span>
             </div>
             <div className="flex sm:justify-center justify-between items-center lg:gap-2 gap-1">
-              <button
-                onClick={() => handleAddToCart()}
-                className="rounded-sm px-2 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
-              >
-                <span className="lg:text-[16px] text-[12px] text-white font-semibold">
-                  {t("Add to Cart")}
-                </span>
-                <ShoppingCart size={18} color="white" />
-              </button>
+              <AddToCart
+                addedToCart={addedToCart}
+                handleAddToCart={handleAddToCart}
+                warnAboutSignIn={warnAboutSignIn}
+                inCartProducts={inCartProducts}
+                selectedSize={selectedSize ? selectedSize : product.size[0]}
+                selectedColor={selectedColor ? selectedColor : product.color[0]}
+                setAddedToCart={setAddedToCart}
+              />
+
               <div className="flex items-center lg:gap-2 gap-1">
                 <button
                   onClick={() => handleRate()}
@@ -383,11 +447,7 @@ const ProductIdClient = () => {
                 </button>
                 <button
                   onClick={() => {
-                    if (!liked) {
-                      handleLikeAction();
-                    } else {
-                      setLikeDialog(true);
-                    }
+                    handleLikeAction();
                   }}
                   className="rounded-sm self-stretch lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
                 >
@@ -651,33 +711,6 @@ const ProductIdClient = () => {
 
       {/* recommended products */}
       <RecommendedProducts />
-
-      {/* like dialog */}
-      <Dialog open={likeDialog} onOpenChange={setLikeDialog}>
-        <DialogContent
-          className="w-[300px] p-4"
-          aria-description="are you sure to unlike"
-        >
-          <DialogTitle>{t("You are unliking this product?")}</DialogTitle>
-          <div className="flex gap-2 justify-between items-center">
-            <button
-              onClick={() => {
-                handleLikeAction();
-                setLikeDialog(false);
-              }}
-              className="cursor-pointer px-2 py-0.5 rounded-sm border border-primary text-primary bg-white dark:bg-black"
-            >
-              {t("Yes")}
-            </button>
-            <button
-              onClick={() => setLikeDialog(false)}
-              className="cursor-pointer px-2 py-0.5 rounded-sm text-white bg-primary"
-            >
-              {t("Close")}
-            </button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };

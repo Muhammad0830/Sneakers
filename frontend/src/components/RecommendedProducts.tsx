@@ -1,3 +1,4 @@
+"use client";
 import useApiQuery from "@/hooks/useApiQuery";
 import React, { useEffect, useRef, useState } from "react";
 import { Product, ProductsDataProps } from "@/types/types";
@@ -5,6 +6,7 @@ import { useCustomToast } from "@/context/CustomToastContext";
 import { useTranslations } from "next-intl";
 import ProductCard from "./ProductCard";
 import LocalData from "@/data_frontend/data.json";
+import { usePathname } from "@/i18n/navigation";
 
 const RecommendedProducts = () => {
   const observerRef = useRef<HTMLDivElement>(null);
@@ -17,10 +19,11 @@ const RecommendedProducts = () => {
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [useLocal, setUseLocal] = useState(false);
   const hasShownDummyInfo = useRef(false);
+  const pathName = usePathname();
 
   const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
     `/sneakers/?page=${page}&limit=${limit}&fetchType=scroll`,
-    ["Sneakers", page, limit],
+    ["Sneakers", page, limit, pathName],
     !useLocal
   );
 

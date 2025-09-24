@@ -39,6 +39,12 @@ export interface Trending {
   created_at?: string;
 }
 
+export type inCartProducts = {
+  size: string;
+  color: string;
+  quantity: number;
+};
+
 export interface Product {
   id: number;
   title: string;
@@ -59,6 +65,7 @@ export interface Product {
   sale_to?: string;
   sale_from?: string;
   is_liked?: boolean;
+  inCartProducts?: inCartProducts[];
 }
 
 export interface ProductsDataProps {

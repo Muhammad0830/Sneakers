@@ -1,0 +1,95 @@
+import { query } from "../middlewares/helper";
+import { Product } from "../types/snaekers";
+
+export const LikeProduct = async (productId: number, userId: number) => {
+  try {
+    await query(
+      `INSERT INTO favouriteProducts (productId, userId) 
+      VALUES (:productId, :userId)`,
+      {
+        productId,
+        userId,
+      }
+    );
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const UnLikeProduct = async (productId: number, userId: number) => {
+  try {
+    await query(
+      `DELETE FROM favouriteProducts 
+      WHERE productId = :productId AND userId = :userId`,
+      {
+        productId,
+        userId,
+      }
+    );
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const AddToCart = async (
+  productId: number,
+  userId: number,
+  quantity: number,
+  size: string,
+  color: string
+) => {
+  try {
+    if (!quantity) {
+      await query(
+        `DELETE FROM inCartProducts WHERE userId = :userId AND productId = :productId AND size = :size AND color = :color`,
+        {
+          productId,
+          userId,
+          size,
+          color,
+        }
+      );
+
+      return;
+    }
+
+    const product = await query(
+      `SELECT * FROM inCartProducts WHERE userId = :userId AND productId = :productId AND size = :size AND color = :color`,
+      {
+        productId,
+        userId,
+        size,
+        color,
+      }
+    );
+
+    if (product.length > 0) {
+      await query(
+        `UPDATE inCartProducts SET quantity = :quantity WHERE userId = :userId AND productId = :productId AND size = :size AND color = :color`,
+        {
+          productId,
+          userId,
+          quantity,
+          size,
+          color,
+        }
+      );
+
+      return;
+    }
+
+    await query(
+      `INSERT INTO inCartProducts (productId, userId, size, color, quantity) 
+        VALUES (:productId, :userId, :size, :color, :quantity)`,
+      {
+        productId,
+        userId,
+        size,
+        color,
+        quantity,
+      }
+    );
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
