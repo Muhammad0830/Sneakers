@@ -134,18 +134,22 @@ sneakersRouter.get("/", optionalAuth, async (req: any, res: any) => {
     const total = (totalResult[0] as { count: number }).count;
     const totalPages = Math.ceil(total / limit);
 
-    const finalColors = data[0].color.split(", ");
-    const finalSizes = data[0].size.split(", ");
+    const finalColors = data
+      .filter((item: any) => item.color)
+      .map((item: any) => item.color.split(", "));
+    const finalSizes = data
+      .filter((item: any) => item.size)
+      .map((item: any) => item.size.split(", "));
 
     res.status(200).json({
       page,
       limit,
       total,
       totalPages,
-      data: data.map((item: any) => ({
+      data: data.map((item: any, index) => ({
         ...item,
-        color: finalColors,
-        size: finalSizes,
+        color: finalColors[index],
+        size: finalSizes[index],
       })),
       hasMore: fetchType === "scroll" ? offset + limit < total : false,
     });
