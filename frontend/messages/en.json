@@ -89,7 +89,12 @@
       "Yes": "Yes",
       "Close": "Close",
       "You are unliking this product?": "You are unliking this product?",
-      "Cancel": "Cancel"
+      "Cancel": "Cancel",
+      "Comment section": "Commment section",
+      "Submit": "Submit",
+      "type your comment here": "type your comment here",
+      "please type your comment to submit": "please type your comment to submit",
+      "My comments on this project": "My comments on this project"
     },
     "Auth": {
       "SignUp": "Sign Up",
@@ -135,7 +140,9 @@
       "Your profile has been updated": "Your profile has been updated",
       "You liked this product": "You liked this product",
       "You unliked this product": "You unliked this product",
-      "Rated successfully": "Rated successfully"
+      "Rated successfully": "Rated successfully",
+      "Your comment is submitted": "Your comment is submitted",
+      "Your comment is deleted": "Your comment is deleted"
     },
     "Profile": {
       "Home": "Home",

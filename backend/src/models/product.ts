@@ -182,3 +182,39 @@ export const calcProductRating = async (productId: number, rating: number) => {
     throw new Error(err);
   }
 };
+
+export const commentAboutProduct = async (
+  productId: number,
+  userId: number,
+  comment: string
+) => {
+  try {
+    const result = await query(`SELECT * FROM products WHERE id = :productId`, {
+      productId,
+    });
+
+    if (result.length <= 0) throw new Error("product not found");
+
+    await query(
+      `INSERT INTO productComments (productId, userId, comment) 
+      VALUES (:productId, :userId, :comment)`,
+      {
+        productId,
+        userId,
+        comment,
+      }
+    );
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const deleteComment = async (commentId: number) => {
+  try {
+    await query(`DELETE FROM productComments WHERE id = :commentId`, {
+      commentId,
+    });
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
