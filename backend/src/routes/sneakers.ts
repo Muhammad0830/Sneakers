@@ -5,6 +5,7 @@ import { Product, Trending, Testimonial } from "../types/snaekers";
 import { optionalAuth, requireAuth } from "../middlewares/auth";
 import {
   AddToCart,
+  calcProductRating,
   LikeProduct,
   RateProduct,
   UnLikeProduct,
@@ -335,6 +336,8 @@ sneakersRouter.post("/product/rate", async (req: any, res: any) => {
     }
 
     await RateProduct(id, userId, rating);
+
+    await calcProductRating(id, rating);
 
     return res.status(200).json({ message: "success" });
   } catch (err: any) {

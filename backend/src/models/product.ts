@@ -100,6 +100,17 @@ export const RateProduct = async (
   rating: number
 ) => {
   try {
+    const product = await query(
+      `SELECT * FROM products WHERE id = :productId`,
+      {
+        productId,
+      }
+    );
+
+    if (product.length <= 0) {
+      throw new Error("product not found");
+    }
+
     const result = await query(
       `SELECT * FROM ratedProducts WHERE userId = :userId AND productId = :productId`,
       {
@@ -129,6 +140,44 @@ export const RateProduct = async (
       }
     );
     return;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const calcProductRating = async (productId: number, rating: number) => {
+  try {
+    const result = await query(
+      `SELECT COUNT (*) as count FROM ratedProducts WHERE productId = :productId`,
+      {
+        productId,
+      }
+    );
+    const count = (result[0] as { count: number }).count;
+
+    const productCurrentRating = await query(
+      `SELECT rating FROM products where id = :productId`,
+      {
+        productId,
+      }
+    );
+    const RatingValue = (
+      productCurrentRating[0] as {
+        rating: number;
+      }
+    ).rating;
+
+    const newAverageRating = ((Number(RatingValue) + rating) / count).toFixed(
+      2
+    );
+
+    await query(
+      `UPDATE products SET rating = :newRating where id = :productId`,
+      {
+        newRating: newAverageRating,
+        productId,
+      }
+    );
   } catch (err: any) {
     throw new Error(err);
   }
