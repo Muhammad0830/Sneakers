@@ -6,6 +6,8 @@ import { optionalAuth, requireAuth } from "../middlewares/auth";
 import {
   AddToCart,
   calcProductRating,
+  commentAboutProduct,
+  deleteComment,
   LikeProduct,
   RateProduct,
   UnLikeProduct,
@@ -172,6 +174,7 @@ sneakersRouter.get(
 
       let data;
       let inCartProducts;
+      let comments;
 
       if (!userId) {
         data = await query<Product[]>(
@@ -210,6 +213,14 @@ sneakersRouter.get(
             userId,
           }
         );
+
+        comments = await query(
+          `SELECT id, comment FROM productComments WHERE productId = :productId AND userId = :userId`,
+          {
+            productId: id,
+            userId,
+          }
+        );
       }
 
       if (data.length <= 0) {
@@ -224,6 +235,7 @@ sneakersRouter.get(
         color: finalColors,
         size: finalSizes,
         inCartProducts,
+        comments,
       });
     } catch (err: any) {
       if (res.status) {
@@ -352,5 +364,48 @@ sneakersRouter.post("/product/rate", async (req: any, res: any) => {
     }
   }
 });
+
+sneakersRouter.post("/product/comment", async (req: any, res: any) => {
+  try {
+    const { id, userId, comment } = req.body;
+
+    if (!id || !userId || !comment) {
+      return res.status(400).json({ message: "invalid request" });
+    }
+    await commentAboutProduct(id, userId, comment);
+
+    return res.status(200).json({ message: "success" });
+  } catch (err: any) {
+    if (res.status) {
+      res.status(500).json({ message: err.message });
+    } else {
+      throw new Error(err.message);
+    }
+  }
+});
+
+sneakersRouter.delete(
+  "/product/comment/:id",
+  // requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const id = parseInt(req.params.id as string);
+      console.log("id", id);
+
+      if (!id) {
+        return res.status(400).json({ message: "invalid request" });
+      }
+      await deleteComment(id);
+
+      return res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
 
 export default sneakersRouter;

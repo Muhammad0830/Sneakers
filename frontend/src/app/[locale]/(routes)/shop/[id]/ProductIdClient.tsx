@@ -6,13 +6,7 @@ import useApiQuery from "@/hooks/useApiQuery";
 import { cn } from "@/lib/utils";
 import { inCartProducts, Product } from "@/types/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import {
-  ArrowLeft,
-  ArrowRight,
-  Heart,
-  MessageCircle,
-  Star,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Heart, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import Image from "next/image";
@@ -23,6 +17,7 @@ import { useApiMutation } from "@/hooks/useApiMutation";
 import { useAuth } from "@/context/AuthContext";
 import AddToCart from "@/components/AddToCart";
 import RateDropdown from "@/components/RateDropdown";
+import ProductComment from "@/components/ProductComment";
 
 type ProductIdClientLikeProps = {
   id: number;
@@ -41,6 +36,12 @@ type ProductIdClientRateProps = {
   id: number;
   userId: number;
   rating: number;
+};
+
+type ProductIdClientCommentProps = {
+  id: number;
+  userId: number;
+  comment: string;
 };
 
 type ResponseProps = {
@@ -65,6 +66,10 @@ const ProductIdClient = () => {
   const [addedToCart, setAddedToCart] = useState(0);
   const [inCartProducts, setInCartProducts] = useState<inCartProducts[]>([]);
   const [rating, setRating] = useState(1);
+  const [comments, setComments] = useState<{ comment: string; id: number }[]>(
+    []
+  );
+  const [commentSubmitted, setCommentSubmitted] = useState(false);
 
   const { user } = useAuth();
 
@@ -81,7 +86,7 @@ const ProductIdClient = () => {
     );
   };
 
-  const { data, isLoading, isError } = useApiQuery<Product>(
+  const { data, isLoading, isError, refetch } = useApiQuery<Product>(
     `/sneakers/product/${id}`,
     ["Sneakers"]
   );
@@ -106,6 +111,16 @@ const ProductIdClient = () => {
     ProductIdClientRateProps
   >("/sneakers/product/rate", "post");
 
+  const { mutate: commentProduct } = useApiMutation<
+    ResponseProps,
+    ProductIdClientCommentProps
+  >("/sneakers/product/comment", "post");
+
+  const { mutate: deleteComment } = useApiMutation<
+    ResponseProps,
+    { id: number }
+  >(({ id }) => `/sneakers/product/comment/${id}`, "delete");
+
   useEffect(() => {
     setWidth(window.innerWidth);
 
@@ -129,6 +144,7 @@ const ProductIdClient = () => {
         setRating(1);
         setRated(false);
       }
+      if (data.comments) setComments(data.comments);
     } else {
       setProduct(LocalProduct);
     }
@@ -270,8 +286,58 @@ const ProductIdClient = () => {
     } else warnAboutSignIn();
   };
 
-  const handleComment = () => {
-    console.log("comment");
+  const handleComment = (commentValue: string) => {
+    if (user?.user?.id) {
+      commentProduct(
+        { id: Number(id), userId: user.user.id, comment: commentValue },
+        {
+          onSuccess: () => {
+            showToast(
+              "success",
+              toastT("Successfull"),
+              toastT("Your comment is submitted")
+            );
+            refetch();
+            setCommentSubmitted(true);
+            setTimeout(() => setCommentSubmitted(false), 1000);
+          },
+          onError: (data) => {
+            showToast(
+              "error",
+              toastT("Error"),
+              toastT("Internal server error")
+            );
+            console.error("comment error", data.message);
+          },
+        }
+      );
+    } else warnAboutSignIn();
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    if (user?.user?.id) {
+      deleteComment(
+        { id: commentId },
+        {
+          onSuccess: () => {
+            showToast(
+              "success",
+              toastT("Successfull"),
+              toastT("Your comment is deleted")
+            );
+            setComments((prev) => prev.filter((c) => c.id !== commentId));
+          },
+          onError: (data) => {
+            showToast(
+              "error",
+              toastT("Error"),
+              toastT("Internal server error")
+            );
+            console.error("comment error", data.message);
+          },
+        }
+      );
+    } else warnAboutSignIn();
   };
 
   if (!id) return notFound();
@@ -469,15 +535,12 @@ const ProductIdClient = () => {
                   rating={rating}
                   setRating={setRating}
                 />
-                <button
-                  onClick={() => handleComment()}
-                  className="rounded-sm lg:px-2 px-1 py-1 bg-primary cursor-pointer flex items-center gap-2 border border-white shadow-[0px_0px_0px01px_var(--primary)] hover:shadow-[0px_0px_10px_1px_var(--primary)] duration-300 transition-all"
-                >
-                  <span className="lg:block hidden text-white font-semibold">
-                    {t("Comment")}
-                  </span>
-                  <MessageCircle size={18} color="white" />
-                </button>
+                <ProductComment
+                  handleComment={handleComment}
+                  handleDeleteComment={handleDeleteComment}
+                  comments={comments}
+                  submitted={commentSubmitted}
+                />
                 <button
                   onClick={() => {
                     handleLikeAction();
