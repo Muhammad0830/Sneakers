@@ -1,18 +1,150 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Product } from "@/types/types";
 import Image from "next/image";
 import { Heart, MessageCircle, Star, StarIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useCustomToast } from "@/context/CustomToastContext";
+import { useAuth } from "@/context/AuthContext";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { Dialog, DialogClose, DialogContent, DialogTitle } from "./ui/dialog";
+import { cn } from "@/lib/utils";
+
+type ProductIdClientLikeProps = {
+  id: number;
+  userId: number;
+};
+
+type ProductIdClientCommentProps = {
+  id: number;
+  userId: number;
+  comment: string;
+};
+
+type ResponseProps = {
+  message: string;
+};
 
 const ProductCard = ({ product }: { product: Product }) => {
   const colors = product.color;
   const sizes = product.size;
+  const [liked, setLiked] = useState(product.is_liked);
+  const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+  const [commentValue, setCommentValue] = useState("");
+  const [commented, setCommented] = useState(false);
+
   const { theme } = useTheme();
   const t = useTranslations("Shop");
+  const toastT = useTranslations("Toast");
+  const { showToast } = useCustomToast();
+  const { user } = useAuth();
+
+  useEffect(() => {
+    if (product.comments && product.comments.length > 0) setCommented(true);
+  }, [product]);
+
+  const warnAboutSignIn = () => {
+    showToast(
+      "info",
+      toastT("To make this action"),
+      toastT("Please sign in or sign up first")
+    );
+  };
+
+  const { mutate: likeProduct } = useApiMutation<
+    ResponseProps,
+    ProductIdClientLikeProps
+  >("/sneakers/product/like", "post");
+
+  const { mutate: unlikeProduct } = useApiMutation<
+    ResponseProps,
+    ProductIdClientLikeProps
+  >("/sneakers/product/unlike", "post");
+
+  const { mutate: commentProduct } = useApiMutation<
+    ResponseProps,
+    ProductIdClientCommentProps
+  >("/sneakers/product/comment", "post");
+
+  const handleLikeAction = () => {
+    if (user?.user?.id) {
+      if (!liked) {
+        likeProduct(
+          { id: Number(product.id), userId: user.user.id },
+          {
+            onSuccess: () => {
+              setLiked(true);
+              showToast(
+                "success",
+                toastT("Success"),
+                toastT("You liked this product")
+              );
+            },
+            onError: (data) => {
+              showToast(
+                "error",
+                toastT("Error"),
+                toastT("Internal server error")
+              );
+              console.error("liking error", data.message);
+            },
+          }
+        );
+      } else {
+        unlikeProduct(
+          { id: Number(product.id), userId: user.user.id },
+          {
+            onSuccess: () => {
+              setLiked(false);
+              showToast(
+                "success",
+                toastT("Success"),
+                toastT("You unliked this product")
+              );
+            },
+            onError: (data) => {
+              showToast(
+                "error",
+                toastT("Error"),
+                toastT("Internal server error")
+              );
+              console.error("unliking error", data.message);
+            },
+          }
+        );
+      }
+    } else warnAboutSignIn();
+  };
+
+  const handleComment = (commentValue: string) => {
+    if (user?.user?.id) {
+      commentProduct(
+        { id: Number(product.id), userId: user.user.id, comment: commentValue },
+        {
+          onSuccess: () => {
+            showToast(
+              "success",
+              toastT("Successfull"),
+              toastT("Your comment is submitted")
+            );
+            setCommentValue("");
+            setCommented(true);
+          },
+          onError: (data) => {
+            showToast(
+              "error",
+              toastT("Error"),
+              toastT("Internal server error")
+            );
+            console.error("comment error", data.message);
+          },
+        }
+      );
+    } else warnAboutSignIn();
+  };
 
   const rating = Number(product.rating).toFixed(1);
 
@@ -21,28 +153,30 @@ const ProductCard = ({ product }: { product: Product }) => {
   }
 
   return (
-    <Link href={`/shop/${product.id}`}>
-      <div className="relative">
-        <div className="productCard group relative flex justify-center gap-2">
-          <div
-            className={`flex absolute cursor-pointer z-30 justify-center items-center sm:w-[170px] sm:h-[170px] w-[100px] h-[100px] productCardImage lg:group-hover:-translate-y-[70px]
+    <div className="relative">
+      <div className="productCard group relative flex justify-center gap-2">
+        <Link
+          href={`/shop/${product.id}`}
+          className={`flex absolute cursor-pointer z-30 justify-center items-center sm:w-[170px] sm:h-[170px] w-[100px] h-[100px] productCardImage lg:group-hover:-translate-y-[70px]
        lg:group-hover:-rotate-[30deg] lg:group-hover:scale-60 transition-transform duration-300`}
-          >
-            <Image
-              src={"/sneakers.png"}
-              alt={product.title}
-              fill
-              className="object-cover"
-            />
-          </div>
-
-          {/* gender badge */}
-          <div className="absolute cursor-pointer z-30 flex capitalize top-3 font-semibold text-sm left-3 bg-primary border-primary text-white px-1 rounded-sm">
+        >
+          <Image
+            src={"/sneakers.png"}
+            alt={product.title}
+            fill
+            className="object-cover"
+          />
+        </Link>
+        {/* gender badge */}
+        <Link href={`/shop/${product.id}`} className="absolute top-3 left-3">
+          <div className="absolute cursor-pointer z-30 flex capitalize font-semibold text-sm bg-primary border-primary text-white px-1 rounded-sm">
             {product.gender}
           </div>
+        </Link>
 
-          {/* discount badge */}
-          {product.discount_type ? (
+        {/* discount badge */}
+        {product.discount_type ? (
+          <Link href={`/shop/${product.id}`}>
             <div className="absolute aspect-square px-2.5 pt-0.5 flex flex-col rounded-full rounded-bl-none justify-center items-center cursor-pointer z-30 top-0 right-0 -translate-y-[30%] translate-x-[30%] group-hover:translate-y-0 group-hover:translate-x-0 group-hover:top-3 group-hover:right-3 group-hover:rounded-bl-full bg-yellow-300 transition-all duration-300">
               <span className="text-sm font-bold  text-[#383838]">
                 {t("Sale")}
@@ -52,8 +186,13 @@ const ProductCard = ({ product }: { product: Product }) => {
                 {product.discount_type === "percentage" ? "%" : "$"}
               </span>
             </div>
-          ) : null}
+          </Link>
+        ) : null}
 
+        <Link
+          href={`/shop/${product.id}`}
+          className="w-full static flex items-center justify-center"
+        >
           <div
             style={{
               backgroundImage:
@@ -177,30 +316,96 @@ const ProductCard = ({ product }: { product: Product }) => {
               </div>
             </div>
           </div>
+        </Link>
 
-          <div className="z-10 bg-background absolute left-0 right-0 bottom-0 top-0"></div>
+        <div className="z-10 bg-background absolute left-0 right-0 bottom-0 top-0"></div>
 
-          <div className="absolute cardButtonsWrapper -translate-y-[0%] top-0 py-1 z-0 left-0 right-0 bg-transparent transition-transform duration-200 flex items-center justify-between">
-            <div className="flex items-center gap-2 ml-[2px]">
-              <div className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-transform duration-300">
-                <Heart
-                  size={16}
-                  color="black"
-                  fill={product.is_liked ? "black" : "transparent"}
-                />
-              </div>
-              <div className="p-1 cursor-pointer rounded-2xl bg-white text-black border-1 border-black/20 dark:border-transparent cardButtons translate-y-[150%] transition-transform duration-300 delay-75">
-                <MessageCircle size={16} color="black" />
-              </div>
-            </div>
-
-            <div className="flex cursor-pointer items-center gap-1 bg-white text-black border-1 border-black/20 dark:border-transparent rounded-2xl px-2 py-0.5 mr-[2px] cardButtons translate-y-[150%] transition-transform duration-300 delay-150">
-              <span className="text-sm">Quick Look</span>
-            </div>
+        <div className="absolute z-[1000] cardButtonsWrapper opacity-0 lg:flex hidden translate-y-[0%] top-0 py-1 left-0 right-0 bg-transparent transition-all duration-[350ms] items-center justify-between">
+          <div className="flex items-center gap-2 ml-[2px]">
+            <button
+              onClick={() => handleLikeAction()}
+              className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-all duration-300"
+            >
+              <Heart
+                size={16}
+                color="black"
+                fill={liked ? "black" : "transparent"}
+              />
+            </button>
+            <button
+              onClick={() => setCommentDialogOpen(true)}
+              className="p-1 cursor-pointer rounded-2xl bg-white text-black border-1 border-black/20 dark:border-transparent cardButtons translate-y-[150%] transition-all duration-300 delay-75"
+            >
+              <MessageCircle
+                size={16}
+                color="black"
+                fill={commented ? "black" : "transparent"}
+              />
+            </button>
           </div>
+
+          <Link
+            href={`/shop/${product.id}`}
+            className="flex cursor-pointer items-center gap-1 bg-white text-black border-1 border-black/20 dark:border-transparent rounded-2xl px-2 py-0.5 mr-[2px] cardButtons translate-y-[150%] transition-all duration-300 delay-150"
+          >
+            <span className="text-sm">{t("Quick Look")}</span>
+          </Link>
         </div>
       </div>
-    </Link>
+
+      <Dialog
+        open={commentDialogOpen}
+        onOpenChange={(open) => setCommentDialogOpen(open)}
+      >
+        <DialogContent
+          aria-describedby="comment modal"
+          aria-description="comment modal"
+          className="!w-[80vw] !max-w-[600px] p-4 flex flex-col gap-2 items-start"
+        >
+          <DialogTitle className="text-xl flex gap-1">
+            <span>{t("Comment section")}:</span>
+            <span>{product.title}</span>
+          </DialogTitle>
+          <div className="w-full">
+            <textarea
+              name="comment"
+              id="comment"
+              className="w-full h-40 border border-primary/50 rounded-sm p-2 text-sm sm:text-[16px] "
+              placeholder={t("type your comment here")}
+              value={commentValue}
+              onChange={(e) => setCommentValue(e.target.value)}
+            ></textarea>
+          </div>
+          <div className={cn("w-full flex items-center gap-2 justify-end")}>
+            <DialogClose asChild className="relative">
+              <button
+                disabled={commentValue.length <= 0}
+                onClick={() => {
+                  handleComment(commentValue);
+                }}
+                className={cn(
+                  "px-2 py-0.5 rounded-sm bg-primary text-white font-semibold group",
+                  commentValue.length <= 0
+                    ? "bg-primary/50 text-white/50 cursor-default"
+                    : "bg-primary cursor-pointer"
+                )}
+              >
+                {t("Submit")}
+
+                <div
+                  className={cn(
+                    "absolute left-0 top-[115%] px-2 py-1 min-w-[250px] group-hover:scale-[1] group-hover:opacity-100 opacity-0 scale-[0] text-foreground text-start text-[13px] rounded-sm bg-background border border-foreground/20 transition-opacity duration-200",
+                    commentValue.length <= 0 ? "flex" : "hidden"
+                  )}
+                >
+                  {t("please type your comment to submit")}
+                </div>
+              </button>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };
 
