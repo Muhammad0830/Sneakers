@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 export const ColorFilter = ({
   selected,
   setSelected,
@@ -5,6 +7,7 @@ export const ColorFilter = ({
   selected: string[];
   setSelected: (values: string[]) => void;
 }) => {
+  const t = useTranslations("Shop");
   const colors = [
     { color: "White", hex: "#ffffff" },
     { color: "Black", hex: "#000000" },
@@ -41,7 +44,7 @@ export const ColorFilter = ({
             htmlFor={color.color}
             className="cursor-pointer select-none text-nowrap md:text-md text-sm"
           >
-            {color.color}
+            {t(color.color)}
           </label>
           <div
             className={`absolute top-0 bottom-0 left-0 right-0 -z-10 translate-x-[100%] peer-checked:translate-x-[0%] transition-transform duration-300`}

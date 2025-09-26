@@ -88,7 +88,7 @@ const ProductIdClient = () => {
 
   const { data, isLoading, isError, refetch } = useApiQuery<Product>(
     `/sneakers/product/${id}`,
-    ["Sneakers"]
+    { key: "Sneakers" }
   );
 
   const { mutate: likeProduct } = useApiMutation<
@@ -133,8 +133,12 @@ const ProductIdClient = () => {
   useEffect(() => {
     if (data) {
       setProduct(data);
-      setSelectedColor(data.color[0]);
-      setSelectedSize(data.size[0]);
+      if (Array.isArray(data.color) && data.color.length > 0)
+        setSelectedColor(data.color[0]);
+      else setSelectedColor("");
+      if (Array.isArray(data.size) && data.size.length > 0)
+        setSelectedSize(data.size[0]);
+      else setSelectedSize("");
       if (data.is_liked !== undefined) setLiked(data.is_liked);
       if (data.inCartProducts) setInCartProducts(data.inCartProducts);
       if (data.ratedByUser) {
@@ -340,6 +344,8 @@ const ProductIdClient = () => {
     } else warnAboutSignIn();
   };
 
+  if (isLoading) return <div>Loading...</div>;
+
   if (!id) return notFound();
 
   if (!product) {
@@ -370,7 +376,7 @@ const ProductIdClient = () => {
               <span className="sm:hidden inline-block">
                 {product.discount_type ? (
                   <div className="flex justify-center items-end">
-                    <span className="line-through text-[#22222250] text-[13px]">
+                    <span className="line-through text-[#22222250] dark:text-[#ffffff50] text-[13px]">
                       {product.price}$
                     </span>
                     <span>
@@ -394,7 +400,7 @@ const ProductIdClient = () => {
               <div className="font-bold">
                 {product.discount_type ? (
                   <div className="flex justify-center items-end">
-                    <span className="line-through text-[#22222250] lg:text-xl sm:text-[16px]">
+                    <span className="line-through text-[#22222250] dark:text-[#ffffff50] lg:text-xl sm:text-[16px]">
                       {product.price}$
                     </span>
                     <span className="lg:text-3xl sm:text-xl">
@@ -439,24 +445,25 @@ const ProductIdClient = () => {
                   {t("Choose a size")}
                 </div>
                 <div className="flex gap-1 items-center mb-1">
-                  {product.size.map((size, index) => {
-                    return (
-                      <button
-                        onClick={() => setSelectedSize(size)}
-                        className={cn(
-                          "px-1 cursor-pointer py-0.5 lg:min-w-[30px] sm:min-w-[25px] min-w-[20px] border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm lg:text-[16px] sm:text-[14px] text-[12px] transition-all duration-300",
-                          selectedSize === size
-                            ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
-                            : selectedSize === "" && index === 0
-                            ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
-                            : "inset-shadow-[0px_0px_0px_0px_var(--primary)] border-primary"
-                        )}
-                        key={index}
-                      >
-                        {size}
-                      </button>
-                    );
-                  })}
+                  {product.size &&
+                    product.size.map((size, index) => {
+                      return (
+                        <button
+                          onClick={() => setSelectedSize(size)}
+                          className={cn(
+                            "px-1 cursor-pointer py-0.5 lg:min-w-[30px] sm:min-w-[25px] min-w-[20px] border border-black/50 dark:border-white/50 sm:rounded-md rounded-sm lg:text-[16px] sm:text-[14px] text-[12px] transition-all duration-300",
+                            selectedSize === size
+                              ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
+                              : selectedSize === "" && index === 0
+                              ? "inset-shadow-[0px_0px_7px_3px_var(--primary)] border-primary"
+                              : "inset-shadow-[0px_0px_0px_0px_var(--primary)] border-primary"
+                          )}
+                          key={index}
+                        >
+                          {size}
+                        </button>
+                      );
+                    })}
                 </div>
               </div>
               <div className="flex sm:hidden items-center gap-2 bg-primary rounded-full px-2">
@@ -476,38 +483,39 @@ const ProductIdClient = () => {
                 {t("Choose a color")}
               </div>
               <div className="flex items-center gap-1.5">
-                {product.color.map((color, index) => {
-                  return (
-                    <button
-                      onClick={() => setSelectedColor(color)}
-                      key={index}
-                      className="relative flex items-center justify-center sm:w-[25px] w-[20px] aspect-square cursor-pointer"
-                    >
-                      <div
-                        style={{ backgroundColor: `${color}` }}
-                        className={cn(
-                          `z-10 relative aspect-square border border-black/50 dark:border-white/50 sm:rounded-sm rounded-[4px] transition-all duration-300`,
-                          selectedColor === color
-                            ? "sm:w-[20px] w-[15px]"
-                            : selectedColor === "" && index === 0
-                            ? "sm:w-[20px] w-[15px]"
-                            : "sm:w-[25px] w-[20px]"
-                        )}
+                {product.color &&
+                  product.color.map((color, index) => {
+                    return (
+                      <button
+                        onClick={() => setSelectedColor(color)}
                         key={index}
-                      ></div>
-                      <div
-                        className={cn(
-                          "absolute rounded-sm border border-primary bg-primary/50 transition-all duration-300",
-                          selectedColor === color
-                            ? "-inset-[2px]"
-                            : selectedColor === "" && index === 0
-                            ? "-inset-[2px]"
-                            : "-inset-[0px]"
-                        )}
-                      ></div>
-                    </button>
-                  );
-                })}
+                        className="relative flex items-center justify-center sm:w-[25px] w-[20px] aspect-square cursor-pointer"
+                      >
+                        <div
+                          style={{ backgroundColor: `${color}` }}
+                          className={cn(
+                            `z-10 relative aspect-square border border-black/50 dark:border-white/50 sm:rounded-sm rounded-[4px] transition-all duration-300`,
+                            selectedColor === color
+                              ? "sm:w-[20px] w-[15px]"
+                              : selectedColor === "" && index === 0
+                              ? "sm:w-[20px] w-[15px]"
+                              : "sm:w-[25px] w-[20px]"
+                          )}
+                          key={index}
+                        ></div>
+                        <div
+                          className={cn(
+                            "absolute rounded-sm border border-primary bg-primary/50 transition-all duration-300",
+                            selectedColor === color
+                              ? "-inset-[2px]"
+                              : selectedColor === "" && index === 0
+                              ? "-inset-[2px]"
+                              : "-inset-[0px]"
+                          )}
+                        ></div>
+                      </button>
+                    );
+                  })}
               </div>
             </div>
             <div className="flex items-center justify-between gap-2 lg:font-bold lg:text-lg sm:text-[16px] text-[14px]">
@@ -515,7 +523,7 @@ const ProductIdClient = () => {
                 {t("Delivery")}:{" "}
                 <span className="text-primary">{t("Free")}</span>
               </span>
-              <span>{t(`For ${product.gender}`)}</span>
+              <span>{product.gender ? t(`For ${product.gender}`) : ""}</span>
             </div>
             <div className="flex sm:justify-center justify-between items-center lg:gap-2 gap-1">
               <AddToCart
@@ -523,8 +531,20 @@ const ProductIdClient = () => {
                 handleAddToCart={handleAddToCart}
                 warnAboutSignIn={warnAboutSignIn}
                 inCartProducts={inCartProducts}
-                selectedSize={selectedSize ? selectedSize : product.size[0]}
-                selectedColor={selectedColor ? selectedColor : product.color[0]}
+                selectedSize={
+                  selectedSize
+                    ? selectedSize
+                    : Array.isArray(product.size)
+                    ? product.size[0]
+                    : ""
+                }
+                selectedColor={
+                  selectedColor
+                    ? selectedColor
+                    : Array.isArray(product.color)
+                    ? product.color[0]
+                    : ""
+                }
                 setAddedToCart={setAddedToCart}
               />
 
@@ -567,11 +587,11 @@ const ProductIdClient = () => {
                 className={`md:flex grid gap-2`}
                 style={{
                   gridTemplateColumns: `repeat(${
-                    product.variants.length === 4 ? 4 : 3
+                    product.variants?.length === 4 ? 4 : 3
                   }, 1fr)`,
                 }}
               >
-                {product.variants.map((v, index) => (
+                {product.variants?.map((v, index) => (
                   <button
                     key={index}
                     onClick={() => {
@@ -595,7 +615,7 @@ const ProductIdClient = () => {
 
             <div className="sm:mt-20 mt-10 relative lg:min-h-[350px] min-h-[200px] w-full flex items-center justify-center">
               {/* product images */}
-              {product.variants.map((v, index) => {
+              {product.variants?.map((v, index) => {
                 const translateX =
                   (selectedVariant - index) * (width > 640 ? -42 : -60);
                 const diff = Math.abs(selectedVariant - index);
@@ -649,12 +669,12 @@ const ProductIdClient = () => {
                   />
                 </button>
                 <button
-                  disabled={selectedVariant === product.variants.length - 1}
+                  disabled={selectedVariant === product.variants?.length - 1}
                   onClick={() => {
                     setSelectedVariant(selectedVariant + 1);
                   }}
                   className={`absolute right-0 trasnition-all duration-200 flex items-center justify-center p-1.5 rounded-[50%] aspect-square bg-black/50 dark:bg-white/50 ${
-                    selectedVariant === product.variants.length - 1
+                    selectedVariant === product.variants?.length - 1
                       ? "opacity-50 hover:scale-100 cursor-default"
                       : "opacity-100 hover:scale-110 cursor-pointer"
                   }`}
@@ -689,7 +709,7 @@ const ProductIdClient = () => {
       <div className="mb-4">
         <div className="md:text-2xl sm:text-xl text-lg font-bold mb-2 flex w-full items-center justify-between">
           <span>Reviews</span>
-          {product.reviews.length > 6 && (
+          {product.reviews?.length > 6 && (
             <Dialog>
               <DialogTrigger asChild>
                 <span className="text-primary md:text-[16px] text-xs font-semibold cursor-pointer">
@@ -701,7 +721,7 @@ const ProductIdClient = () => {
                   Reviews
                 </DialogTitle>
                 <div className="font-semibold grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 items-start gap-1 md:overflow-x-visible overflow-x-scroll">
-                  {product.reviews.map((r, index) => {
+                  {product.reviews?.map((r, index) => {
                     if (index >= 6) return;
 
                     return (
@@ -748,7 +768,7 @@ const ProductIdClient = () => {
         </div>
 
         <div className="font-semibold flex md:grid lg:grid-cols-3 grid-cols-2 items-start gap-1 md:overflow-x-visible overflow-x-scroll">
-          {product.reviews.map((r, index) => {
+          {product.reviews?.map((r, index) => {
             if (width >= 768 && index >= 6) return;
 
             return (
@@ -797,7 +817,7 @@ const ProductIdClient = () => {
           Key Features
         </div>
         <ul className="list-disc ml-7">
-          {product.keyFeatures.map((f, index) => (
+          {product.keyFeatures?.map((f, index) => (
             <li className="font-semibold" key={index}>
               {f}
             </li>

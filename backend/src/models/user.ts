@@ -30,3 +30,65 @@ export async function updateUser(id: number, name: string) {
     name: name,
   });
 }
+
+export async function findFavourites(userId: number) {
+  const rows = await query(
+    `SELECT p.*, fp.created_at as created_at, 
+    COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from
+    FROM products as p
+    LEFT JOIN on_sale as s ON p.id = s.product_id
+    AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
+    JOIN favouriteProducts as fp on fp.productId = p.id and userId = :userId ORDER BY fp.created_at DESC`,
+    {
+      userId,
+    }
+  );
+  return rows as any[];
+}
+
+export async function deleteFavourite(productId: number, userId: number) {
+  const res = await query(
+    `DELETE FROM favouriteProducts WHERE userId = :userId AND productId = :productId`,
+    {
+      userId,
+      productId,
+    }
+  );
+}
+
+export async function findMyCommentsWithProducts(userId: number) {
+  const rows = await query(
+    `SELECT p.*, pc.id as commentId, pc.comment, pc.created_at as commentCreatedAt
+    FROM products as p
+    JOIN productComments as pc ON pc.userId = :userId AND pc.productId = p.id`,
+    {
+      userId,
+    }
+  );
+
+  return rows as any[];
+}
+
+export async function updateComment(
+  commentId: number,
+  userId: number,
+  comment: string
+) {
+  const res = await query(
+    `SELECT * FROM productComments WHERE userId = :userId AND id = :commentId`,
+    {
+      userId,
+      commentId,
+    }
+  );
+
+  if (res.length <= 0) throw new Error("comment not found");
+
+  await query(
+    `UPDATE productComments SET comment = :comment WHERE id = :commentId`,
+    {
+      commentId,
+      comment,
+    }
+  );
+}

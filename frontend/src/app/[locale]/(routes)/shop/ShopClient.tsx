@@ -174,10 +174,12 @@ export default function ShopClient() {
     selectedFilter || undefined
   );
 
-  const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
+  const { data, isLoading, isError, refetch } = useApiQuery<ProductsDataProps>(
     `/sneakers/?${queryString}`,
-    ["Sneakers", page, limit, queryString],
-    !useLocal
+    {
+      key: ["Sneakers", page, limit, queryString],
+      enabled: !useLocal,
+    }
   );
 
   useEffect(() => {
@@ -321,7 +323,7 @@ export default function ShopClient() {
           }`}
           variants="borderedWithShadow"
         >
-          All
+          {t("All")}
         </Button>
 
         <div
@@ -371,7 +373,7 @@ export default function ShopClient() {
             }}
             className="text-xl border-[2px] flex items-center gap-4 lg:px-8"
           >
-            <span>Sorts</span>
+            <span>{t("Sorts")}</span>
             <ChevronDown
               size={28}
               color="white"
@@ -473,7 +475,7 @@ export default function ShopClient() {
                             : "translate-x-0"
                         } transition-transform duration-200`}
                       >
-                        {moreFilter.name}
+                        {t(moreFilter.name)}
                       </span>
 
                       <span
@@ -514,7 +516,7 @@ export default function ShopClient() {
           }}
         >
           <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
-            <span className="pointer-events-none">Filter by: </span>
+            <span className="pointer-events-none">{t("Filter by:")} </span>
             {specificFilters.some((f) => f.isActive) ? (
               <span className="flex items-center gap-1 flex-row ">
                 {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
@@ -523,7 +525,7 @@ export default function ShopClient() {
                     className="text-sm text-gray-800 pointer-events-none"
                   >
                     <span className="text-primary bg-varWhite px-1 py-0.5 rounded-sm">
-                      {filter!.name}
+                      {t(filter!.name)}
                     </span>
                     <span className="text-gray-500">
                       {index < activeFiltersInOrder.length - 1 && " / "}
@@ -543,16 +545,16 @@ export default function ShopClient() {
               </span>
             ) : (
               <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
-                All
+                {t("All")}
               </span>
             )}
           </div>
           <div className="border-[1px] border-primary py-2 px-2 rounded-md flex items-center gap-1">
-            <span className="pointer-events-none">Sort By: </span>
+            <span className="pointer-events-none">{t("Sort by:")}</span>
             {selectedFilter ? (
               <div className="flex items-center gap-2">
                 <span className="text-primary h-6 text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
-                  {selectedFilter?.name}
+                  {t(selectedFilter?.name)}
                 </span>
                 <button
                   onClick={() => {
@@ -565,7 +567,7 @@ export default function ShopClient() {
               </div>
             ) : (
               <span className="text-primary h-6 text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
-                None
+                {t("None")}
               </span>
             )}
           </div>
@@ -593,7 +595,7 @@ export default function ShopClient() {
             </DialogTrigger>
 
             <DialogContent className="w-[90vw] max-h-[90vh] overflow-y-scroll p-3 rounded-md bg-[#fff] dark:bg-[#222]">
-              <DialogTitle>Filters and Sortings</DialogTitle>
+              <DialogTitle>{t("Filters and Sortings")}</DialogTitle>
               <MobileFilterSort
                 specificFilters={specificFilters}
                 appliedFilters={appliedFilters}
@@ -614,7 +616,9 @@ export default function ShopClient() {
       <div className="border border-transparent sm:hidden mt-2 w-full flex flex-row flex-wrap justify-between">
         <div className="flex">
           <div className="border-[1px] border-primary py-1 px-2 rounded-md mb-1 flex items-center gap-1">
-            <span className="pointer-events-none text-sm">Filter by: </span>
+            <span className="pointer-events-none text-sm">
+              {t("Filter by:")}
+            </span>
             {specificFilters.some((f) => f.isActive) ? (
               <span className="flex items-center gap-1 flex-row ">
                 {activeFiltersInOrder.filter(Boolean).map((filter, index) => (
@@ -623,7 +627,7 @@ export default function ShopClient() {
                     className="text-sm text-gray-800 pointer-events-none"
                   >
                     <span className="text-primary bg-varWhite px-0.5 py-0.5 rounded-sm text-sm">
-                      {filter!.name}
+                      {t(filter!.name)}
                     </span>
                   </span>
                 ))}
@@ -640,18 +644,18 @@ export default function ShopClient() {
               </span>
             ) : (
               <span className="text-primary text-sm bg-varWhite px-1 py-0.5 rounded-sm pointer-events-none">
-                All
+                {t("All")}
               </span>
             )}
           </div>
         </div>
         <div className="flex">
           <div className="border-[1px] border-primary py-1 px-2 rounded-md flex items-center gap-1">
-            <span className="pointer-events-none text-sm">Sort By: </span>
+            <span className="pointer-events-none text-sm">{t("Sort by:")}</span>
             {selectedFilter ? (
               <div className="flex items-center gap-2">
                 <span className="text-primary text-sm h-6 bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
-                  {selectedFilter?.name}
+                  {t(selectedFilter?.name)}
                 </span>
                 <button
                   onClick={() => {
@@ -664,7 +668,7 @@ export default function ShopClient() {
               </div>
             ) : (
               <span className="text-primary h-6 text-sm bg-varWhite px-0.5 py-0.5 rounded-sm pointer-events-none">
-                None
+                {t("None")}
               </span>
             )}
           </div>
@@ -673,11 +677,11 @@ export default function ShopClient() {
 
       <div className="sm:flex hidden justify-between items-center w-full md:translate-y-4 translate-y-2">
         <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
-          Visible products: From {(page - 1) * limit + 1} to{" "}
-          {page === totalPages ? total : page * limit}
+          {t("Visible products:")} {t("From")} {(page - 1) * limit + 1}{" "}
+          {t("to")} {page === totalPages ? total : page * limit}
         </div>
         <div className="text-md text-white font-semibold bg-primary dark:bg-transparent border-1 border-transparent dark:border-primary rounded-sm px-1">
-          Total: {total} products available!
+          {t("Total:")} {t("products available!", { count: total })}
         </div>
       </div>
 
@@ -687,13 +691,16 @@ export default function ShopClient() {
           <SkeletonProducts />
         ) : products.length <= 0 ? (
           <div className="w-full">
-            No products found, please try changing the filter or the search
-            query.
+            {t(
+              "No products found, please try changing the filter or the search query"
+            )}
           </div>
         ) : (
           <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 lg:gap-8 md:gap-6 gap-3">
             {products?.map((product: Product, index: number) => {
-              return <ProductCard product={product} key={index} />;
+              return (
+                <ProductCard refetch={refetch} product={product} key={index} />
+              );
             })}
           </div>
         )}
@@ -707,7 +714,7 @@ export default function ShopClient() {
           className="flex border border-primary items-center justify-between gap-2 "
         >
           <ShoppingCart size={20} color="var(--primary)" />
-          <span className="sm:text-md text-sm">Go to the Cart</span>
+          <span className="sm:text-md text-sm">{t("Go to the Cart")}</span>
           <ChevronRight size={20} color="var(--primary)" />
         </Button>
 
@@ -725,7 +732,7 @@ export default function ShopClient() {
                 page === 1 && localPage === 1 ? "bg-primary/50" : ""
               } sm:text-md text-sm`}
             >
-              Previous
+              {t("Previous")}
             </Button>
             {(!useLocal && page !== 1) || (useLocal && localPage !== 1) ? (
               <Button
@@ -777,7 +784,7 @@ export default function ShopClient() {
                   : ""
               } sm:text-md text-sm`}
             >
-              Next
+              {t("Next")}
             </Button>
           </div>
         )}
@@ -786,7 +793,7 @@ export default function ShopClient() {
       {/* Sorting Dialog for tablet and small desktop */}
       <Dialog open={sortingDialogOpen} onOpenChange={setSortingDialogOpen}>
         <DialogContent className="bg-white dark:bg-black sm:min-w-[350px] min-w-[250px] w-[50vw] px-4 py-3 rounded-md">
-          <DialogTitle className="text-xl">Sorts</DialogTitle>
+          <DialogTitle className="text-xl">{t("Sorts")}</DialogTitle>
           <div className="grid grid-cols-2 gap-2">
             {moreFilters.map((moreFilter: MoreFiltersType, index: number) => {
               return (
@@ -837,7 +844,7 @@ export default function ShopClient() {
                             : "translate-x-0"
                         } transition-transform duration-200`}
                       >
-                        {moreFilter.name}
+                        {t(moreFilter.name)}
                       </span>
 
                       <span

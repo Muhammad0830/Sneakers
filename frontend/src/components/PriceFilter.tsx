@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 export const PriceFilter = ({
@@ -7,6 +8,7 @@ export const PriceFilter = ({
   selected: string[];
   setSelected: (values: string[]) => void;
 }) => {
+  const t = useTranslations("Shop");
   const [from, setFrom] = useState(selected[0] || "");
   const [to, setTo] = useState(selected[1] || "");
 
@@ -33,7 +35,7 @@ export const PriceFilter = ({
           type="text"
           inputMode="numeric"
           pattern="[0-9]*"
-          placeholder="From $"
+          placeholder={`${t("from")} $`}
           className="no-spinner w-full h-full rounded sm:py-1 px-2 py-1.5 sm:text-md text-sm"
         />
       </div>
@@ -46,7 +48,7 @@ export const PriceFilter = ({
               setTo(value);
             }
           }}
-          placeholder="To $"
+          placeholder={`${t("to")} $`}
           className="no-spinner w-full h-full rounded sm:py-1 px-2 py-1.5 sm:text-md text-sm"
           inputMode="numeric"
           pattern="[0-9]*"

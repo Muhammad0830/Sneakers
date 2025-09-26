@@ -23,8 +23,7 @@ const RecommendedProducts = () => {
 
   const { data, isLoading, isError } = useApiQuery<ProductsDataProps>(
     `/sneakers/?page=${page}&limit=${limit}&fetchType=scroll`,
-    ["Sneakers", page, limit, pathName],
-    !useLocal
+    { key: ["Sneakers", page, limit, pathName], enabled: !useLocal }
   );
 
   useEffect(() => {
