@@ -82,12 +82,12 @@ const HomeClient = () => {
 
   const { data: testimonialsApi = [] } = useApiQuery<TestimonialType[]>(
     "/sneakers/testimonials",
-    "Testimonials"
+    { key: "Testimonials" }
   );
 
   const { data: productsApi = [], error } = useApiQuery<Trending[]>(
     "/sneakers/trending",
-    "Trending"
+    { key: "Trending" }
   );
 
   // checking the backend working or not

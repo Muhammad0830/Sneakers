@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 export const GenderFilter = ({
@@ -8,6 +9,7 @@ export const GenderFilter = ({
   setSelected: (values: string[]) => void;
 }) => {
   const { theme } = useTheme();
+  const t = useTranslations("Shop");
   const options = ["Men", "Women", "Kids"];
   return (
     <div className="flex flex-col gap-2">
@@ -35,9 +37,9 @@ export const GenderFilter = ({
           ></div>
           <label
             htmlFor={option}
-            className="cursor-pointer select-none text-nowrap sm:text-md text-sm"
+            className="cursor-pointer select-none text-nowrap sm:text-md text-sm capitalize"
           >
-            For {option.charAt(0).toUpperCase() + option.slice(1)}
+            {t("For")} {t(option)}
           </label>
           <div
             className={`absolute top-0 bottom-0 left-0 right-0 -z-10 translate-x-[100%] peer-checked:translate-x-[0%] transition-transform duration-300`}

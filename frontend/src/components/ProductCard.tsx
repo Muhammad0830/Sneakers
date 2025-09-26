@@ -28,10 +28,18 @@ type ResponseProps = {
   message: string;
 };
 
-const ProductCard = ({ product }: { product: Product }) => {
+const ProductCard = ({
+  product,
+  noAnimatedButtons,
+  refetch,
+}: {
+  product: Product;
+  noAnimatedButtons?: boolean;
+  refetch?: () => void;
+}) => {
   const colors = product.color;
   const sizes = product.size;
-  const [liked, setLiked] = useState(product.is_liked);
+  const [liked, setLiked] = useState(false);
   const [commentDialogOpen, setCommentDialogOpen] = useState(false);
   const [commentValue, setCommentValue] = useState("");
   const [commented, setCommented] = useState(false);
@@ -44,6 +52,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
   useEffect(() => {
     if (product.comments && product.comments.length > 0) setCommented(true);
+    if (product.is_liked !== undefined) setLiked(product.is_liked);
   }, [product]);
 
   const warnAboutSignIn = () => {
@@ -82,6 +91,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 toastT("Success"),
                 toastT("You liked this product")
               );
+              if (refetch) refetch();
             },
             onError: (data) => {
               showToast(
@@ -104,6 +114,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 toastT("Success"),
                 toastT("You unliked this product")
               );
+              if (refetch) refetch();
             },
             onError: (data) => {
               showToast(
@@ -132,6 +143,7 @@ const ProductCard = ({ product }: { product: Product }) => {
             );
             setCommentValue("");
             setCommented(true);
+            if (refetch) refetch();
           },
           onError: (data) => {
             showToast(
@@ -176,16 +188,22 @@ const ProductCard = ({ product }: { product: Product }) => {
 
         {/* discount badge */}
         {product.discount_type ? (
-          <Link href={`/shop/${product.id}`}>
-            <div className="absolute aspect-square px-2.5 pt-0.5 flex flex-col rounded-full rounded-bl-none justify-center items-center cursor-pointer z-30 top-0 right-0 -translate-y-[30%] translate-x-[30%] group-hover:translate-y-0 group-hover:translate-x-0 group-hover:top-3 group-hover:right-3 group-hover:rounded-bl-full bg-yellow-300 transition-all duration-300">
-              <span className="text-sm font-bold  text-[#383838]">
-                {t("Sale")}
-              </span>
-              <span className="text-[12px] font-bold  text-[#383838]">
-                {Number(product.discount_value).toFixed(0)}
-                {product.discount_type === "percentage" ? "%" : "$"}
-              </span>
-            </div>
+          <Link
+            href={`/shop/${product.id}`}
+            className={cn(
+              "absolute aspect-square px-2.5 pt-0.5 flex flex-col rounded-full rounded-bl-none justify-center items-center cursor-pointer z-30 top-0 right-0 -translate-y-[30%] translate-x-[30%] bg-yellow-300 transition-all duration-300",
+              noAnimatedButtons
+                ? ""
+                : "group-hover:translate-y-0 group-hover:translate-x-0 group-hover:top-3 group-hover:right-3 group-hover:rounded-bl-full"
+            )}
+          >
+            <span className="text-sm font-bold  text-[#383838]">
+              {t("Sale")}
+            </span>
+            <span className="text-[12px] font-bold  text-[#383838]">
+              {Number(product.discount_value).toFixed(0)}
+              {product.discount_type === "percentage" ? "%" : "$"}
+            </span>
           </Link>
         ) : null}
 
@@ -320,37 +338,39 @@ const ProductCard = ({ product }: { product: Product }) => {
 
         <div className="z-10 bg-background absolute left-0 right-0 bottom-0 top-0"></div>
 
-        <div className="absolute z-[1000] cardButtonsWrapper opacity-0 lg:flex hidden translate-y-[0%] top-0 py-1 left-0 right-0 bg-transparent transition-all duration-[350ms] items-center justify-between">
-          <div className="flex items-center gap-2 ml-[2px]">
-            <button
-              onClick={() => handleLikeAction()}
-              className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-all duration-300"
-            >
-              <Heart
-                size={16}
-                color="black"
-                fill={liked ? "black" : "transparent"}
-              />
-            </button>
-            <button
-              onClick={() => setCommentDialogOpen(true)}
-              className="p-1 cursor-pointer rounded-2xl bg-white text-black border-1 border-black/20 dark:border-transparent cardButtons translate-y-[150%] transition-all duration-300 delay-75"
-            >
-              <MessageCircle
-                size={16}
-                color="black"
-                fill={commented ? "black" : "transparent"}
-              />
-            </button>
-          </div>
+        {noAnimatedButtons ? null : (
+          <div className="absolute z-[1000] cardButtonsWrapper opacity-0 lg:flex hidden translate-y-[0%] top-0 py-1 left-0 right-0 bg-transparent transition-all duration-[350ms] items-center justify-between">
+            <div className="flex items-center gap-2 ml-[2px]">
+              <button
+                onClick={() => handleLikeAction()}
+                className="p-1 cursor-pointer rounded-2xl cardButtons bg-white text-black border-1 border-black/20 dark:border-transparent translate-y-[150%] transition-all duration-300"
+              >
+                <Heart
+                  size={16}
+                  color="black"
+                  fill={liked ? "black" : "transparent"}
+                />
+              </button>
+              <button
+                onClick={() => setCommentDialogOpen(true)}
+                className="p-1 cursor-pointer rounded-2xl bg-white text-black border-1 border-black/20 dark:border-transparent cardButtons translate-y-[150%] transition-all duration-300 delay-75"
+              >
+                <MessageCircle
+                  size={16}
+                  color="black"
+                  fill={commented ? "black" : "transparent"}
+                />
+              </button>
+            </div>
 
-          <Link
-            href={`/shop/${product.id}`}
-            className="flex cursor-pointer items-center gap-1 bg-white text-black border-1 border-black/20 dark:border-transparent rounded-2xl px-2 py-0.5 mr-[2px] cardButtons translate-y-[150%] transition-all duration-300 delay-150"
-          >
-            <span className="text-sm">{t("Quick Look")}</span>
-          </Link>
-        </div>
+            <Link
+              href={`/shop/${product.id}`}
+              className="flex cursor-pointer items-center gap-1 bg-white text-black border-1 border-black/20 dark:border-transparent rounded-2xl px-2 py-0.5 mr-[2px] cardButtons translate-y-[150%] transition-all duration-300 delay-150"
+            >
+              <span className="text-sm">{t("Quick Look")}</span>
+            </Link>
+          </div>
+        )}
       </div>
 
       <Dialog

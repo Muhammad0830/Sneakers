@@ -71,6 +71,7 @@ const ShopPageFilterPopOver = ({
   isDummyDataWorking,
 }: Props) => {
   const toastT = useTranslations("Toast");
+  const t = useTranslations("Shop");
   return (
     <>
       <Button
@@ -87,7 +88,7 @@ const ShopPageFilterPopOver = ({
         } ${filter.isActive ? "active" : ""}`}
         variants="borderedWithShadow"
       >
-        {filter.name}
+        {t(`${filter.name}`)}
       </Button>
 
       <div
@@ -114,7 +115,7 @@ const ShopPageFilterPopOver = ({
               }}
               className="z-10 bg-primary rounded-sm border-blue-700 px-3 py-0.5 cursor-pointer text-white"
             >
-              Close
+              {t("Close")}
             </button>
             <button
               className={`overflow-hidden relative rounded-sm flex justify-center border-blue-700 px-1.5 py-0.5 transition-colors duration-300 cursor-pointer text-white ${
@@ -187,7 +188,7 @@ const ShopPageFilterPopOver = ({
                     : "translate-x-0"
                 }`}
               >
-                Apply
+                {t("Apply")}
               </span>
               <span
                 className={`absolute transition-transform duration-300 ${
@@ -207,7 +208,7 @@ const ShopPageFilterPopOver = ({
                     : "-translate-x-[300%]"
                 }`}
               >
-                Cancel
+                {t("Cancel")}
               </span>
               <span
                 className={`relative transition-transform duration-300 ${
@@ -221,7 +222,7 @@ const ShopPageFilterPopOver = ({
                     : "-translate-x-[300%]"
                 }`}
               >
-                Update
+                {t("Update")}
               </span>
             </button>
           </div>

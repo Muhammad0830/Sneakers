@@ -5,6 +5,7 @@ import { appliedFiltersType, Filters, MoreFiltersType } from "@/types/types";
 import FilterPopOver from "./filterPopOver";
 import { RotateCcw } from "lucide-react";
 import SimpleButton from "./ui/SimpleButton";
+import { useTranslations } from "next-intl";
 
 type SelectedValuesMap = { [key: string]: string[] };
 
@@ -37,6 +38,7 @@ export default function MobileFilterSort({
   setSelectedFilter,
 }: Props) {
   const [activeTab, setActiveTab] = useState<"filter" | "sort">("filter");
+  const t = useTranslations("Shop");
 
   return (
     <div className="flex flex-col gap-4 w-full h-full">
@@ -50,7 +52,7 @@ export default function MobileFilterSort({
           }`}
           onClick={() => setActiveTab("filter")}
         >
-          Filters
+          {t("Filters")}
         </button>
         <button
           className={`flex-1 py-2 text-center ${
@@ -60,7 +62,7 @@ export default function MobileFilterSort({
           }`}
           onClick={() => setActiveTab("sort")}
         >
-          Sort
+          {t("Sort")}
         </button>
       </div>
 
@@ -69,7 +71,7 @@ export default function MobileFilterSort({
         {activeTab === "filter" ? (
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between gap-2 jube">
-              <div>Reset all filters?</div>
+              <div>{t("Reset all filters?")}</div>
               <SimpleButton
                 onClick={() => {
                   toggleFilter("All", "none");
@@ -108,7 +110,7 @@ export default function MobileFilterSort({
                         }}
                         className="text-red-500 text-xs"
                       >
-                        Clear
+                        {t("Clear")}
                       </button>
                     )}
                   </div>
@@ -163,7 +165,7 @@ export default function MobileFilterSort({
                               : "translate-x-0"
                           }`}
                         >
-                          Apply
+                          {t("Apply")}
                         </span>
                         <span
                           className={`absolute transition-transform duration-300 ${
@@ -182,7 +184,7 @@ export default function MobileFilterSort({
                               : "-translate-x-[300%]"
                           }`}
                         >
-                          Cancel
+                          {t("Cancel")}
                         </span>
                         <span
                           className={`relative transition-transform duration-300 ${
@@ -195,7 +197,7 @@ export default function MobileFilterSort({
                               : "-translate-x-[300%]"
                           }`}
                         >
-                          Update
+                          {t("Update")}
                         </span>
                       </button>
                     </div>
@@ -246,7 +248,7 @@ export default function MobileFilterSort({
                       : "text-black"
                   } dark:text-white`}
                 >
-                  {moreFilter.name}
+                  {t(moreFilter.name)}
                 </span>
                 <span
                   className={`absolute top-0 ${

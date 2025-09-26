@@ -389,7 +389,7 @@ sneakersRouter.post("/product/comment", async (req: any, res: any) => {
 
 sneakersRouter.delete(
   "/product/comment/:id",
-  // requireAuth as any,
+  requireAuth as any,
   async (req: any, res: any) => {
     try {
       const id = parseInt(req.params.id as string);

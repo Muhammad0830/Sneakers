@@ -67,7 +67,7 @@ export interface Product {
   is_liked?: boolean;
   inCartProducts?: inCartProducts[];
   ratedByUser?: number;
-  comments?: { comment: string, id: number }[];
+  comments?: { comment: string; id: number }[];
 }
 
 export interface ProductsDataProps {
@@ -86,3 +86,10 @@ export type User = {
     name: string;
   };
 };
+
+export interface MyComments {
+  id: number;
+  comment: string;
+  created_at: string;
+  product: Product;
+}
