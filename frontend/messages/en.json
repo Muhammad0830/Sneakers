@@ -69,7 +69,13 @@
     },
     "Shop": {
       "Sale": "Sale",
-      "Loading the data": "Loading the data..."
+      "Loading the data": "Loading the data...",
+      "Quick Look": "Quick Look",
+      "Comment section": "Comment section",
+      "type your comment here":"type your comment here",
+      "Submit": "Submit",
+      "please type your comment to submit": "please type your comment to submit",
+      "Comment": "Comment"
     },
     "Product": {
       "See All": "See All",

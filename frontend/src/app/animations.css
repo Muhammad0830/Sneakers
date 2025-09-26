@@ -65,6 +65,7 @@
 
 .productCard:hover .cardButtonsWrapper {
   translate: 0 -90%;
+  opacity: 1;
 }
 
 .productCard:hover .cardButtons {

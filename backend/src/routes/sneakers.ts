@@ -114,11 +114,13 @@ sneakersRouter.get("/", optionalAuth, async (req: any, res: any) => {
       data = await query<Product[]>(
         `SELECT p.*,
         case when f.id is not null then 1 else 0 end as is_liked,
-        COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value 
+        COALESCE(JSON_ARRAYAGG(JSON_OBJECT('comment', pc.comment)), JSON_ARRAY()) AS comments,
+        MAX(s.discount_type) AS discount_type, MAX(s.discount_value) AS discount_value
         FROM products as p LEFT JOIN on_sale as s ON p.id = s.product_id 
         AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
         left join favouriteProducts f on p.id = f.productId and f.userId = :userId
-        ${whereSQL} ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
+        LEFT JOIN productComments pc ON p.id = pc.productId AND pc.userId = :userId
+        ${whereSQL} GROUP BY p.id ORDER BY ${sortBy} ${order} LIMIT :limit OFFSET :offset`,
         params
       );
     }
@@ -152,6 +154,7 @@ sneakersRouter.get("/", optionalAuth, async (req: any, res: any) => {
         ...item,
         color: finalColors[index],
         size: finalSizes[index],
+        comments: data[index].comments[0].comment ? data[index].comments : [],
       })),
       hasMore: fetchType === "scroll" ? offset + limit < total : false,
     });
@@ -390,7 +393,6 @@ sneakersRouter.delete(
   async (req: any, res: any) => {
     try {
       const id = parseInt(req.params.id as string);
-      console.log("id", id);
 
       if (!id) {
         return res.status(400).json({ message: "invalid request" });
