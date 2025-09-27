@@ -6,8 +6,10 @@ import { optionalAuth, requireAuth } from "../middlewares/auth";
 import {
   AddToCart,
   calcProductRating,
+  checkIfUserLikedProduct,
   commentAboutProduct,
   deleteComment,
+  getInCartProducts,
   LikeProduct,
   RateProduct,
   UnLikeProduct,
@@ -286,65 +288,151 @@ sneakersRouter.get("/testimonials", async (req: any, res: any) => {
   }
 });
 
-sneakersRouter.post("/product/like", async (req: any, res: any) => {
-  try {
-    const { id, userId } = req.body;
+sneakersRouter.get(
+  "/products/cart",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const userId = req.user?.userId;
 
-    if (!id || !userId) {
-      return res.status(400).json({ message: "invalid request" });
-    }
+      const data = await getInCartProducts(userId);
+      const updatedData = data.map((item) => {
+        const {
+          inCartId,
+          cartProductCreatedAt,
+          quantity,
+          selectedSize,
+          selectedColor,
+          ...rest
+        } = item;
+        return {
+          id: inCartId,
+          createdAt: cartProductCreatedAt,
+          quantity,
+          size: selectedSize,
+          color: selectedColor,
+          product: rest,
+        };
+      });
 
-    await LikeProduct(id, userId);
-
-    return res.status(200).json({ message: "success" });
-  } catch (err: any) {
-    if (res.status) {
-      res.status(500).json({ message: err.message });
-    } else {
-      throw new Error(err.message);
-    }
-  }
-});
-
-sneakersRouter.post("/product/unlike", async (req: any, res: any) => {
-  try {
-    const { id, userId } = req.body;
-
-    if (!id || !userId) {
-      return res.status(400).json({ message: "invalid request" });
-    }
-
-    await UnLikeProduct(id, userId);
-
-    res.status(200).json({ message: "success" });
-  } catch (err: any) {
-    if (res.status) {
-      res.status(500).json({ message: err.message });
-    } else {
-      throw new Error(err.message);
+      return res.status(200).json(updatedData);
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
     }
   }
-});
+);
 
-sneakersRouter.post("/product/addtocart", async (req: any, res: any) => {
-  try {
-    const { id: productId, userId, quantity, size, color } = req.body;
+sneakersRouter.post(
+  "/product/like",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const { id } = req.body;
+      const userId = req.user?.userId;
 
-    if (!productId || !userId || !size || !color) {
-      return res.status(400).json({ message: "invalid request" });
-    }
+      if (!id) {
+        return res.status(400).json({ message: "invalid request" });
+      }
 
-    await AddToCart(productId, userId, quantity, size, color);
+      await LikeProduct(id, userId);
 
-    return res.status(200).json({ message: "success" });
-  } catch (err: any) {
-    if (res.status) {
-      res.status(500).json({ message: err.message });
-    } else {
-      throw new Error(err.message);
+      return res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
     }
   }
-});
+);
+
+sneakersRouter.post(
+  "/product/unlike",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const { id } = req.body;
+      const userId = req.user?.userId;
+
+      if (!id) {
+        return res.status(400).json({ message: "invalid request" });
+      }
+
+      await UnLikeProduct(id, userId);
+
+      res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
+
+sneakersRouter.post(
+  "/product/likeUnlike",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const { id } = req.body;
+      const userId = req.user?.userId;
+
+      if (!id) {
+        return res.status(400).json({ message: "invalid request" });
+      }
+
+      const rows = await checkIfUserLikedProduct(id, userId);
+
+      if (rows.length > 0) {
+        await UnLikeProduct(id, userId);
+      } else {
+        await LikeProduct(id, userId);
+      }
+
+      return res
+        .status(200)
+        .json({ message: rows.length > 0 ? "unliked" : "liked" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
+
+sneakersRouter.post(
+  "/product/addtocart",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const { id: productId, quantity, size, color } = req.body;
+      const userId = req.user?.userId;
+
+      if (!productId || !size || !color) {
+        return res.status(400).json({ message: "invalid request" });
+      }
+
+      await AddToCart(productId, userId, quantity, size, color);
+
+      return res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
 
 sneakersRouter.post("/product/rate", async (req: any, res: any) => {
   try {

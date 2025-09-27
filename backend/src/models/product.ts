@@ -218,3 +218,37 @@ export const deleteComment = async (commentId: number) => {
     throw new Error(err);
   }
 };
+
+export const getInCartProducts = async (userId: number) => {
+  try {
+    const rows = await query(
+      `SELECT p.*,
+        CASE WHEN f.id is not null then 1 else 0 end as is_liked, 
+        cp.id as inCartId, cp.created_at as cartProductCreatedAt, cp.quantity, cp.size as selectedSize, cp.color as selectedColor
+        FROM products as p
+        LEFT JOIN favouriteProducts f on p.id = f.productId AND f.userId = :userId
+        JOIN inCartProducts as cp on p.id = cp.productId AND cp.userId = :userId`,
+      {
+        userId,
+      }
+    );
+    return rows;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const checkIfUserLikedProduct = async (id: number, userId: number) => {
+  try {
+    const rows = await query(
+      `SELECT * FROM favouriteProducts WHERE userId = :userId AND productId = :productId`,
+      {
+        userId,
+        productId: id,
+      }
+    );
+    return rows;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};

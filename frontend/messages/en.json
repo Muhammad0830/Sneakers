@@ -201,7 +201,9 @@
       "Your comment is submitted": "Your comment is submitted",
       "Your comment is deleted": "Your comment is deleted",
       "Deleted Successfully": "Deleted Successfully",
-      "Edited Successfully": "Edited Successfully"
+      "Edited Successfully": "Edited Successfully",
+      "Liked successfully": "Liked successfully",
+      "Unliked successfully": "Unliked successfully"
     },
     "Profile": {
       "Home": "Home",
@@ -232,7 +234,29 @@
       "Home": "Home",
       "PathName": "PathName",
       "Cart": "Cart",
-      "Profile": "Profile"
-
+      "Profile": "Profile",
+      "Size": "Size",
+      "Color": "Color",
+      "Gender": "Gender",
+      "For": "For",
+      "men": "Men",
+      "women": "Women",
+      "kids": "Kids",
+      "white": "White",
+      "black": "Black",
+      "red": "Red",
+      "lightblue": "Lightblue",
+      "pink": "Pink",
+      "lightgreen": "Lightgreen",
+      "All products": "All products",
+      "You have currently products": "You have currently {count} products in your cart",
+      "Products Number": "{count} products",
+      "To order": "To order",
+      "Total": "Total",
+      "Products": "Products",
+      "Your order": "Your order",
+      "Are you sure to delete?": "Are you sure to delete?",
+      "Cancel": "Cancel",
+      "Delete": "Delete"
     }
 }

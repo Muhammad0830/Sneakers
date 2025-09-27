@@ -158,4 +158,31 @@ userRouter.delete(
   }
 );
 
+userRouter.delete(
+  "/onCartProduct/:id",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const id = parseInt(req.params.id as string);
+      const userId = req.user?.userId;
+
+      if (!id) return res.status(400).json({ message: "Invalid request" });
+
+      const rows = await UserModel.checkIfUserHasProduct(id, userId);
+      if (rows.length <= 0)
+        return res.status(404).json({ message: "Product not found" });
+
+      await UserModel.deleteOnCartProduct(id, userId);
+
+      return res.status(200).json({ message: "Success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
+
 export default userRouter;

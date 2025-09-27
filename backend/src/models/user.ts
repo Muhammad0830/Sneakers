@@ -92,3 +92,25 @@ export async function updateComment(
     }
   );
 }
+
+export async function deleteOnCartProduct(id: number, userId: number) {
+  await query(
+    `DELETE FROM inCartProducts WHERE userId = :userId AND id = :id`,
+    {
+      userId,
+      id,
+    }
+  );
+}
+
+export async function checkIfUserHasProduct(id: number, userId: number) {
+  const rows = await query(
+    `SELECT * FROM inCartProducts WHERE id = :id AND userId = :userId`,
+    {
+      id,
+      userId,
+    }
+  );
+
+  return rows;
+}

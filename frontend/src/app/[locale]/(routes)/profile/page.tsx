@@ -301,8 +301,8 @@ const Profile = () => {
               router.push("/profile?mode=favourites");
             }}
             className={cn(
-              "px-3 py-1 cursor-pointer font-semibold sm:text-xl text-[16px] transition-all duration-200",
-              selected === "favourites" ? "bg-primary" : ""
+              "px-3 py-1 text-black dark:text-white cursor-pointer font-semibold sm:text-xl text-[16px] transition-all duration-200",
+              selected === "favourites" ? "bg-primary text-white" : ""
             )}
           >
             {t("Favourites")}
@@ -314,8 +314,8 @@ const Profile = () => {
               router.push("/profile?mode=myComments");
             }}
             className={cn(
-              "px-3 py-1 cursor-pointer font-semibold sm:text-xl text-[16px] transition-all duration-200",
-              selected === "myComments" ? "bg-primary" : ""
+              "px-3 py-1 text-black dark:text-white cursor-pointer font-semibold sm:text-xl text-[16px] transition-all duration-200",
+              selected === "myComments" ? "bg-primary text-white" : ""
             )}
           >
             {t("My Comments")}
