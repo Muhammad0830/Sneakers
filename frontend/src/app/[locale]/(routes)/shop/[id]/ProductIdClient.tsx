@@ -4,7 +4,15 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { useCustomToast } from "@/context/CustomToastContext";
 import useApiQuery from "@/hooks/useApiQuery";
 import { cn } from "@/lib/utils";
-import { inCartProducts, Product } from "@/types/types";
+import {
+  inCartProducts,
+  Product,
+  ResponseProps,
+  ProductIdClientLikeProps,
+  ProductIdClientMutateProps,
+  ProductIdClientRateProps,
+  ProductIdClientCommentProps,
+} from "@/types/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { ArrowLeft, ArrowRight, Heart, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -18,35 +26,6 @@ import { useAuth } from "@/context/AuthContext";
 import AddToCart from "@/components/AddToCart";
 import RateDropdown from "@/components/RateDropdown";
 import ProductComment from "@/components/ProductComment";
-
-type ProductIdClientLikeProps = {
-  id: number;
-  userId: number;
-};
-
-type ProductIdClientMutateProps = {
-  id: number;
-  userId: number;
-  quantity: number;
-  size: string;
-  color: string;
-};
-
-type ProductIdClientRateProps = {
-  id: number;
-  userId: number;
-  rating: number;
-};
-
-type ProductIdClientCommentProps = {
-  id: number;
-  userId: number;
-  comment: string;
-};
-
-type ResponseProps = {
-  message: string;
-};
 
 const ProductIdClient = () => {
   const params = useParams();
@@ -195,7 +174,6 @@ const ProductIdClient = () => {
       addToCart(
         {
           id: Number(id),
-          userId: user.user.id,
           quantity: newAddedToCart,
           size: selectedSize || product?.size[0] || "",
           color: selectedColor || product?.color[0] || "",
@@ -218,7 +196,7 @@ const ProductIdClient = () => {
     if (user?.user?.id) {
       if (!liked) {
         likeProduct(
-          { id: Number(id), userId: user.user.id },
+          { id: Number(id) },
           {
             onSuccess: () => {
               setLiked(true);
@@ -240,7 +218,7 @@ const ProductIdClient = () => {
         );
       } else {
         unlikeProduct(
-          { id: Number(id), userId: user.user.id },
+          { id: Number(id) },
           {
             onSuccess: () => {
               setLiked(false);

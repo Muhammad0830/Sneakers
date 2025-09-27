@@ -93,3 +93,38 @@ export interface MyComments {
   created_at: string;
   product: Product;
 }
+
+export interface InCartProducts {
+  id: number;
+  size: string;
+  color: string;
+  quantity: number;
+  product: Product;
+}
+
+export type ResponseProps = {
+  message: string;
+};
+
+export type ProductIdClientLikeProps = {
+  id: number;
+};
+
+export type ProductIdClientMutateProps = {
+  id: number;
+  quantity: number;
+  size: string;
+  color: string;
+};
+
+export type ProductIdClientRateProps = {
+  id: number;
+  userId: number;
+  rating: number;
+};
+
+export type ProductIdClientCommentProps = {
+  id: number;
+  userId: number;
+  comment: string;
+};
