@@ -223,7 +223,10 @@
       "Are you sure to delete?": "Are you sure to delete?",
       "Close": "Close",
       "No Comments yet": "No Comments yet",
-      "No Favourites Yet": "No Favourites Yet"
+      "No Favourites Yet": "No Favourites Yet",
+      "minutesAgo": "{count, plural, one {# minute ago} other {# minutes ago}}",
+      "hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
+      "daysAgo": "{count, plural, one {# day ago} other {# days ago}}"
     }, 
     "cart": {
       "Home": "Home",
