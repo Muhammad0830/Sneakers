@@ -1,4 +1,5 @@
 "use client";
+import MobileMenuButton from "@/components/MobileMenuButton";
 import ProductCard from "@/components/ProductCard";
 import {
   Dialog,
@@ -13,14 +14,14 @@ import useApiQuery from "@/hooks/useApiQuery";
 import { Link, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { MyComments, Product, User } from "@/types/types";
-import { Camera, Pencil, Plus, ShoppingCart, Trash2 } from "lucide-react";
+import { Camera, Pencil, ShoppingCart, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-// time helper function
-function timeAgo(date: Date): string {
+// eslint-disable-next-line
+function timeAgo(date: Date, t: (key: string, values?: any) => string): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
@@ -28,11 +29,11 @@ function timeAgo(date: Date): string {
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
   if (diffMinutes < 60) {
-    return `${diffMinutes} minute${diffMinutes !== 1 ? "s" : ""} ago`;
+    return t("minutesAgo", { count: diffMinutes });
   } else if (diffHours < 24) {
-    return `${diffHours} hour${diffHours !== 1 ? "s" : ""} ago`;
+    return t("hoursAgo", { count: diffHours });
   } else {
-    return `${diffDays} day${diffDays !== 1 ? "s" : ""} ago`;
+    return t("daysAgo", { count: diffDays });
   }
 }
 
@@ -47,6 +48,7 @@ const Profile = () => {
   const [name, setName] = useState("");
   const [commentValue, setCommentValue] = useState("");
   const [isEditingComment, setIsEditingComment] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const t = useTranslations("Profile");
   const toastT = useTranslations("Toast");
   const router = useRouter();
@@ -241,7 +243,7 @@ const Profile = () => {
             </div>
             <input
               className={cn(
-                "lg:text-2xl sm:text-xl text-lg font-bold bg-primary/30 px-2 -translate-x-2 rounded border border-primary text-black dark:text-white",
+                "lg:text-2xl sm:text-xl text-sm font-bold bg-primary/30 sm:px-2 pl-1 sm:-translate-x-2 -translate-x-1 rounded border border-primary text-black dark:text-white",
                 isEditing ? "block" : "hidden"
               )}
               value={name}
@@ -279,13 +281,19 @@ const Profile = () => {
             <ShoppingCart className="w-5 aspect-square" />
           </Link>
 
-          <button className="sm:hidden flex p-1 rounded-sm bg-white dark:bg-black border border-black/40 dark:border-white/40 text-white">
-            <Plus className="w-4 h-4" />
-          </button>
+          <MobileMenuButton
+            setIsEditing={setIsEditing}
+            setMobileMenuOpen={setMobileMenuOpen}
+            handleSubmit={handleSubmit}
+            mobileMenuOpen={mobileMenuOpen}
+            isEditing={isEditing}
+            setSelected={setSelected}
+            selected={selected}
+          />
         </div>
       </div>
 
-      <div className="w-full flex justify-start">
+      <div className="w-full sm:flex hidden justify-start">
         <div className="relative mt-6 border-primary border rounded-sm flex overflow-hidden">
           <button
             onClick={() => {
@@ -317,22 +325,51 @@ const Profile = () => {
 
       {selected === "favourites" ? (
         <div className="mt-8">
-          <div className="sm:text-2xl text-lg font-bold sm:mb-4 mb-2">{t("Favourites")}</div>
+          <div className="sm:text-2xl text-lg font-bold sm:mb-4 mb-2">
+            {t("Favourites")}
+          </div>
           {favourites?.length > 0 ? (
             <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 md:gap-4 gap-2">
               {favourites?.map((f: Product, index: number) => {
                 return (
                   <div className="relative" key={index}>
                     <ProductCard noAnimatedButtons={true} product={f} />
-                    <button
-                      onClick={() => handleDelete(f.id)}
-                      className={cn(
-                        "absolute top-2 right-2 z-30 cursor-pointer scale-90 hover:scale-100 transition-scale duration-200 bg-red-500 rounded-full p-1.5",
-                        f.discount_type ? "right-10" : ""
-                      )}
-                    >
-                      <Trash2 className="w-5 h-5 text-white" />
-                    </button>
+
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button
+                          className={cn(
+                            "absolute top-2 right-2 z-30 cursor-pointer scale-90 hover:scale-100 transition-scale duration-200 bg-red-500 rounded-full sm:p-1.5 p-1",
+                            f.discount_type ? "sm:right-10 top-12 right-2" : ""
+                          )}
+                        >
+                          <Trash2 className="w-5 h-5 text-white" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent
+                        aria-describedby="are you sure to delete"
+                        className="p-4"
+                      >
+                        <DialogTitle className="sm:text-xl text-lg">
+                          {t("Are you sure to delete?")}
+                        </DialogTitle>
+                        <div className="w-full justify-between gap-2 flex items-center">
+                          <DialogClose asChild>
+                            <button className="px-2 py-1 rounded-sm font-semibold border border-primary text-white bg-primary cursor-pointer">
+                              {t("Cancel")}
+                            </button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <button
+                              onClick={() => handleDelete(f.id)}
+                              className="px-2 py-1 rounded-sm font-semibold border border-red-500 text-red-500 cursor-pointer"
+                            >
+                              {t("Delete")}
+                            </button>
+                          </DialogClose>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 );
               })}
@@ -347,7 +384,9 @@ const Profile = () => {
         </div>
       ) : selected === "myComments" ? (
         <div className="mt-8">
-          <div className="sm:text-2xl text-lg font-bold sm:mb-4 mb-2">{t("My Comments")}</div>
+          <div className="sm:text-2xl text-lg font-bold sm:mb-4 mb-2">
+            {t("My Comments")}
+          </div>
           <div className="flex flex-col gap-2">
             {myComments?.length > 0 ? (
               myComments.map((comment: MyComments, index: number) => {
@@ -463,19 +502,56 @@ const Profile = () => {
                             }}
                             className="cursor-pointer p-1 bg-white dark:bg-black rounded-sm border border-black/40 dark:border-white/40"
                           >
-                            <Pencil className="w-5 h-5 text-white" />
+                            <Pencil className="w-5 h-5" />
                           </button>
                         </div>
                       </div>
                     </div>
 
                     <div className="sm:hidden flex justify-between items-center self-stretch">
-                      <div className="text-sm">{timeAgo(createdAt)}</div>
+                      <div className="text-sm">{timeAgo(createdAt, t)}</div>
                       <div className="flex items-center gap-1 justify-center">
-                        <button className="p-1.5 rounded-sm bg-white dark:bg-black border border-black/50 dark:border-white/50">
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                        <button className="p-1.5 rounded-sm bg-white dark:bg-black border border-black/50 dark:border-white/50">
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <button className="cursor-pointer p-1 bg-red-500 rounded-sm border text-white">
+                              <Trash2 className="w-4 h-4 text-white" />
+                            </button>
+                          </DialogTrigger>
+                          <DialogContent
+                            aria-describedby="are you sure to delete"
+                            className="p-4"
+                          >
+                            <DialogTitle className="sm:text-xl text-lg">
+                              {t("Are you sure to delete?")}
+                            </DialogTitle>
+                            <div className="w-full justify-between gap-2 flex items-center">
+                              <DialogClose asChild>
+                                <button className="px-2 py-1 rounded-sm font-semibold border border-primary text-white bg-primary cursor-pointer">
+                                  {t("Cancel")}
+                                </button>
+                              </DialogClose>
+                              <DialogClose asChild>
+                                <button
+                                  onClick={() => {
+                                    handleDeleteComment(comment.id);
+                                  }}
+                                  className="px-2 py-1 rounded-sm font-semibold border border-red-500 text-red-500 cursor-pointer"
+                                >
+                                  {t("Delete")}
+                                </button>
+                              </DialogClose>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                        <button
+                          onClick={() => {
+                            setCommentDialogOpen(true);
+                            setSelectedComment(comment);
+                            setCommentValue(comment.comment);
+                            setIsEditingComment(true);
+                          }}
+                          className="cursor-pointer p-1 bg-white dark:bg-black rounded-sm border border-black/40 dark:border-white/40"
+                        >
                           <Pencil className="w-4 h-4" />
                         </button>
                       </div>
@@ -492,7 +568,15 @@ const Profile = () => {
         </div>
       ) : null}
 
-      <Dialog open={commentDialogOpen} onOpenChange={setCommentDialogOpen}>
+      <Dialog
+        open={commentDialogOpen}
+        onOpenChange={(e) => {
+          setCommentDialogOpen(e);
+          setIsEditingComment(false);
+          setSelectedComment(null);
+          setCommentValue("");
+        }}
+      >
         <DialogContent
           aria-describedby="My Comment"
           className="!w-[80vw] !max-w-[800px] p-4"

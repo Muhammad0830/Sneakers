@@ -191,16 +191,16 @@ const ProductCard = ({
           <Link
             href={`/shop/${product.id}`}
             className={cn(
-              "absolute aspect-square px-2.5 pt-0.5 flex flex-col rounded-full rounded-bl-none justify-center items-center cursor-pointer z-30 top-0 right-0 -translate-y-[30%] translate-x-[30%] bg-yellow-300 transition-all duration-300",
+              "absolute aspect-square sm:px-2.5 px-1.5 py-0.5 sm:pt-0.5 flex flex-col rounded-full sm:rounded-bl-none justify-center items-center cursor-pointer z-30 top-2 sm:top-0 right-2 sm:right-0 sm:-translate-y-[30%] sm:translate-x-[30%] bg-yellow-300 transition-all duration-300",
               noAnimatedButtons
                 ? ""
-                : "group-hover:translate-y-0 group-hover:translate-x-0 group-hover:top-3 group-hover:right-3 group-hover:rounded-bl-full"
+                : "group-hover:translate-y-0 group-hover:translate-x-0 sm:group-hover:top-3 sm:group-hover:right-3 group-hover:rounded-bl-full"
             )}
           >
-            <span className="text-sm font-bold  text-[#383838]">
+            <span className="sm:text-sm text-xs font-bold  text-[#383838]">
               {t("Sale")}
             </span>
-            <span className="text-[12px] font-bold  text-[#383838]">
+            <span className="sm:text-xs text-[10px] font-bold  text-[#383838]">
               {Number(product.discount_value).toFixed(0)}
               {product.discount_type === "percentage" ? "%" : "$"}
             </span>
