@@ -445,11 +445,14 @@ const HomeClient = () => {
                 "Their kind words reflect our commitment to quality, service, and a seamless experience"
               )}
             </h3>
-            <div className="flex sm:justify-start justify-center">
+            <Link
+              href={"/testimonials"}
+              className="flex sm:justify-start justify-center"
+            >
               <Button isLinkButton className="md:text-md text-sm">
                 {t("View More")}
               </Button>
-            </div>
+            </Link>
           </div>
 
           <div className="sm:flex-1 sm:mx-0 mx-20 w-full sm:overflow-visible overflow-scroll items-center sm:justify-center justify-start flex sm:self-end self-center ">
