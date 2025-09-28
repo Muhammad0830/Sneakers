@@ -203,7 +203,8 @@
       "Deleted Successfully": "Deleted Successfully",
       "Edited Successfully": "Edited Successfully",
       "Liked successfully": "Liked successfully",
-      "Unliked successfully": "Unliked successfully"
+      "Unliked successfully": "Unliked successfully",
+      "Your message is submitted": "Your message is submitted"
     },
     "Profile": {
       "Home": "Home",
@@ -258,5 +259,21 @@
       "Are you sure to delete?": "Are you sure to delete?",
       "Cancel": "Cancel",
       "Delete": "Delete"
+    },
+    "Contact": {
+      "Contact": "Contact",
+      "Any ideas or issues": "Any ideas or issues...",
+      "Contact with Us!": "Contact with Us!",
+      "You can contact with us using our email and phone number or writing here": "You can contact with us using our email and phone number or writing here.",
+      "**If you are not signed up or signed in, please sign in/up first before writing here": "**If you are not signed up or signed in, please sign in/up first before writing here.",
+      "Sign Up": "Sign Up",
+      "Sign In": "Sign In",
+      "Call to us": "Call to us",
+      "Call to us using this number": "Call to us using this number",
+      "Write to us": "Write to us",
+      "Call to us using this email": "Call to us using this email",
+      "Write your words here": "Write your words here",
+      "Submit": "Submit",
+      "goHome": "Go Home"
     }
 }

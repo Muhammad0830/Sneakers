@@ -114,3 +114,14 @@ export async function checkIfUserHasProduct(id: number, userId: number) {
 
   return rows;
 }
+
+export async function SendMessage(message: string, userId: number) {
+  await query(
+    `INSERT INTO submittedMessages (userId, message) 
+      VALUES (:userId, :message)`,
+    {
+      userId,
+      message,
+    }
+  );
+}

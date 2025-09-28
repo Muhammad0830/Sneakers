@@ -80,6 +80,30 @@ userRouter.get(
   }
 );
 
+userRouter.post(
+  "/contactMessage",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const { message } = req.body;
+      const userId = req.user?.userId;
+
+      if (!message)
+        return res.status(400).json({ message: "Message is required" });
+
+      await UserModel.SendMessage(message, userId);
+
+      return res.status(200).json({ message: "Success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
+
 userRouter.put(
   "/update",
   requireAuth as any,
