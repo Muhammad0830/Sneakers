@@ -28,7 +28,9 @@ function timeAgo(date: Date, t: (key: string, values?: any) => string): string {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffMinutes < 60) {
+  if (diffMinutes <= 1) {
+    return t("justNow");
+  } else if (diffMinutes < 60) {
     return t("minutesAgo", { count: diffMinutes });
   } else if (diffHours < 24) {
     return t("hoursAgo", { count: diffHours });
@@ -207,8 +209,8 @@ const Profile = () => {
   };
 
   return (
-    <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mb-20">
-      <div className="mt-4 ">
+    <div className="lg:px-[60px] md:px-[40px] sm:px-[30px] px-[20px] mb-20 min-h-[calc(100svh-152px)]">
+      <div className="pt-4">
         PathName:{" "}
         <Link className="text-white bg-primary rounded-sm px-1" href={"/home"}>
           {t("Home")}
@@ -340,7 +342,9 @@ const Profile = () => {
                         <button
                           className={cn(
                             "absolute top-2 right-2 z-30 cursor-pointer scale-90 hover:scale-100 transition-scale duration-200 bg-red-500 rounded-full sm:p-1.5 p-1",
-                            f.discount_type ? "sm:right-10 top-12 right-2" : ""
+                            f.discount_type
+                              ? "sm:right-10 right-2 max-sm:top-12"
+                              : ""
                           )}
                         >
                           <Trash2 className="w-5 h-5 text-white" />
@@ -582,7 +586,7 @@ const Profile = () => {
           className="!w-[80vw] !max-w-[800px] p-4"
         >
           <DialogTitle className="sm:text-2xl text-xl flex gap-2">
-            <span>{t("My Comments")}:</span>
+            <span className="max-[400px]:hidden">{t("My Comments")}:</span>
             <span>{selectedComment?.product.title}</span>
           </DialogTitle>
 
@@ -621,7 +625,7 @@ const Profile = () => {
                   <DialogTrigger asChild>
                     <button className="px-2 py-1 flex gap-2 items-center border border-red-500 rounded-sm bg-red-500 text-white cursor-pointer">
                       <span>{t("Delete")}</span>
-                      <Trash2 className="w-5 h-5 text-white" />
+                      <Trash2 className="max-[340px]:hidden w-5 h-5 text-white" />
                     </button>
                   </DialogTrigger>
                   <DialogContent
@@ -669,7 +673,7 @@ const Profile = () => {
                 )}
               >
                 <span>{t("Edit")}</span>
-                <Pencil className="w-5 h-5" />
+                <Pencil className="max-[340px]:hidden w-5 h-5" />
               </button>
             </div>
           </div>

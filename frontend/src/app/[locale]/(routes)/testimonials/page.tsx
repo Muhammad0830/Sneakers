@@ -44,7 +44,6 @@ const Page = () => {
         }
       );
     }
-    console.log("messageValue", messageValue);
   };
 
   return (
