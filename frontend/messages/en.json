@@ -227,6 +227,7 @@
       "Close": "Close",
       "No Comments yet": "No Comments yet",
       "No Favourites Yet": "No Favourites Yet",
+      "justNow": "just now",
       "minutesAgo": "{count, plural, one {# minute ago} other {# minutes ago}}",
       "hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
       "daysAgo": "{count, plural, one {# day ago} other {# days ago}}"
@@ -258,7 +259,8 @@
       "Your order": "Your order",
       "Are you sure to delete?": "Are you sure to delete?",
       "Cancel": "Cancel",
-      "Delete": "Delete"
+      "Delete": "Delete",
+      "Sale":"Sale"
     },
     "Contact": {
       "Contact": "Contact",

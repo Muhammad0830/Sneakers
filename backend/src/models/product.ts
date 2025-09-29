@@ -224,9 +224,12 @@ export const getInCartProducts = async (userId: number) => {
     const rows = await query(
       `SELECT p.*,
         CASE WHEN f.id is not null then 1 else 0 end as is_liked, 
+        COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from,
         cp.id as inCartId, cp.created_at as cartProductCreatedAt, cp.quantity, cp.size as selectedSize, cp.color as selectedColor
         FROM products as p
         LEFT JOIN favouriteProducts f on p.id = f.productId AND f.userId = :userId
+        LEFT JOIN on_sale as s ON p.id = s.product_id
+          AND NOW() BETWEEN s.sale_from AND s.sale_to AND s.status = 'active'
         JOIN inCartProducts as cp on p.id = cp.productId AND cp.userId = :userId`,
       {
         userId,

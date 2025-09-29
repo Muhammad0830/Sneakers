@@ -23,6 +23,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddToCartComponent from "@/components/AddToCartComponent";
+import { calcPrice } from "@/lib/utils";
 
 const CartClient = () => {
   const [onCartProducts, setOnCartProducts] = useState<InCartProducts[]>([]);
@@ -173,9 +174,20 @@ const CartClient = () => {
 
   const selectedProducts = onCartProducts
     .filter((p) => selected.includes(p.id))
-    .map((p) => Number(p.product.price));
+    .map((p) => ({
+      quantity: p.quantity,
+      price: calcPrice(
+        Number(p.product.price),
+        Number(p.product.discount_value),
+        p.product.discount_type
+      ),
+    }));
+  const totalNumberProducts = selectedProducts.reduce(
+    (acc, curr) => acc + curr.quantity,
+    0
+  );
   const totalPrice = selectedProducts
-    .reduce((acc, curr) => acc + curr, 0)
+    .reduce((acc, curr) => acc + curr.quantity * curr.price, 0)
     .toFixed(2);
 
   if (onCartProductsLoading) return <div>Loading...</div>;
@@ -267,6 +279,23 @@ const CartClient = () => {
                               fill
                               className="object-cover w-full h-full"
                             />
+                            {cart.product.discount_type ? (
+                              <>
+                                <div className="position absolute lg:text-sm/5 text-xs/5 font-semibold top-0 right-0 pl-1 pr-1 py-0.5 rounded-tr-md rounded-bl-lg bg-yellow-500 text-black">
+                                  <span>{t("Sale")}</span>
+                                </div>
+                                <div className="position absolute lg:text-sm/5 text-xs/5 font-semibold bottom-0 right-0 pl-1 pr-1 py-0.5 rounded-tl-lg rounded-br-md bg-yellow-500 text-black">
+                                  <span>
+                                    {Number(
+                                      cart.product.discount_value
+                                    ).toFixed(0)}
+                                    {cart.product.discount_type === "percentage"
+                                      ? "%"
+                                      : "$"}
+                                  </span>
+                                </div>
+                              </>
+                            ) : null}
                           </div>
                           <div className="sm:hidden flex flex-col items-center gap-1">
                             <div className="flex gap-1">
@@ -333,8 +362,22 @@ const CartClient = () => {
                         t={t}
                       />
 
-                      <div className="lg:text-3xl sm:text-2xl text-2xl font-bold text-center">
-                        {cart.product.price}$
+                      <div className="lg:text-3xl sm:text-2xl text-2xl font-bold text-end flex flex-col items-center">
+                        <div className="text-end flex flex-col">
+                          {cart.product.discount_type ? (
+                            <span className="text-sm/4 md:text-[16px]/4 text-gray-500">
+                              {cart.product.price}$
+                            </span>
+                          ) : null}
+                          <span>
+                            {calcPrice(
+                              Number(cart.product.price),
+                              Number(cart.product.discount_value),
+                              cart.product.discount_type
+                            )}
+                            $
+                          </span>
+                        </div>
                       </div>
                     </div>
 
@@ -386,7 +429,9 @@ const CartClient = () => {
                       />
                     </motion.button>
                   </div>
-                  <div className="w-full border border-t-0 border-primary my-2"></div>
+                  {index !== onCartProducts.length - 1 ? (
+                    <div className="w-full border border-t-0 border-primary my-2"></div>
+                  ) : null}
                 </div>
               );
             })}
@@ -400,7 +445,7 @@ const CartClient = () => {
           <div className="text-xl font-bold">{t("Your order")}</div>
           <div className="flex items-center justify-between gap-2">
             <div>{t("Products")}</div>
-            <div className="font-bold">{selected.length}</div>
+            <div className="font-bold">{totalNumberProducts}</div>
           </div>
           <div className="flex items-center justify-between gap-2">
             <div>{t("Total")}</div>
@@ -422,7 +467,7 @@ const CartClient = () => {
           <div className="text-xl font-bold">{t("Your order")}</div>
           <div className="flex items-center justify-between gap-2">
             <div>{t("Products")}</div>
-            <div className="font-bold">{selected.length}</div>
+            <div className="font-bold">{totalNumberProducts}</div>
           </div>
           <div className="flex items-center justify-between gap-2">
             <div>{t("Total")}</div>
@@ -442,7 +487,7 @@ const CartClient = () => {
           <div className="flex gap-2">
             <div className="flex items-center justify-between gap-2">
               <div>{t("Products")}</div>
-              <div className="text-2xl font-bold">{selected.length}</div>
+              <div className="text-2xl font-bold">{totalNumberProducts}</div>
             </div>
             <div className="border border-primary border-l-0"></div>
             <div className="flex items-center justify-between gap-2">
@@ -465,11 +510,11 @@ const CartClient = () => {
           isInViewMobile ? { opacity: 0, x: "150%" } : { opacity: 1, x: "0%" }
         }
         transition={{ duration: 0.5, ease: "backInOut", type: "spring" }}
-        className="fixed bottom-5 right-5 lg:w-[300px] md:w-[200px] min-w-[150px] max-w-[200px] bg-white md:hidden block border border-primary rounded-md p-2"
+        className="fixed bottom-5 right-5 lg:w-[300px] md:w-[200px] min-w-[150px] max-w-[200px] bg-white dark:bg-black md:hidden block border border-primary rounded-md p-2"
       >
         <div className="flex items-center justify-between gap-2">
           <div>{t("Products")}</div>
-          <div className="text-2xl font-bold">{selected.length}</div>
+          <div className="text-2xl font-bold">{totalNumberProducts}</div>
         </div>
         <div className="flex items-center justify-between gap-2">
           <div>{t("Total")}</div>

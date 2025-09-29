@@ -81,6 +81,9 @@ const MobileMenuButton = ({
               onClick={() => {
                 setSelected("favourites");
                 router.push("/profile?mode=favourites");
+                setTimeout(() => {
+                  setMobileMenuOpen(false);
+                }, 300);
               }}
               className={cn(
                 "px-3 py-1 w-full cursor-pointer font-semibold sm:text-xl text-[16px] transition-all sm:duration-200 duration-150 rounded-sm",
@@ -93,6 +96,9 @@ const MobileMenuButton = ({
               onClick={() => {
                 setSelected("myComments");
                 router.push("/profile?mode=myComments");
+                setTimeout(() => {
+                  setMobileMenuOpen(false);
+                }, 300);
               }}
               className={cn(
                 "px-3 py-1 w-full cursor-pointer font-semibold sm:text-xl text-[16px] transition-all sm:duration-200 duration-150 rounded-sm",

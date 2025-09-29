@@ -11,7 +11,7 @@ import { useCustomToast } from "@/context/CustomToastContext";
 import { useAuth } from "@/context/AuthContext";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { Dialog, DialogClose, DialogContent, DialogTitle } from "./ui/dialog";
-import { cn } from "@/lib/utils";
+import { cn, calcPrice } from "@/lib/utils";
 
 type ProductIdClientLikeProps = {
   id: number;
@@ -238,13 +238,11 @@ const ProductCard = ({
                     </span>
                     <span>
                       /
-                      {(
-                        Number(product.price) -
-                        (product.discount_type === "percentage"
-                          ? Number(product.price) *
-                            (Number(product.discount_value) / 100)
-                          : Number(product.discount_value))
-                      ).toFixed(2)}
+                      {calcPrice(
+                        Number(product.price),
+                        Number(product.discount_value),
+                        product.discount_type
+                      )}
                       $
                     </span>
                   </div>
@@ -268,13 +266,11 @@ const ProductCard = ({
                       </span>
                       <span className="sm:hidden flex">/</span>
                       <span>
-                        {(
-                          Number(product.price) -
-                          (product.discount_type === "percentage"
-                            ? Number(product.price) *
-                              (Number(product.discount_value) / 100)
-                            : Number(product.discount_value))
-                        ).toFixed(2)}
+                        {calcPrice(
+                          Number(product.price),
+                          Number(product.discount_value),
+                          product.discount_type
+                        )}
                         $
                       </span>
                     </div>
