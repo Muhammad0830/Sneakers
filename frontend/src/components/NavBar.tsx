@@ -10,6 +10,7 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { useCustomToast } from "@/context/CustomToastContext";
 import ProfileButton from "./ProfileButton";
+import AllPagesLinks from "./AllPagesLinks";
 
 const logo = "SNEAKER";
 
@@ -31,6 +32,10 @@ const data = {
       name: "Sign Up",
       href: "/auth?mode=signup",
     },
+    {
+      name: "Testimonials",
+      href: "/testimonials",
+    },
   ],
 };
 
@@ -43,8 +48,9 @@ const NavBar = () => {
   const [pathName, setPathName] = useState<string | null>(null);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { user } = useAuth();
   const [width, setWidth] = useState<number | null>(null);
+
+  const { user } = useAuth();
   const { showToast } = useCustomToast();
 
   useEffect(() => setMounted(true), []);
@@ -74,6 +80,15 @@ const NavBar = () => {
   return (
     <header className="md:px-4 z-50 fixed left-0 right-0 top-0 bg-varWhite/50 backdrop-blur-xs py-4 lg:px-6 px-4 flex items-center justify-between shadow-gray-500/20 shadow-lg">
       <div className="flex-1 flex sm:justify-center justify-between lg:gap-10 sm:gap-4 gap-6 items-center">
+        {/* all page Links button */}
+        <AllPagesLinks />
+        <SimpleButton
+          onClick={() => setOpen((prev) => !prev)}
+          className="px-1 rounded-sm border bg-white dark:bg-black border-primary py-1 lg:hidden sm:flex hidden justify-center items-center"
+        >
+          <Menu className="w-5 h-5 text-primary" />
+        </SimpleButton>
+
         {/* left side Links | Desktop */}
         <nav className="flex-1 sm:flex lg:gap-10 sm:gap-4 gap-6 justify-end hidden">
           <div className="lg:text-lg text-md">
@@ -196,7 +211,7 @@ const NavBar = () => {
           <div className="flex items-center gap-2 justify-end lg:hidden">
             <SimpleButton
               onClick={() => setOpen((prev) => !prev)}
-              className="lg:hidden flex justify-center items-center"
+              className="sm:hidden flex justify-center items-center"
             >
               <Menu size={30} color="var(--color-varBlack)" />
             </SimpleButton>
@@ -225,9 +240,9 @@ const NavBar = () => {
           <div className="absolute top-10 right-10 flex flex-col gap-3 items-center">
             <SimpleButton
               onClick={() => setOpen(false)}
-              className="flex justify-center items-center"
+              className="px-0.5 py-1 flex justify-center items-center border-red-500"
             >
-              <X size={30} color="var(--color-varBlack)" />
+              <X className="w-7 h-7 text-red-500" />
             </SimpleButton>
 
             <div className="flex flex-col gap-2 bg-background rounded-full px-1.5 py-2">
