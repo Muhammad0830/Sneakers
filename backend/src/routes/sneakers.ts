@@ -442,9 +442,9 @@ sneakersRouter.post("/product/rate", async (req: any, res: any) => {
       return res.status(400).json({ message: "invalid request" });
     }
 
-    await RateProduct(id, userId, rating);
+    await calcProductRating(id, userId, rating);
 
-    await calcProductRating(id, rating);
+    await RateProduct(id, userId, rating);
 
     return res.status(200).json({ message: "success" });
   } catch (err: any) {

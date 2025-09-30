@@ -139,21 +139,26 @@ export const RateProduct = async (
         rating,
       }
     );
+
     return;
   } catch (err: any) {
     throw new Error(err);
   }
 };
 
-export const calcProductRating = async (productId: number, rating: number) => {
+export const calcProductRating = async (
+  productId: number,
+  userId: number,
+  rating: number
+) => {
   try {
-    const result = await query(
+    const countResult = await query(
       `SELECT COUNT (*) as count FROM ratedProducts WHERE productId = :productId`,
       {
         productId,
       }
     );
-    const count = (result[0] as { count: number }).count;
+    const count = (countResult[0] as { count: number }).count;
 
     const productCurrentRating = await query(
       `SELECT rating FROM products where id = :productId`,
@@ -167,9 +172,35 @@ export const calcProductRating = async (productId: number, rating: number) => {
       }
     ).rating;
 
-    const newAverageRating = ((Number(RatingValue) + rating) / count).toFixed(
-      2
+    const result = await query(
+      `SELECT * FROM ratedProducts WHERE userId = :userId AND productId = :productId`,
+      {
+        userId,
+        productId,
+      }
     );
+
+    let newAverageRating;
+
+    if (result.length > 0) {
+      const oldRatingResult = await query(
+        `SELECT rating FROM ratedProducts WHERE productId = :productId AND userId = :userId`,
+        {
+          productId,
+          userId,
+        }
+      );
+      const oldRatingValue = (oldRatingResult[0] as { rating: number }).rating;
+
+      newAverageRating = (
+        Number(RatingValue) -
+        (Number(oldRatingValue) - rating) / count
+      ).toFixed(2);
+    } else {
+      newAverageRating = ((Number(RatingValue) + rating) / (count + 1)).toFixed(
+        2
+      );
+    }
 
     await query(
       `UPDATE products SET rating = :newRating where id = :productId`,
