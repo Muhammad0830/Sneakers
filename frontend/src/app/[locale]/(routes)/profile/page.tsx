@@ -218,7 +218,7 @@ const Profile = () => {
         /{" "}
         <Link
           className="text-white bg-primary rounded-sm px-1 shadow-[0px_0px_5px_2px_var(--primary)]"
-          href={"/home"}
+          href={"/profile"}
         >
           {t("Profile")}
         </Link>
