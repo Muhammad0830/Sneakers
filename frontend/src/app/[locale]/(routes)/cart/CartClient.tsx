@@ -202,9 +202,9 @@ const CartClient = () => {
         /{" "}
         <Link
           className="text-white bg-primary rounded-sm px-1 shadow-[0px_0px_5px_2px_var(--primary)]"
-          href={"/home"}
+          href={"/cart"}
         >
-          {t("Profile")}
+          {t("Cart")}
         </Link>
       </div>
 
@@ -266,7 +266,7 @@ const CartClient = () => {
                         </Label>
 
                         <Link
-                          href={`/shop/1`}
+                          href={`/shop/${cart.product.id}`}
                           className="flex items-center justify-center flex-col gap-3"
                         >
                           <div className="sm:hidden flex text-[16px] font-bold">
@@ -317,14 +317,14 @@ const CartClient = () => {
 
                       <div className="md:min-w-[170px] sm:flex hidden flex-col gap-1 justify-between self-stretch">
                         <Link
-                          href={"/shop/1"}
+                          href={`/shop/${cart.product.id}`}
                           className="lg:text-2xl sm:text-xl text-lg font-bold"
                         >
                           {cart.product.title}
                         </Link>
                         <div className="flex flex-col gap-1 items-start text-[16px]">
                           <Link
-                            href={"/shop/1"}
+                            href={`/shop/${cart.product.id}`}
                             className="flex lg:flex-row flex-col lg:items-center lg:gap-2 gap-1"
                           >
                             <div>
@@ -338,7 +338,7 @@ const CartClient = () => {
                             </div>
                           </Link>
                           <Link
-                            href={"/shop/1"}
+                            href={`/shop/${cart.product.id}`}
                             className="flex items-center gap-1"
                           >
                             {t("Color")}: {t(cart.color)}
