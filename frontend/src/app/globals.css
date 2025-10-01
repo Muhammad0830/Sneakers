@@ -11,6 +11,7 @@
   --color-primary-80: var(--primary-80);
   --color-primary0: var(--primary0);
   --color-primary10: var(--primary10);
+  --color-primary20: var(--primary20);
   --color-varWhite: var(--varWhite);
   --color-varBlack: var(--varBlack);
   --font-sans: var(--font-geist-sans);
@@ -52,6 +53,7 @@
 :root {
   --background: #efefef;
   --primary: #24f89c;
+  --primary20: #24f89c40;
   --primary10: #24f89c20;
   --primary0: #24f89c00;
   --primary-80: #00ff9131;
@@ -93,6 +95,7 @@
   --background: #101010;
   --foreground: #ededed;
   --primary: #24f89c;
+  --primary20: #24f89c40;
   --primary10: #24f89c20;
   --primary0: #24f89c00;
   --varWhite: #222222;

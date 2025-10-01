@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/CustomButton";
 import Link from "next/link";
 import SVGpathComponent from "@/components/SVGpathComponent";
 import Image from "next/image";

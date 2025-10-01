@@ -287,5 +287,21 @@
       "Be part of our growing family of satisfied customers—share your thoughts today!": "Be part of our growing family of satisfied customers—share your thoughts today!",
       "Write your words here": "Write your words here",
       "Submit": "Submit"
+    },
+    "Checkout": {
+      "My Orders": "My Orders",
+      "Products": "Products",
+      "Total": "Total",
+      "SubTotal": "SubTotal",
+      "Shipping info": "Shipping info",
+      "Name": "Name",
+      "Phone Number": "Phone Number",
+      "Address": "Address",
+      "Payment Method": "Payment Method",
+      "Cardholder Name": "Cardholder Name",
+      "Card Number (16digits)": "Card Number (16digits)",
+      "Expiry Date": "Expiry Date",
+      "CVV (3digits)": "CVV (3digits)",
+      "Place and Order": "Place and Order"
     }
 }

@@ -4,7 +4,7 @@ import React from "react";
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/CustomButton";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
