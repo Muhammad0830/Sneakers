@@ -1,6 +1,6 @@
 "use client";
 import { PhoneInput } from "@/components/PhoneInput";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
