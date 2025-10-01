@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/CustomButton";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -24,9 +24,7 @@ export default function Error({
         Something went wrong.
       </h1>
       <div className="flex gap-3 items-center justify-center">
-        <Button onClick={() => reset()}>
-          Try again
-        </Button>
+        <Button onClick={() => reset()}>Try again</Button>
         <Link href={"/home"}>
           <Button>{t("goHome")}</Button>
         </Link>

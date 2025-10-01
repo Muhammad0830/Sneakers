@@ -451,9 +451,12 @@ const CartClient = () => {
             <div>{t("Total")}</div>
             <div className="text-2xl font-bold">{totalPrice}$</div>
           </div>
-          <button className="cursor-pointer rounded font-semibold w-full bg-primary text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow">
+          <Link
+            href={"/checkout"}
+            className="flex justify-center items-center w-full bg-primary cursor-pointer rounded font-semibold text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
+          >
             {t("To order")}
-          </button>
+          </Link>
         </div>
 
         <motion.div
@@ -473,9 +476,12 @@ const CartClient = () => {
             <div>{t("Total")}</div>
             <div className="text-2xl font-bold">{totalPrice}$</div>
           </div>
-          <button className="cursor-pointer rounded font-semibold w-full bg-primary text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow">
+          <Link
+            href={"/checkout"}
+            className="flex justify-center items-center cursor-pointer rounded font-semibold w-full bg-primary text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
+          >
             {t("To order")}
-          </button>
+          </Link>
         </motion.div>
       </div>
 
@@ -495,12 +501,13 @@ const CartClient = () => {
               <div className="text-2xl font-bold">{totalPrice}$</div>
             </div>
           </div>
-          <button
+          <Link
+            href={"/checkout"}
             onClick={() => handleOrder()}
-            className="cursor-pointer rounded font-semibold w-full bg-primary text-white px-4 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
+            className="flex justify-center items-center cursor-pointer rounded font-semibold w-full bg-primary text-white px-4 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
           >
             {t("To order")}
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -520,9 +527,12 @@ const CartClient = () => {
           <div>{t("Total")}</div>
           <div className="text-2xl font-bold">{totalPrice}$</div>
         </div>
-        <button className="cursor-pointer rounded font-semibold w-full bg-primary text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow">
+        <Link
+          href={"/checkout"}
+          className="flex justify-center items-center cursor-pointer rounded font-semibold w-full bg-primary text-white px-2 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
+        >
           {t("To order")}
-        </button>
+        </Link>
       </motion.div>
     </div>
   );

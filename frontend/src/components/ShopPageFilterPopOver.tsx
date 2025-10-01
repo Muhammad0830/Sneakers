@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import FilterPopOver from "./filterPopOver";
 import { appliedFiltersType, MoreFiltersType } from "@/types/types";
-import Button from "./ui/Button";
+import Button from "./ui/CustomButton";
 import { useTranslations } from "next-intl";
 
 interface Props {

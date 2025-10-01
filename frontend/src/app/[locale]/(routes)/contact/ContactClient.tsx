@@ -1,5 +1,5 @@
 "use client";
-import Button from "@/components/ui/Button";
+import Button from "@/components/ui/CustomButton";
 import { useAuth } from "@/context/AuthContext";
 import { useCustomToast } from "@/context/CustomToastContext";
 import { useApiMutation } from "@/hooks/useApiMutation";
