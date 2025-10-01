@@ -169,9 +169,9 @@ const Page = () => {
           <Button
             onClick={() => setSelectedMethod("visa")}
             className={cn(
-              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary10 bg-white dark:bg-black border border-primary text-primary font-bold",
+              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary20 bg-white dark:bg-black border border-primary text-primary font-bold",
               selectedMethod === "visa"
-                ? "bg-primary hover:bg-primary text-white"
+                ? "bg-primary hover:bg-primary dark:hover:bg-primary dark:bg-primary text-white"
                 : "bg-primary0"
             )}
           >
@@ -191,9 +191,9 @@ const Page = () => {
           <Button
             onClick={() => setSelectedMethod("mastercard")}
             className={cn(
-              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary10 bg-white dark:bg-black border border-primary text-primary font-bold",
+              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary20 bg-white dark:bg-black border border-primary text-primary font-bold",
               selectedMethod === "mastercard"
-                ? "bg-primary hover:bg-primary text-white"
+                ? "bg-primary hover:bg-primary dark:hover:bg-primary dark:bg-primary text-white"
                 : "bg-primary0"
             )}
           >
@@ -213,9 +213,9 @@ const Page = () => {
           <Button
             onClick={() => setSelectedMethod("paypal")}
             className={cn(
-              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary10 bg-white dark:bg-black border border-primary text-primary font-bold",
+              "rounded-sm min-[400px]:px-2 px-1 py-1 h-auto cursor-pointer min-[400px]:gap-2 gap-1 hover:bg-primary10 dark:hover:bg-primary20 bg-white dark:bg-black border border-primary text-primary font-bold",
               selectedMethod === "paypal"
-                ? "bg-primary hover:bg-primary text-white"
+                ? "bg-primary hover:bg-primary dark:hover:bg-primary dark:bg-primary text-white"
                 : "bg-primary0"
             )}
           >
@@ -234,7 +234,7 @@ const Page = () => {
           </Button>
         </div>
         <div className="flex md:flex-row flex-col gap-2 items-center">
-          <div className="flex sm:flex-row flex-col gap-2 w-full">
+          <div className="flex sm:flex-row flex-col gap-2 md:w-auto w-full">
             <div className="sm:w-1/2 md:w-auto w-full">
               <div className="text-sm font-bold">{t("Cardholder Name")}</div>
               <Input
@@ -256,7 +256,7 @@ const Page = () => {
               />
             </div>
           </div>
-          <div className="flex sm:flex-row flex-col gap-2 w-full">
+          <div className="flex sm:flex-row flex-col gap-2 md:w-auto w-full">
             <div className="sm:w-1/2 md:w-auto w-full">
               <div className="text-sm font-bold">{t("Expiry Date")}</div>
               <Input
