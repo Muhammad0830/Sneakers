@@ -34,6 +34,8 @@ import {
   SkeletonProducts,
   SkeletonPagination,
 } from "@/components/SkeletonShopPage";
+import { Link } from "@/i18n/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 function hasChanges(
   defaultValues: {
@@ -161,6 +163,7 @@ export default function ShopClient() {
   const t = useTranslations("Shop");
   const toastT = useTranslations("Toast");
   const parentRef = useRef<HTMLDivElement>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     if (useLocal) setPage(1);
@@ -708,16 +711,32 @@ export default function ShopClient() {
 
       {/* pagination buttons */}
       <div className="flex sm:flex-row flex-col-reverse justify-between gap-5 mb-8 items-center">
-        <Button
-          isLinkButton
-          variants="borderedWithShadow"
-          className="flex border border-primary items-center justify-between gap-2 "
-        >
-          <ShoppingCart size={20} color="var(--primary)" />
-          <span className="sm:text-md text-sm">{t("Go to the Cart")}</span>
-          <ChevronRight size={20} color="var(--primary)" />
-        </Button>
-
+        {user?.user?.id ? (
+          <Link href={"/cart"}>
+            <Button
+              isLinkButton
+              variants="borderedWithShadow"
+              className="flex border border-primary items-center justify-between gap-2 "
+            >
+              <ShoppingCart size={20} color="var(--primary)" />
+              <span className="sm:text-md text-sm">{t("Go to the Cart")}</span>
+              <ChevronRight size={20} color="var(--primary)" />
+            </Button>
+          </Link>
+        ) : (
+          <Button
+            onClick={() =>
+              showToast("warning", toastT("Please sign in or sign up first"))
+            }
+            isLinkButton
+            variants="borderedWithShadow"
+            className="flex border border-primary items-center justify-between gap-2 "
+          >
+            <ShoppingCart size={20} color="var(--primary)" />
+            <span className="sm:text-md text-sm">{t("Go to the Cart")}</span>
+            <ChevronRight size={20} color="var(--primary)" />
+          </Button>
+        )}
         {isLoading ? (
           <SkeletonPagination />
         ) : (

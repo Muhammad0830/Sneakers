@@ -34,8 +34,13 @@ const allPagesLinks = [
 
 const AllPagesLinks = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [pathNameState, setPathNameState] = useState<string | null>(null);
   const pathName = usePathname();
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setPathNameState(pathName);
+  }, [pathName]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -98,34 +103,23 @@ const AllPagesLinks = () => {
                 href={link.href}
                 onClick={() => setIsOpen(false)}
               >
-                <motion.div
-                  initial={{
-                    backgroundColor:
-                      pathName === link.href
-                        ? "var(--color-primary10)"
-                        : "var(--color-primary0)",
-                  }}
-                  whileHover={{
-                    backgroundColor: "var(--color-primary10)",
-                  }}
-                  transition={{
-                    duration: 0.15,
-                    ease: "easeInOut",
-                    type: "spring",
-                  }}
-                  className={cn("px-2 py-0.5 rounded-sm w-full group")}
+                <div
+                  className={cn(
+                    "px-2 py-0.5 rounded-sm w-full group hover:primary10",
+                    pathNameState === link.href ? "bg-primary10" : "bg-primary0"
+                  )}
                 >
                   <div
                     className={cn(
                       "group-hover:translate-x-0 transition-translate duration-150",
-                      pathName === link.href
+                      pathNameState === link.href
                         ? "translate-x-0"
                         : "-translate-x-1"
                     )}
                   >
                     {link.label}
                   </div>
-                </motion.div>
+                </div>
               </Link>
             )
           )}
