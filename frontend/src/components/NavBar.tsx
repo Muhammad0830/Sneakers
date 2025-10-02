@@ -230,7 +230,7 @@ const NavBar = () => {
 
       {/* Menu */}
       <div
-        className={`flex flex-col gap-3 absolute px-10 py-10 left-[0] ${
+        className={`flex flex-col gap-3 z-50 absolute px-10 py-10 left-[0] ${
           open ? "translate-t-[0%]" : "-translate-y-[100%]"
         } transition:left duration-150 top-0 right-0 h-screen bg-varWhite lg:hidden`}
       >
