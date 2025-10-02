@@ -1,5 +1,5 @@
 import { createPool } from "../db/mysql";
-import { RowDataPacket, FieldPacket } from "mysql2";
+import { RowDataPacket, FieldPacket, ResultSetHeader } from "mysql2";
 
 const pool = createPool();
 
@@ -15,7 +15,7 @@ function sqlWithNamedParams(sql: string, params: Record<string, any>) {
   return { sql: parsedSql, values };
 }
 
-export async function query<T extends RowDataPacket[]>(
+export async function query<T extends RowDataPacket[] | ResultSetHeader>(
   sql: string,
   params?: any
 ): Promise<T> {

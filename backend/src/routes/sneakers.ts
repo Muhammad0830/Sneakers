@@ -11,6 +11,7 @@ import {
   deleteComment,
   getInCartProducts,
   LikeProduct,
+  placeAnOrder,
   RateProduct,
   UnLikeProduct,
 } from "../models/product";
@@ -474,6 +475,62 @@ sneakersRouter.post("/product/comment", async (req: any, res: any) => {
     }
   }
 });
+sneakersRouter.post(
+  "/placeOrder",
+  requireAuth as any,
+  async (req: any, res: any) => {
+    try {
+      const {
+        name,
+        phoneNumber,
+        address,
+        selectedMethod,
+        cardholderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        cartItems,
+      } = req.body;
+
+      if (
+        !name ||
+        !phoneNumber ||
+        !address ||
+        !selectedMethod ||
+        !cardholderName ||
+        !cardNumber ||
+        !expiryDate ||
+        !cvv ||
+        !cartItems
+      ) {
+        return res.status(400).json({ message: "invalid request" });
+      }
+
+      const userId = req.user?.userId;
+
+      await placeAnOrder(
+        userId,
+        name,
+        phoneNumber,
+        address,
+        selectedMethod,
+        cardholderName,
+        cardNumber,
+        expiryDate,
+        cvv,
+        cartItems
+      );
+
+      return res.status(200).json({ message: "success" });
+    } catch (err: any) {
+      if (res.status) {
+        res.status(500).json({ message: err.message });
+      } else {
+        throw new Error(err.message);
+      }
+    }
+  }
+);
 
 sneakersRouter.delete(
   "/product/comment/:id",

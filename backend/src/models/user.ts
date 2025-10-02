@@ -1,3 +1,4 @@
+import { RowDataPacket } from "mysql2";
 import { query } from "../middlewares/helper";
 
 export async function findUserByEmail(email: string) {
@@ -74,7 +75,7 @@ export async function updateComment(
   userId: number,
   comment: string
 ) {
-  const res = await query(
+  const res = await query<RowDataPacket[]>(
     `SELECT * FROM productComments WHERE userId = :userId AND id = :commentId`,
     {
       userId,

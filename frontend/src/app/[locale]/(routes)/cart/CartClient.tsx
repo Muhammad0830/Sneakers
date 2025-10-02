@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dialog";
 import AddToCartComponent from "@/components/AddToCartComponent";
 import { calcPrice } from "@/lib/utils";
+import { useCheckoutContext } from "@/context/CheckoutContext";
 
 const CartClient = () => {
   const [onCartProducts, setOnCartProducts] = useState<InCartProducts[]>([]);
@@ -31,6 +32,7 @@ const CartClient = () => {
   const [isInView, setIsInView] = useState(false);
   const [isInViewMobile, setIsInViewMobile] = useState(false);
 
+  const { setCartItems } = useCheckoutContext();
   const { showToast } = useCustomToast();
   const toastT = useTranslations("Toast");
   const t = useTranslations("cart");
@@ -79,12 +81,24 @@ const CartClient = () => {
   }, [onCartProducts]);
 
   useEffect(() => {
-    if (data) return setOnCartProducts(data);
+    const localStorageCartItems = localStorage.getItem("cartItems") || "[]";
+    const localStorageCartItemsParsed = JSON.parse(localStorageCartItems);
+    setSelected(localStorageCartItemsParsed.map((p: { id: number }) => p.id));
+  }, []);
+
+  useEffect(() => {
+    if (data) setOnCartProducts(data);
   }, [data]);
 
-  const handleOrder = () => {
-    console.log("handleOrder");
-  };
+  useEffect(() => {
+    const selectedOnCartProducts = onCartProducts?.filter((p) =>
+      selected.includes(p.id)
+    );
+    if (selectedOnCartProducts?.length > 0) {
+      localStorage.setItem("cartItems", JSON.stringify(selectedOnCartProducts));
+      setCartItems(selectedOnCartProducts);
+    }
+  }, [selected, onCartProducts]); // eslint-disable-line
 
   const handleDelete = (id: number) => {
     removeFromCart(
@@ -182,6 +196,7 @@ const CartClient = () => {
         p.product.discount_type
       ),
     }));
+
   const totalNumberProducts = selectedProducts.reduce(
     (acc, curr) => acc + curr.quantity,
     0
@@ -503,7 +518,6 @@ const CartClient = () => {
           </div>
           <Link
             href={"/checkout"}
-            onClick={() => handleOrder()}
             className="flex justify-center items-center cursor-pointer rounded font-semibold w-full bg-primary text-white px-4 py-1 shadow-[0px_0px_0px_0px_var(--primary)] hover:shadow-[0px_0px_5px_2px_var(--primary)] transition-shadow"
           >
             {t("To order")}

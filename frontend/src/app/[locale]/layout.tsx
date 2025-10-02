@@ -6,6 +6,7 @@ import FullScreenLoader from "@/components/FullScreenLoader";
 import GlobalLoader from "@/components/GlobalLoader";
 import CustomToast from "@/components/CustomToast";
 import NavChildrenFooter from "@/components/NavChildrenFooter";
+import { CheckoutProvider } from "@/context/CheckoutContext";
 
 export default async function LocaleLayout({
   children,
@@ -23,14 +24,16 @@ export default async function LocaleLayout({
   return (
     <div lang={locale}>
       <NextIntlClientProvider>
-        <LoadingProvider>
-          <GlobalLoader />
-          <FullScreenLoader />
-          <div className="min-h-screen flex flex-col relative">
-            <NavChildrenFooter>{children}</NavChildrenFooter>
-            <CustomToast />
-          </div>
-        </LoadingProvider>
+        <CheckoutProvider>
+          <LoadingProvider>
+            <GlobalLoader />
+            <FullScreenLoader />
+            <div className="min-h-screen flex flex-col relative">
+              <NavChildrenFooter>{children}</NavChildrenFooter>
+              <CustomToast />
+            </div>
+          </LoadingProvider>
+        </CheckoutProvider>
       </NextIntlClientProvider>
     </div>
   );

@@ -204,7 +204,8 @@
       "Edited Successfully": "Edited Successfully",
       "Liked successfully": "Liked successfully",
       "Unliked successfully": "Unliked successfully",
-      "Your message is submitted": "Your message is submitted"
+      "Your message is submitted": "Your message is submitted",
+      "Your order is placed": "Your order is placed"
     },
     "Profile": {
       "Home": "Home",
@@ -302,6 +303,7 @@
       "Card Number (16digits)": "Card Number (16digits)",
       "Expiry Date": "Expiry Date",
       "CVV (3digits)": "CVV (3digits)",
-      "Place and Order": "Place and Order"
+      "Place an Order": "Place and Order",
+      "No Products Chosen": "No Products Chosen"
     }
 }
