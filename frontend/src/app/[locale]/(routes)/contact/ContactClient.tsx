@@ -33,7 +33,7 @@ const ContactClient = () => {
         { message: messageValue },
         {
           onSuccess: () => {
-            showToast("success", toastT("Your message is submitted"));
+            showToast("success", toastT("Your message has submitted"));
             setMessageValue("");
           },
           onError: (error) => {

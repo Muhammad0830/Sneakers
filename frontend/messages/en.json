@@ -204,8 +204,9 @@
       "Edited Successfully": "Edited Successfully",
       "Liked successfully": "Liked successfully",
       "Unliked successfully": "Unliked successfully",
-      "Your message is submitted": "Your message is submitted",
-      "Your order is placed": "Your order is placed"
+      "Your message has submitted": "Your message has submitted",
+      "Your order is placed": "Your order is placed",
+      "Please write at least one word": "Please write at least one word"
     },
     "Profile": {
       "Home": "Home",
