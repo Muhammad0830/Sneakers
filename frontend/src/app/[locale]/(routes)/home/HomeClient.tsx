@@ -26,6 +26,9 @@ import {
 import TestimonialCard from "@/components/TestimonialCard";
 import { AboutCardType, TestimonialType, Trending } from "@/types/types";
 import localData from "@/data_frontend/data.json";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { useCustomToast } from "@/context/CustomToastContext";
+import { useAuth } from "@/context/AuthContext";
 
 const AboutUsData = [
   {
@@ -67,7 +70,6 @@ const AboutUsData = [
 ];
 
 const HomeClient = () => {
-  const t = useTranslations("Home");
   const SVGpathComponentRef = useRef<{
     moveToIndex: (index: number) => void;
     hello: () => void;
@@ -77,8 +79,15 @@ const HomeClient = () => {
   const [centerIndex, setCenterIndex] = useState(0);
   const [responsiveX, setYResponsive] = useState(0.8);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const TestimonialRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
+  const [message, setMessage] = useState("");
+
+  const { user } = useAuth();
+  const TestimonialRef = useRef<HTMLDivElement>(null);
+  const { showToast } = useCustomToast();
+
+  const t = useTranslations("Home");
+  const toastT = useTranslations("Toast");
 
   const { data: testimonialsApi = [] } = useApiQuery<TestimonialType[]>(
     "/sneakers/testimonials",
@@ -89,6 +98,11 @@ const HomeClient = () => {
     "/sneakers/trending",
     { key: "Trending" }
   );
+
+  const { mutate: handleSendMessage } = useApiMutation<
+    { message: string },
+    { message: string }
+  >("/user/contactMessage", "post");
 
   // checking the backend working or not
   const testimonials: TestimonialType[] =
@@ -150,6 +164,29 @@ const HomeClient = () => {
       // setCurrentIndex(updatedIndex);
       setIsAnimating(false);
     }, 700);
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (user?.user?.id) {
+      if (message.length <= 0) {
+        showToast("warning", toastT("Please write at least one word"));
+      } else {
+        handleSendMessage(
+          { message: message },
+          {
+            onSuccess: () => {
+              showToast("success", toastT("Your message has submitted"));
+              setMessage("");
+            },
+            onError: (error) => {
+              showToast("error", toastT("Failed to perform the action"));
+              console.error("submit error:", error);
+            },
+          }
+        );
+      }
+    } else showToast("warning", toastT("Please sign in or sign up first"));
   };
 
   const slides = Array.from(Array(products.length).keys());
@@ -615,21 +652,34 @@ const HomeClient = () => {
                   {t("Write your words here")}
                 </div>
                 <div>
-                  <Button className="sm:text-md text-sm">{t("Submit")}</Button>
+                  <Button
+                    type="submit"
+                    form="myForm"
+                    className="sm:text-md text-sm"
+                  >
+                    {t("Submit")}
+                  </Button>
                 </div>
               </div>
-              <div className="rounded-md border border-primary lg:h-25 h-30">
-                <textarea
-                  name="message"
-                  id="message"
-                  placeholder="Type here"
-                  className="w-full h-full p-2 resize-none"
-                ></textarea>
-              </div>
+              <form
+                onSubmit={handleSubmit}
+                id="myForm"
+                className="lg:h-25 h-30"
+              >
+                <div className="rounded-md border border-primary h-full">
+                  <textarea
+                    name="message"
+                    id="message"
+                    placeholder="Type here"
+                    className="w-full h-full p-2 resize-none"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                  />
+                </div>
+              </form>
             </div>
             <h3 className="font-normal text-md flex flex-col gap-3 items-start sm:hidden">
               <span className="text-center">
-                {" "}
                 {t(
                   "**If you are not signed up or signed in, please sign in/up first before writing here"
                 )}

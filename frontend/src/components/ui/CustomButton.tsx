@@ -16,6 +16,7 @@ type ButtonProps = {
   isCursorPointer?: boolean;
   isHoverable?: boolean;
   ref?: React.Ref<HTMLButtonElement>;
+  form?: string;
 };
 
 const Button = ({
@@ -32,14 +33,16 @@ const Button = ({
   isCursorPointer,
   isHoverable,
   ref,
+  form,
 }: ButtonProps) => {
   const t = useTranslations("Home");
   return (
     <button
+      form={form}
       ref={ref}
       className={`relative overflow-visible group buttonWrapper ${wrapperClassName}`}
       onClick={onClick}
-      type={type}
+      type={type || "button"}
       disabled={disabled}
     >
       <div
