@@ -157,7 +157,11 @@ sneakersRouter.get("/", optionalAuth, async (req: any, res: any) => {
         ...item,
         color: finalColors[index],
         size: finalSizes[index],
-        comments: data[index].comments[0].comment ? data[index].comments : [],
+        comments: userId
+          ? data[index].comments[0].comment
+            ? data[index].comments
+            : []
+          : [],
       })),
       hasMore: fetchType === "scroll" ? offset + limit < total : false,
     });
