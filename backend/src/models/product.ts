@@ -1,3 +1,4 @@
+import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { query } from "../middlewares/helper";
 import { Product } from "../types/snaekers";
 
@@ -53,7 +54,7 @@ export const AddToCart = async (
       return;
     }
 
-    const product = await query(
+    const product = await query<RowDataPacket[]>(
       `SELECT * FROM inCartProducts WHERE userId = :userId AND productId = :productId AND size = :size AND color = :color`,
       {
         productId,
@@ -78,7 +79,7 @@ export const AddToCart = async (
       return;
     }
 
-    await query(
+    await query<ResultSetHeader>(
       `INSERT INTO inCartProducts (productId, userId, size, color, quantity) 
         VALUES (:productId, :userId, :size, :color, :quantity)`,
       {
@@ -100,7 +101,7 @@ export const RateProduct = async (
   rating: number
 ) => {
   try {
-    const product = await query(
+    const product = await query<RowDataPacket[]>(
       `SELECT * FROM products WHERE id = :productId`,
       {
         productId,
@@ -111,7 +112,7 @@ export const RateProduct = async (
       throw new Error("product not found");
     }
 
-    const result = await query(
+    const result = await query<RowDataPacket[]>(
       `SELECT * FROM ratedProducts WHERE userId = :userId AND productId = :productId`,
       {
         productId,
@@ -152,7 +153,7 @@ export const calcProductRating = async (
   rating: number
 ) => {
   try {
-    const countResult = await query(
+    const countResult = await query<RowDataPacket[]>(
       `SELECT COUNT (*) as count FROM ratedProducts WHERE productId = :productId`,
       {
         productId,
@@ -160,7 +161,7 @@ export const calcProductRating = async (
     );
     const count = (countResult[0] as { count: number }).count;
 
-    const productCurrentRating = await query(
+    const productCurrentRating = await query<RowDataPacket[]>(
       `SELECT rating FROM products where id = :productId`,
       {
         productId,
@@ -172,7 +173,7 @@ export const calcProductRating = async (
       }
     ).rating;
 
-    const result = await query(
+    const result = await query<RowDataPacket[]>(
       `SELECT * FROM ratedProducts WHERE userId = :userId AND productId = :productId`,
       {
         userId,
@@ -183,7 +184,7 @@ export const calcProductRating = async (
     let newAverageRating;
 
     if (result.length > 0) {
-      const oldRatingResult = await query(
+      const oldRatingResult = await query<RowDataPacket[]>(
         `SELECT rating FROM ratedProducts WHERE productId = :productId AND userId = :userId`,
         {
           productId,
@@ -220,9 +221,12 @@ export const commentAboutProduct = async (
   comment: string
 ) => {
   try {
-    const result = await query(`SELECT * FROM products WHERE id = :productId`, {
-      productId,
-    });
+    const result = await query<RowDataPacket[]>(
+      `SELECT * FROM products WHERE id = :productId`,
+      {
+        productId,
+      }
+    );
 
     if (result.length <= 0) throw new Error("product not found");
 
@@ -252,7 +256,7 @@ export const deleteComment = async (commentId: number) => {
 
 export const getInCartProducts = async (userId: number) => {
   try {
-    const rows = await query(
+    const rows = await query<RowDataPacket[]>(
       `SELECT p.*,
         CASE WHEN f.id is not null then 1 else 0 end as is_liked, 
         COALESCE(s.discount_type, NULL) AS discount_type, COALESCE(s.discount_value, NULL) AS discount_value, COALESCE(s.sale_to, null) as sale_to, COALESCE(s.sale_from, null) as sale_from,
@@ -274,7 +278,7 @@ export const getInCartProducts = async (userId: number) => {
 
 export const checkIfUserLikedProduct = async (id: number, userId: number) => {
   try {
-    const rows = await query(
+    const rows = await query<RowDataPacket[]>(
       `SELECT * FROM favouriteProducts WHERE userId = :userId AND productId = :productId`,
       {
         userId,
@@ -282,6 +286,54 @@ export const checkIfUserLikedProduct = async (id: number, userId: number) => {
       }
     );
     return rows;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+export const placeAnOrder = async (
+  userId: number,
+  name: string,
+  phoneNumber: string,
+  address: string,
+  selectedMethod: string,
+  cardholderName: string,
+  cardNumber: string,
+  expiryDate: string,
+  cvv: string,
+  cartItems: any[]
+) => {
+  try {
+    for (const item of cartItems) {
+      const result = await query<ResultSetHeader>(
+        `INSERT INTO orders (userId, productId, size, color, quantity) VALUES (:userId, :productId, :size, :color, :quantity)`,
+        {
+          userId,
+          productId: item.product.id,
+          size: item.size,
+          color: item.color,
+          quantity: item.quantity,
+        }
+      );
+
+      const insertId = result.insertId;
+
+      await query(
+        `INSERT INTO orderDetails (orderId, name, phoneNumber, address, paymentMethod, cardholderName, cardNumber, expiryDate, cvv)
+        VALUES (:orderId, :name, :phoneNumber, :address, :paymentMethod, :cardholderName, :cardNumber, :expiryDate, :cvv)`,
+        {
+          orderId: insertId,
+          name: name,
+          phoneNumber: phoneNumber,
+          address: address,
+          paymentMethod: selectedMethod,
+          cardholderName: cardholderName,
+          cardNumber: cardNumber,
+          expiryDate: expiryDate,
+          cvv: cvv,
+        }
+      );
+    }
   } catch (err: any) {
     throw new Error(err);
   }
