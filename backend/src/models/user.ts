@@ -8,7 +8,10 @@ export async function findUserByEmail(email: string) {
 }
 
 export async function findUserById(id: number) {
-  const rows = await query("SELECT * FROM users WHERE id = ?", [id]);
+  const rows = await query<RowDataPacket[]>(
+    "SELECT * FROM users WHERE id = ?",
+    [id]
+  );
   const arr = rows as any[];
   return arr[0] ?? null;
 }
@@ -105,7 +108,7 @@ export async function deleteOnCartProduct(id: number, userId: number) {
 }
 
 export async function checkIfUserHasProduct(id: number, userId: number) {
-  const rows = await query(
+  const rows = await query<RowDataPacket[]>(
     `SELECT * FROM inCartProducts WHERE id = :id AND userId = :userId`,
     {
       id,
